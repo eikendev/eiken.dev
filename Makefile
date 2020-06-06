@@ -34,6 +34,10 @@ endif
 .PHONY: build
 build: dependencies
 	${HUGO_COMMAND} --minify
+	# If we run using Docker, we should reset file ownership afterwards.
+ifneq (,$(findstring docker,${CONTAINER_COMMAND}))
+	sudo chown -R ${shell id -u ${USER}}:${shell id -g ${USER}} public/
+endif
 	mkdir -p public/font/mathjax
 	cp node_modules/mathjax/es5/output/chtml/fonts/woff-v2/* public/font/mathjax/
 
