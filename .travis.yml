@@ -1,17 +1,11 @@
 os: linux
-language: node_js # We use Hugo Pipes, and hence need a working Node.js environment.
-node_js:
-  - node # Yarn needs Node.js version 4 or later.
+language: minimal
+services:
+  - docker
 git:
   depth: false # Hugo uses Git information to fetch .Lastmod information (enableGitInfo).
-addons:
-  snaps:
-    - name: hugo
-      channel: extended
 script:
   - make build
-cache:
-  yarn: true
 deploy:
   provider: pages
   skip_cleanup: true
