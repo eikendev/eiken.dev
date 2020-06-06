@@ -1,39 +1,50 @@
-CONTAINER_COMMAND := ${shell command -v podman 2>/dev/null || command -v docker 2>/dev/null}
-
 HUGO_IMAGE := klakegg/hugo:ext
 HUGO_PORT := 1313
-HUGO_COMMAND := \
+
+CONTAINER_COMMAND := ${shell command -v podman 2>/dev/null || command -v docker 2>/dev/null}
+
+BASE_COMMAND := \
 	${CONTAINER_COMMAND} run \
 	--tty \
 	--interactive \
 	--rm=true \
-	-p ${HUGO_PORT}:${HUGO_PORT} \
 	-v "${PWD}":/src \
-	--security-opt label=disable \
+	--security-opt label=disable
+
+YARN_COMMAND := \
+	${BASE_COMMAND} \
+	--entrypoint="yarn" \
+	${HUGO_IMAGE}
+
+HUGO_COMMAND := \
+	${BASE_COMMAND} \
+	-p ${HUGO_PORT}:${HUGO_PORT} \
 	${HUGO_IMAGE}
 
 .PHONY: all
 all: build
 
-.PHONY: check
-check:
+.PHONY: dependencies
+dependencies:
 ifndef CONTAINER_COMMAND
     $(error "Neither Docker nor Podman could be found.")
 endif
+	${YARN_COMMAND} install
 
 .PHONY: build
-build: check
+build: dependencies
 	${HUGO_COMMAND} --minify
 	mkdir -p public/font/mathjax
 	cp node_modules/mathjax/es5/output/chtml/fonts/woff-v2/* public/font/mathjax/
 
 .PHONY: server
-server: check
+server: dependencies
 	mkdir -p static/font/mathjax
 	cp node_modules/mathjax/es5/output/chtml/fonts/woff-v2/* static/font/mathjax/
 	${HUGO_COMMAND} server --minify --buildDrafts
 
 .PHONY: clean
 clean:
+	rm -rf ./node_modules/
 	rm -rf ./public/
 	rm -rf ./resources/_gen/
