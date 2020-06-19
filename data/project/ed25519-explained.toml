@@ -1,6 +1,5 @@
 Name = "Ed25519 Explained"
 Priority = 55
-License = "ISC"
 Languages = ["C"]
 RepositoryLink = "https://github.com/eikendev/ed25519-explained"
 RepositoryIcon = "fab fa-github"
