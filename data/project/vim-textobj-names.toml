@@ -1,4 +1,5 @@
 Name = "vim-textobj-names"
+Priority = 40
 License = "MIT"
 Languages = ["Vim script"]
 RepositoryLink = "https://github.com/eikendev/vim-textobj-names"

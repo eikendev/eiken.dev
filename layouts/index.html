@@ -29,7 +29,7 @@
 	<div class="container">
 		<h2 class="text-center mb-5">Current projects</h2>
 		<div class="row">
-			{{ range $.Site.Data.project }}
+			{{ range sort $.Site.Data.project "Priority" "desc" }}
 			<div class="col-md-6 col-lg-4 mb-4 mb-clear-lastchild">
 				<div class="card shadow-sm">
 					<div class="card-body">

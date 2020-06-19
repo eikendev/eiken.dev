@@ -1,4 +1,5 @@
 Name = "ttrss"
+Priority = 5
 License = "MIT"
 Languages = ["Python"]
 RepositoryLink = "https://github.com/eikendev/ttrss"

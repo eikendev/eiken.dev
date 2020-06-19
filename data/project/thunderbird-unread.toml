@@ -1,4 +1,5 @@
 Name = "Thunderbird Unread"
+Priority = 30
 License = "ISC"
 Languages = ["Bash"]
 RepositoryLink = "https://github.com/eikendev/thunderbird-unread"

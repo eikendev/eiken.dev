@@ -1,4 +1,5 @@
 Name = "RfcDL"
+Priority = 100
 License = "MIT"
 Languages = ["Python"]
 RepositoryLink = "https://github.com/eikendev/rfcdl"

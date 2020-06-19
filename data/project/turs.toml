@@ -1,4 +1,5 @@
 Name = "Turs"
+Priority = 45
 License = "MIT"
 Languages = ["Rust"]
 RepositoryLink = "https://github.com/eikendev/turs"
