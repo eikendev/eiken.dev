@@ -1,0 +1,8 @@
+Name = "airquality"
+Priority = 70
+License = "ISC"
+Languages = ["C++"]
+RepositoryLink = "https://github.com/eikendev/airquality"
+RepositoryIcon = "fab fa-github"
+DownloadLink = "https://github.com/eikendev/airquality/archive/master.zip"
+Description = "For this project, I grabbed an [ESP8266](https://www.espressif.com/en/products/socs/esp8266/overview) together with a CO2 sensor and built a device that publishes the measurements via [MQTT](https://mqtt.org/). As a result, I now have a pretty graph on my [Grafana](https://grafana.com/) dashboard displaying the air quality in my room in real-time."

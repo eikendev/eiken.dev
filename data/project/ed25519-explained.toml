@@ -1,0 +1,8 @@
+Name = "Ed25519 Explained"
+Priority = 55
+License = "ISC"
+Languages = ["C"]
+RepositoryLink = "https://github.com/eikendev/ed25519-explained"
+RepositoryIcon = "fab fa-github"
+DownloadLink = "https://github.com/eikendev/ed25519-explained/archive/master.zip"
+Description = "Although I'm no cryptographer, I enjoy discovering new techniques that are used in applied cryptography. Since Ed25519 has a particularly good reputation, I went ahead trying to understand how its reference implementation was written. While doing so, I documented the code to make it easier to read for other adventurers."
