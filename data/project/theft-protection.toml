@@ -1,5 +1,5 @@
 Name = "Theft Protection"
-Priority = 95
+Priority = 100
 License = "ISC"
 Languages = ["C++"]
 RepositoryLink = "https://github.com/eikendev/theft-protection"
