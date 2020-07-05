@@ -1,8 +1,8 @@
-Name = "sectxtcov"
+Name = "sectxt"
 Priority = 85
 License = "ISC"
 Languages = ["Rust"]
-RepositoryLink = "https://github.com/eikendev/sectxtcov"
+RepositoryLink = "https://github.com/eikendev/sectxt"
 RepositoryIcon = "fab fa-github"
-DownloadLink = "https://github.com/eikendev/sectxtcov/archive/master.zip"
+DownloadLink = "https://github.com/eikendev/sectxt/archive/master.zip"
 Description = "The [security.txt standard](https://securitytxt.org/) was proposed so researchers have a definite endpoint to notify about vulnerabilities on a website. Even though it's only a draft in its current state, some websites have deployed it already. With this tool I want to help track the coverage of the standard among major websites."
