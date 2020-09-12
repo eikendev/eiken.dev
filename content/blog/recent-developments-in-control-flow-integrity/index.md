@@ -1,5 +1,5 @@
 ---
-title: "Recent Developments in Control Flow Integrity"
+title: "Recent Developments in Control-Flow Integrity"
 date: 2020-09-12T21:52:00Z
 tags: ["security", "cfi"]
 ---
