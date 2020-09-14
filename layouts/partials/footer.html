@@ -1,5 +1,18 @@
+{{ $link1_url := "https://eikenberg.at/" }}
+{{ $link2_url := "/index.xml" }}
+
+{{ $link1 := dict "name" "eikenberg.at" "href" $link1_url "icon" "fa-globe-europe" }}
+{{ $link2 := dict "name" "Feed"         "href" $link2_url "icon" "fa-rss" }}
+
+{{ $links := slice $link1 $link2 }}
+
 <div class="container">
-	<p>
-		Find out more about me on <a href="https://eikenberg.at/">eikenberg.at</a>.
-	</p>
+	<div class="row justify-content-center">
+		{{ range $links }}
+		<a class="mb-2 mr-4 mr-clear-lastchild text-white" href="{{ .href }}" title="{{ .name }}">
+			<i class="fas {{ .icon }} mr-1"></i>{{ .name }}
+		</a>
+		{{ end }}
+	</div>
+
 </div>
