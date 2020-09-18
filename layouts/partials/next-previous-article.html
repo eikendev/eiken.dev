@@ -1,24 +1,18 @@
 {{ if or (.NextPage) (.PrevPage) }}
-<div class="row row-cols-2 mt-5">
-	<div class="col-6 align-self-start text-left">
-		{{ with .PrevInSection }}
-		<a class="btn btn-secondary mr-2" href="{{.Permalink}}">
-			<i class="fas fa-chevron-left"></i>
-		</a>
-		<a class="text-reset text-decoration-none" href="{{.Permalink}}">
-			{{.Title}}
-		</a>
-		{{ end }}
-	</div>
-	<div class="col-6 align-self-end text-right">
-		{{ with .NextInSection }}
-		<a class="text-reset text-decoration-none" href="{{.Permalink}}">
-			{{.Title}}
-		</a>
-		<a class="btn btn-secondary ml-2" href="{{.Permalink}}">
-			<i class="fas fa-chevron-right"></i>
-		</a>
-		{{ end }}
-	</div>
+<div class="mx-auto mt-5 text-center">
+	{{ with .PrevInSection }}
+	<a class="text-reset text-decoration-none" href="{{.Permalink}}">
+		<div>
+			Previous: <i>{{.Title}}</i>
+		</div>
+	</a>
+	{{ end }}
+	{{ with .NextInSection }}
+	<a class="text-reset text-decoration-none" href="{{.Permalink}}">
+		<div>
+			Next: <i>{{.Title}}</i>
+		</div>
+	</a>
+	{{ end }}
 </div>
 {{ end }}

@@ -4,23 +4,26 @@
 	<div class="py-md-3 py-lg-5 container">
 		<article>
 			<div class="text-center mb-5">
-				<h1 class="mb-3">{{.Title}}</h1>
 				{{ with .Params.tags }}
-				<div class="mb-3">
-					{{ range . }}<a href="{{ "tags" | absURL}}/{{ . | urlize }}" class="badge badge-secondary badge-pill mr-1">{{.}}</a>{{ end }}
+				<div class="mb-4">
+					{{ range . }}<a href="{{ "tags" | absURL}}/{{ . | urlize }}" class="badge badge-secondary badge-pill mr-1 ml-1">{{.}}</a>{{ end }}
 				</div>
 				{{ end }}
+				<h1 class="mb-4">{{.Title}}</h1>
 				<p class="text-muted">
-					<i class="fas fa-calendar-day mr-2"></i><time datetime="{{ .PublishDate.Format "2006-01-02T15:04:05Z07:00" }}">{{ .PublishDate.Format "January 2, 2006" }}</time>
-					<br />
-					<i class="fas fa-clock mr-2"></i>{{ .ReadingTime }} {{ if eq 1 .ReadingTime }}minute{{ else }}minutes{{ end }}
+					<span class="my-1 mx-3">
+						<i class="fas fa-calendar-day mr-2"></i><time datetime="{{ .PublishDate.Format "2006-01-02T15:04:05Z07:00" }}">{{ .PublishDate.Format "January 2, 2006" }}</time>
+					</span>
+					<span class="my-1 mx-3">
+						<i class="fas fa-clock mr-2"></i>{{ .ReadingTime }} {{ if eq 1 .ReadingTime }}minute{{ else }}minutes{{ end }}
+					</span>
 				</p>
 			</div>
 			{{.Content }}
 		</article>
 		<div class="mt-5">
 			<div class="row row-cols-2 justify-content-center">
-				<div class="col-12 col-lg-6">
+				<div class="col-12 col-lg-8">
 					<div class="card shadow-sm">
 						<div class="card-body">
 							{{- partial "sharing.html" . -}}
