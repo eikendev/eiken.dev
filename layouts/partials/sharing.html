@@ -1,9 +1,10 @@
 {{ $service1_url := printf "https://twitter.com/intent/tweet?url=%s&text=%s" .Permalink .Title }}
-{{ $service2_url := printf "https://www.reddit.com/submit?url=%s&title=%s" .Permalink .Title }}
-{{ $service3_url := printf "https://news.ycombinator.com/submitlink?u=%s&t=%s" .Permalink .Title }}
+{{ $service1 := dict "name" "Twitter" "href" $service1_url "color" "primary" "icon" "fa-twitter" }}
 
-{{ $service1 := dict "name" "Twitter"     "href" $service1_url "color" "primary"   "icon" "fa-twitter" }}
-{{ $service2 := dict "name" "Reddit"      "href" $service2_url "color" "secondary" "icon" "fa-reddit-alien" }}
+{{ $service2_url := printf "https://www.reddit.com/submit?url=%s&title=%s" .Permalink .Title }}
+{{ $service2 := dict "name" "Reddit" "href" $service2_url "color" "secondary" "icon" "fa-reddit-alien" }}
+
+{{ $service3_url := printf "https://news.ycombinator.com/submitlink?u=%s&t=%s" .Permalink .Title }}
 {{ $service3 := dict "name" "Hacker News" "href" $service3_url "color" "secondary" "icon" "fa-hacker-news" }}
 
 {{ $services := slice $service1 $service2 $service3 }}
@@ -19,5 +20,5 @@
 </div>
 
 <div class="text-center">
-	Never miss new content by following me on <a href="https://twitter.com/eikendev">Twitter</a> and subscribing to my <a href="/index.xml">feed</a>.
+	Never miss new content by following me on <a href="{{ printf "https://twitter.com/%s" $.Site.Params.twitter }}">Twitter</a> and subscribing to my <a href="/index.xml">feed</a>.
 </div>

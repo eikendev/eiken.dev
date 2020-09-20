@@ -9,7 +9,7 @@
 				<h4>Contact</h4>
 				<ul class="list-unstyled">
 					<li><a href="https://eikenberg.at/" class="text-white"><i class="mr-1 fas fa-globe-europe"></i>eikenberg.at</a></li>
-					<li><a href="https://twitter.com/eikendev" class="text-white"><i class="mr-1 fab fa-twitter"></i>eikendev</a></li>
+					<li><a href="{{ printf "https://twitter.com/%s" $.Site.Params.twitter }}" class="text-white"><i class="mr-1 fab fa-twitter"></i>eikendev</a></li>
 					<li><a href="#" class="text-white cryptedmail" data-name="hello" data-domain="eiken" data-tld="dev" onclick="window.location.href = 'mailto:' + this.dataset.name + '@' + this.dataset.domain + '.' + this.dataset.tld; return false;"><i class="mr-1 fas fa-envelope"></i></a></li>
 				</ul>
 			</div>
