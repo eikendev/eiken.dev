@@ -12,15 +12,17 @@ pygmentsUseClasses=true
 [taxonomies]
 	tag = "tags"
 
+[social]
+	github = "eikendev"
+	gitlab = "eikendev"
+	twitter = "eikendev"
+
 [params]
 	title = "eikendev"
 	author = "Raphael Eikenberg (eikendev)"
 	description = "Coding projects and blog posts by eikendev. Always happy to learn something new. Also interested in infosec? Join my journey!"
 	keywords = "coding, programming, projects, infosec, information security, system security, portfolio"
 	images = ["/img/logo.png"]
-	github = "eikendev"
-	gitlab = "eikendev"
-	twitter = "eikendev"
 
 # https://gohugo.io/templates/rss/
 [author]
@@ -43,9 +45,9 @@ pygmentsUseClasses=true
 		lineNos = true
 		lineNumbersInTable = true
 		tabWidth = 4
-    [markup.goldmark.extensions]
-        footnote = true
-        strikethrough = true
-        table = true
-        taskList = true
-        typographer = true
+	[markup.goldmark.extensions]
+		footnote = true
+		strikethrough = true
+		table = true
+		taskList = true
+		typographer = true
