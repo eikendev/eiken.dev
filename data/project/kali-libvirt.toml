@@ -1,5 +1,5 @@
 Name = "kali-libvirt"
-Priority = 90
+Priority = 95
 License = "ISC"
 Languages = ["Shell"]
 RepositoryLink = "https://github.com/eikendev/kali-libvirt"

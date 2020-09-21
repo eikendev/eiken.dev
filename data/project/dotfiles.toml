@@ -4,4 +4,4 @@ Languages = ["Shell", "Vim script"]
 RepositoryLink = "https://github.com/eikendev/dotfiles"
 RepositoryIcon = "fab fa-github"
 DownloadLink = "https://github.com/eikendev/dotfiles/archive/master.zip"
-Description = "I've been customizing my configuration files for many years and decided to publish them in a new repository. This project helps me tailoring my working environment to my needs and automate certain tasks on the command line. Among others, it contains my configurations for [Neovim](https://neovim.io/) and [Zsh](https://www.zsh.org/)."
+Description = "I've been customizing my configuration files for many years and decided to publish them in a new repository. This project helps me tailoring my working environment to my needs and automating certain tasks on the command line. Among others, it contains configurations for [Neovim](https://neovim.io/) and [Zsh](https://www.zsh.org/)."
