@@ -2,6 +2,7 @@
 title: "Recent Developments in Control-Flow Integrity"
 date: 2020-09-12T21:52:00Z
 tags: ["security", "cfi"]
+images: ["./controlflow-light.webp"]
 ---
 
 I was a bit busy in the past few months, but now I'm back to talk about some system security.
@@ -40,6 +41,8 @@ There are also more formal definitions in recent literature, but I'll try a bit 
 
 So, CFI describes the goal of keeping the execution trace of a program within expected bounds.
 This prevents an attacker from manipulating the execution trace to their favor.
+
+{{< figure src="./controlflow-dark.svg" alt="Hijack of a Control Flow" caption="This figure depicts the typical flow-control during a hijack. Instead of jumping from the source address to the legit target, an attacker manipulates the the control-flow in a way that makes the program execute the target of their choice. A big thanks goes to [Christian](https://leopoldse.dev/) for creating this image." >}}
 
 Let me first introduce two components to describe how CFI works, namely
 - a **monitor** that is used to keep track of the execution of the program, and

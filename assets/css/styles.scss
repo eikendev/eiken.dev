@@ -2,6 +2,16 @@ html {
 	overflow-y: scroll;
 }
 
+figure {
+	margin: 0 auto 1rem auto;
+	max-width: 800px;
+}
+
+figure > img {
+	display: block;
+	margin: 0 auto 1rem auto;
+}
+
 #logo {
 	height: 30px;
 }
