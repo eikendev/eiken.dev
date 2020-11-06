@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+source ./commands.sh
+
+COMMAND="$HUGO_COMMAND $*"
+
+eval "$COMMAND"

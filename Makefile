@@ -1,41 +1,17 @@
-HUGO_IMAGE := klakegg/hugo:ext
-HUGO_PORT := 1313
-
-CONTAINER_COMMAND := ${shell command -v podman 2>/dev/null || command -v docker 2>/dev/null}
-
-BASE_COMMAND := \
-	${CONTAINER_COMMAND} run \
-	--tty \
-	--interactive \
-	--rm=true \
-	-v "${PWD}":/src \
-	--security-opt label=disable
-
-YARN_COMMAND := \
-	${BASE_COMMAND} \
-	--entrypoint="yarn" \
-	${HUGO_IMAGE}
-
-HUGO_COMMAND := \
-	${BASE_COMMAND} \
-	-p ${HUGO_PORT}:${HUGO_PORT} \
-	${HUGO_IMAGE}
+ENGINE_COMMAND := ${shell source ./commands.sh; echo $$ENGINE_COMMAND}
 
 .PHONY: all
 all: build
 
 .PHONY: dependencies
 dependencies:
-ifndef CONTAINER_COMMAND
-    $(error "Neither Docker nor Podman could be found.")
-endif
-	${YARN_COMMAND} install
+	./yarn install
 
 .PHONY: build
 build: dependencies
-	${HUGO_COMMAND} --minify
+	./hugo --minify
 	# If we run using Docker, we should reset file ownership afterwards.
-ifneq (,$(findstring docker,${CONTAINER_COMMAND}))
+ifneq (,$(findstring docker,${ENGINE_COMMAND}))
 	sudo chown -R ${shell id -u ${USER}}:${shell id -g ${USER}} public/
 endif
 	mkdir -p public/font/mathjax
@@ -45,7 +21,7 @@ endif
 server: dependencies
 	mkdir -p static/font/mathjax
 	cp node_modules/mathjax/es5/output/chtml/fonts/woff-v2/* static/font/mathjax/
-	${HUGO_COMMAND} server --minify --buildDrafts
+	./hugo server --minify --buildDrafts
 
 .PHONY: clean
 clean:
