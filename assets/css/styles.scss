@@ -30,7 +30,7 @@ section.footnotes {
 }
 
 .hanchor {
-	display: none;
+	visibility: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -38,7 +38,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 %headings:hover > .hanchor {
-	display: inline !important;
+	visibility: visible;
 }
 
 #logo {
