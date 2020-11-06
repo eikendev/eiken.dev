@@ -19,7 +19,9 @@
 					</span>
 				</div>
 			</div>
-			{{.Content }}
+    		{{- with .Content -}}
+				{{ . | replaceRE "(<h[1-9] id=\"([^\"]+)\".+)(</h[1-9]+>)" `${1}<a href="#${2}" class="hanchor" ariaLabel="Anchor"><i class="fas fa-link fa-xs ml-2"></i></a>${3}` | safeHTML }}
+    		{{- end -}}
 		</article>
 		<div class="mt-5">
 			<div class="row row-cols-2 justify-content-center">
