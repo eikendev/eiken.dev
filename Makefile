@@ -1,4 +1,4 @@
-ENGINE_COMMAND := ${shell source ./commands.sh; echo $$ENGINE_COMMAND}
+ENGINE_COMMAND := ${shell . ./commands.sh; echo $$ENGINE_COMMAND}
 
 .PHONY: all
 all: build
