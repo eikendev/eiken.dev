@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source ./commands.sh
+. ./commands.sh
 
 COMMAND="$HUGO_COMMAND $*"
 

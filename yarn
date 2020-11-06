@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source ./commands.sh
+. ./commands.sh
 
 COMMAND="$YARN_COMMAND $*"
 
