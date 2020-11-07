@@ -3,6 +3,10 @@ html {
 }
 
 h2, h3, h4, h5, h6 {
+	@extend %headings26 !optional;
+}
+
+article %headings26 {
 	margin-top: 2rem;
 }
 
@@ -37,11 +41,7 @@ section.footnotes {
 	visibility: hidden;
 }
 
-h1, h2, h3, h4, h5, h6 {
-	@extend %headings !optional;
-}
-
-%headings:hover > .hanchor {
+%headings26:hover > .hanchor {
 	visibility: visible;
 }
 
