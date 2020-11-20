@@ -1,9 +1,10 @@
 {{ $script_jquery := resources.Get "js/jquery.slim.js" }}
 {{ $script_site := resources.Get "js/site.js" }}
 {{ $script_bootstrap := resources.Get "js/bootstrap.bundle.js" }}
+{{ $script_zooming := resources.Get "js/zooming.min.js" }}
 
 {{/* The order is important. We might want to use jQuery in our own Javascript code. */}}
-{{ $script := slice $script_jquery $script_site $script_bootstrap | resources.Concat "js/bundle.js" | resources.Minify | resources.Fingerprint "sha384" }}
+{{ $script := slice $script_jquery $script_site $script_bootstrap $script_zooming | resources.Concat "js/bundle.js" | resources.Minify | resources.Fingerprint "sha384" }}
 <script src="{{ $script.Permalink }}" integrity="{{ $script.Data.Integrity }}" crossorigin="anonymous"></script>
 
 {{ if .Params.chartjs }}

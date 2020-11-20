@@ -6,8 +6,18 @@ h2, h3, h4, h5, h6 {
 	@extend %headings26 !optional;
 }
 
-article %headings26 {
-	margin-top: 2rem;
+article {
+	%headings26 {
+		margin-top: 2rem;
+	}
+
+	// Code listings.
+	div.chroma {
+		margin-bottom: 1.5rem;
+	}
+	pre.chroma {
+		margin-bottom: 0;
+	}
 }
 
 figure {
