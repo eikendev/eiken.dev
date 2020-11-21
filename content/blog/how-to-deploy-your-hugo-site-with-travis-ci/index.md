@@ -91,4 +91,4 @@ There we have it.
 I'm so relieved that I'll never have to manually update the contents of the site again.
 And to be honest, the new setup isn't complicated at all.
 Maybe some of you can benefit from my configuration, too.
-You can find the whole file on [GitHub](https://github.com/eikendev/eikendev.github.io/blob/source/.travis.yml).
+You can find the whole file on [GitHub](https://github.com/eikendev/eikendev.github.io/blob/15d29862b6e080843e11777e268775fcef0d158c/.travis.yml).
