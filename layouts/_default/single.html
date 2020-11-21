@@ -6,7 +6,7 @@
 			<div class="text-center mb-5">
 				{{ with .Params.tags }}
 				<div class="mb-4">
-					{{ range . }}<a href="{{ "tags" | absURL}}/{{ . | urlize }}" class="badge badge-secondary badge-pill mr-1 ml-1">{{.}}</a>{{ end }}
+					{{ range . }}<a href="{{ "tags" | absURL}}/{{ . | urlize }}" class="badge badge-secondary badge-pill mx-1">{{.}}</a>{{ end }}
 				</div>
 				{{ end }}
 				<h1 class="mb-4">{{.Title}}</h1>

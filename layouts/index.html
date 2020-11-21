@@ -9,9 +9,7 @@
 					<div class="d-flex flex-row align-items-center flex-wrap">
 						<div class="flex-grow-1">{{- .Title -}}</div>
 						<div>
-							{{ with .Params.tags }}
-							{{ range . }}<span class="badge badge-secondary badge-pill align-middle">{{.}}</span> {{ end }}
-							{{ end }}
+							{{ with .Params.tags }}{{ range . }}<span class="badge badge-secondary badge-pill mx-1 align-middle">{{.}}</span>{{ end }}{{ end }}
 						</div>
 					</div>
 				</a>
