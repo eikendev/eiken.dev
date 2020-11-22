@@ -1,18 +1,20 @@
 {{ $link1_url := "https://eikenberg.at/" }}
 {{ $link2_url := "/index.xml" }}
+{{ $link3_url := "https://creativecommons.org/licenses/by/4.0/" }}
 
-{{ $link1 := dict "name" "eikenberg.at" "href" $link1_url "icon" "fa-globe-europe" }}
-{{ $link2 := dict "name" "Feed"         "href" $link2_url "icon" "fa-rss" }}
+{{ $link1 := dict "name" "eikenberg.at" "href" $link1_url "hover" "" "icon" "fas fa-globe-europe" }}
+{{ $link2 := dict "name" "Feed" "href" $link2_url "hover" "" "icon" "fas fa-rss" }}
+{{ $link3 := dict "name" "License" "href" $link3_url "hover" "Attribution 4.0 International (CC BY 4.0)" "icon" "fab fa-creative-commons" }}
 
-{{ $links := slice $link1 $link2 }}
+{{ $links := slice $link1 $link2 $link3 }}
 
 <div class="container">
-	<div class="row justify-content-center">
+	<div class="row justify-content-center mb-3">
 		{{ range $links }}
-		<a class="my-1 mx-3 mr-clear-lastchild text-white" href="{{ .href }}" title="{{ .name }}">
-			<i class="fas {{ .icon }} mr-2"></i>{{ .name }}
+		<a class="my-1 mx-3 mr-clear-lastchild text-white" href="{{ .href }}" title="{{if .hover}}{{ .hover }}{{else}}{{ .name }}{{end}}">
+			<i class="{{ .icon }} mr-2"></i>{{ .name }}
 		</a>
 		{{ end }}
 	</div>
-
+	<p class="text-center text-muted mb-clear-lastchild"><small>Copyright © {{ $.Site.Author.name }}</small></p>
 </div>
