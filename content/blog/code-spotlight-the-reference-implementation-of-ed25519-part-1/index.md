@@ -141,14 +141,14 @@ All operations need to be implemented as follows:
 - signing is done via `crypto_sign()`, and
 - verifying is done via `crypto_sign_open()`.
 
+In the reference, the implementations of those functions are located in the files `keypair.c`, `sign.c`, and `open.c` respectively.
+
 To enforce the interface, SUPERCOP defines the following prototypes in `PROTOTYPES.c`.
 ```c
 extern int crypto_sign(unsigned char *,unsigned long long *,const unsigned char *,unsigned long long,const unsigned char *);
 extern int crypto_sign_open(unsigned char *,unsigned long long *,const unsigned char *,unsigned long long,const unsigned char *);
 extern int crypto_sign_keypair(unsigned char *,unsigned char *);
 ```
-
-In the reference, the implementations of those functions are located in the files `keypair.c`, `sign.c`, and `open.c` respectively.
 
 And yes, the prototypes only provide little information about the parameters.
 To get more information, it's best to have a look at an existing implementation.
@@ -422,8 +422,8 @@ In the first step, the secret scalar is calculated.
 
 So, first, we have to hash the private key.
 ```c
-    unsigned char h[64];
-    crypto_hash_sha512(h, private_key, 32);
+unsigned char h[64];
+crypto_hash_sha512(h, private_key, 32);
 ```
 `crypto_hash_sha512()` is used by SUPERCOP as a generic name for a function that provides SHA-512, a cryptographic hash function.
 Depending on your setup, SUPERCOP can benchmark different implementations for SHA-512 and pick the fastest one for your machine (which is OpenSSL for me).
@@ -436,9 +436,9 @@ Then the RFC refers to section 5.1.5 which describes the key generation.
 
 Since only the first half of the digest is used for calculating the secret scalar, the "last octet" here is the 32nd byte.
 ```c
-    h[0] &= 248;
-    h[31] &= 127;
-    h[31] |= 64;
+h[0] &= 248;
+h[31] &= 127;
+h[31] |= 64;
 ```
 To make it a bit more obvious, let's represent the scalars in binary.
 ```python
@@ -460,8 +460,8 @@ The RFC then tells us how to interpret the result.
 > Interpret the buffer as the little-endian integer, forming a secret scalar s. (...)
 
 ```c
-    sc25519 secret_scalar;
-    sc25519_from32bytes(&secret_scalar, h);
+sc25519 secret_scalar;
+sc25519_from32bytes(&secret_scalar, h);
 ```
 What exactly happens here will become important later.
 For now, all you need to know is that `sc25519` is a type used to represent scalars.
@@ -470,8 +470,8 @@ The rest of the steps of the key generation procedure will instruct us on how to
 Here, the implementation assumes that the public key can be copied from the arguments to the signing function.
 The reason for this is that it's probably safe to assume that the user has someplace to store that public key.
 ```c
-    unsigned char public_key[32];
-    memmove(public_key, private_key + 32, 32);
+unsigned char public_key[32];
+memmove(public_key, private_key + 32, 32);
 ```
 Hold on, why are we copying parts of the secret key and interpreting them as the public key?
 We aren't actually: When you trace the buffer back to where it is built, you will see that both the secret key and the public key are concatenated and stored in the same buffer.
@@ -485,7 +485,7 @@ Let's see what happens to the second half.
 So there's not really a calculation.
 But by declaring a pointer it becomes more readable later.
 ```c
-    unsigned char *prefix = h + 32;
+unsigned char *prefix = h + 32;
 ```
 
 ### Step 2: Computing the Nonce
@@ -510,23 +510,23 @@ Directly below the table, `dom2()` is defined as follows.
 This means for Ed25519 we can reduce the expression to `SHA-512(prefix || M)`.
 Let's see how the reference implements it.
 ```c
-    memmove(signed_message + 64, message, message_len);
-    memmove(signed_message + 32, prefix, 32);
+memmove(signed_message + 64, message, message_len);
+memmove(signed_message + 32, prefix, 32);
 ```
 The `signed_message` variable is used as a buffer to concatenate the prefix and the message.
 Note that at this point, the variable name `signed_message` is misleading, since the prefix will not be part of the signed message.
 
 Then, the hash is calculated over the prepared buffer.
 ```c
-    unsigned char r_digest[64];
-    crypto_hash_sha512(r_digest, signed_message + 32, message_len + 32);
+unsigned char r_digest[64];
+crypto_hash_sha512(r_digest, signed_message + 32, message_len + 32);
 ```
 
 Finally, the RFC instructs us to interpret the result as a scalar.
 We did this before for the secret scalar, but this time we interpret 64 bytes instead of 32 bytes.
 ```c
-    sc25519 r;
-    sc25519_from64bytes(&r, r_digest);
+sc25519 r;
+sc25519_from64bytes(&r, r_digest);
 ```
 This is our nonce.
 
@@ -539,8 +539,8 @@ Let's read what the RFC requires us to do.
 
 \\(r\\) was already calculated in the last step, so we can do the scalar multiplication right away.
 ```c
-    ge25519 rB;
-    ge25519_scalarmult_base(&rB, &r);
+ge25519 rB;
+ge25519_scalarmult_base(&rB, &r);
 ```
 
 The RFC also tells us to _reduce_ \\(r\\).
@@ -550,7 +550,7 @@ For now it's enough to know that the reduction of \\(r\\) is taken care of by `s
 Then, the new point \\([r]B\\) (named `rB` in the code) is encoded as described in the RFC.
 The encoding (`R` in the RFC) is directly written into the `signed_message` buffer.
 ```c
-    ge25519_pack(signed_message, &rB);
+ge25519_pack(signed_message, &rB);
 ```
 Note that strictly speaking, moving the encoding into `signed_message` is not actually part of the third step in the RFC, but done here for efficiency reasons.
 One could store the result in a dedicated buffer for the moment, but in the next step, it needs to end up in this spot anyway.
@@ -567,16 +567,16 @@ As before, `dom2()` is the empty string and `PH()` is the identity function, mea
 We just moved the encoding of \\([r]B\\) into the beginning of the `signed_message` buffer, and the message (denoted as `M`) is already at its place, too.
 Thus, we only need to move the public key (denoted as `A`) into the buffer and calculate the hash.
 ```c
-    memmove(signed_message + 32, public_key, 32);
+memmove(signed_message + 32, public_key, 32);
 
-    unsigned char hram[64];
-    crypto_hash_sha512(hram, signed_message, message_len + 64);
+unsigned char hram[64];
+crypto_hash_sha512(hram, signed_message, message_len + 64);
 ```
 
 Again, we interpret the 64-byte digest as a scalar.
 ```c
-    sc25519 k;
-    sc25519_from64bytes(&k, hram);
+sc25519 k;
+sc25519_from64bytes(&k, hram);
 ```
 
 ### Step 5: Computing the Proof
@@ -588,9 +588,9 @@ Finally comes the proof, which is the second piece of our signature.
 This is a calculation with scalars.
 Actually, these are very large scalars, but the magic functions take care of that.
 ```c
-    sc25519 *S = &k;
-    sc25519_mul(S, &k, &secret_scalar);
-    sc25519_add(S, S, &r);
+sc25519 *S = &k;
+sc25519_mul(S, &k, &secret_scalar);
+sc25519_add(S, S, &r);
 ```
 
 Similar to before, the reduction of \\(k\\) has already happened in `sc25519_from64bytes()`.
@@ -605,12 +605,12 @@ The RFC also specifies how exactly we are supposed to build the signature.
 At this stage, the `signed_message` buffer contains `R || A || M`.
 We are left with writing \\(S\\) into the buffer, so we retrieve `R || S || M`.
 ```c
-    sc25519_to32bytes(signed_message + 32, S);
+sc25519_to32bytes(signed_message + 32, S);
 ```
 
 Finally, the reference writes the output length.
 ```c
-    *signed_message_len = message_len + 64;
+*signed_message_len = message_len + 64;
 ```
 
 The final length of the output is the length of the message plus 64 bytes.
