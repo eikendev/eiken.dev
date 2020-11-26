@@ -39,8 +39,13 @@ figcaption {
 blockquote {
 	border-left: 3px solid #CCC;
 	font-family: "Times New Roman", Times, serif;
-	margin: 1em 0em 1em 2em;
 	padding-left: 1em;
+}
+
+@include media-breakpoint-up(md) {
+	blockquote {
+		margin: 1em 0em 1em 2em;
+	}
 }
 
 section.footnotes {
