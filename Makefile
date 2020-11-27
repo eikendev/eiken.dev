@@ -12,10 +12,11 @@ build: dependencies
 	./hugo --minify
 	# If we run using Docker, we should reset file ownership afterwards.
 ifneq (,$(findstring docker,${ENGINE_COMMAND}))
-	sudo chown -R ${shell id -u ${USER}}:${shell id -g ${USER}} public/
+	sudo chown -R ${shell id -u ${USER}}:${shell id -g ${USER}} ./public/
 endif
-	mkdir -p public/font/mathjax
-	cp node_modules/mathjax/es5/output/chtml/fonts/woff-v2/* public/font/mathjax/
+	mkdir -p ./public/font/mathjax
+	cp node_modules/mathjax/es5/output/chtml/fonts/woff-v2/* ./public/font/mathjax/
+	./scripts/extract > ./public/allthelinks.txt
 
 .PHONY: server
 server: dependencies

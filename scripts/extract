@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+DIRECTORY='./public'
+
+find_urls () {
+	lynx -dump -hiddenlinks=listonly "$1" \
+		| sed -e '1,/^References$/d' \
+		| grep -i '\. https\?://.*' \
+		| cut -d '.' -f 2- \
+		| cut -d ' ' -f 2
+}
+
+export -f find_urls
+
+find "$DIRECTORY" -type f -name '*.html' -print0 \
+	| xargs --max-procs=4 --max-args=1 --null bash -c 'find_urls "$@"' _ \
+	| sort \
+	| uniq -u \
+	| grep -v 'https://news.ycombinator.com/submitlink?' \
+	| grep -v 'https://twitter.com/intent/tweet?' \
+	| grep -v 'https://www.reddit.com/submit?'

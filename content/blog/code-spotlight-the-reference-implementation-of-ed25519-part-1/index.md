@@ -179,7 +179,7 @@ Let me first sum up the key sentences in Cloudflare's blog post.
 This equation for the curve is provided by the scheme we use.
 Depending on the equation, we deal with a different _kind_ of curve.
 
-For Ed25519, a specific [twisted Edwards curve](http://eprint.iacr.org/2008/013.pdf) is used, and its equation is
+For Ed25519, a specific [twisted Edwards curve](https://eprint.iacr.org/2008/013.pdf) is used, and its equation is
 \\[ a x^2 + y^2 = 1 + d x^2 y^2 ,\\]
 where \\(a = -1\\) and \\(d = -\\frac{121665}{121666}.\\)
 So the points on the curve are the elements in the set
