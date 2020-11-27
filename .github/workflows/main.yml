@@ -12,6 +12,8 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0 # Hugo uses Git information to fetch .Lastmod information (enableGitInfo).
+      - name: Install dependencies
+        run: sudo apt-get install -y lynx # Used for extracting links.
       - name: Build
         run: make build
       - name: Deploy
