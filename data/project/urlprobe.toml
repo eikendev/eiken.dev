@@ -1,0 +1,8 @@
+Name = "urlprobe"
+Priority = 80
+License = "ISC"
+Languages = ["Rust"]
+RepositoryLink = "https://github.com/eikendev/urlprobe"
+RepositoryIcon = "fab fa-github"
+DownloadLink = "https://github.com/eikendev/urlprobe/archive/master.zip"
+Description = "I'm a big fan of the UNIX philosophy to build small tools that do one particular thing well. Although there were solutions for checking the availability of large lists of URLs, I wanted to give it a shot myself. This is how `urlprobe` was born."
