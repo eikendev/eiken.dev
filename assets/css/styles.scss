@@ -84,3 +84,9 @@ section.footnotes {
 .MathJax {
 	overflow-x: auto !important;
 }
+
+// Fix a spacing issue in Chroma tables that only have a single line. This
+// might be obsolete at the time of revisiting.
+.chroma .lnt {
+	display: block;
+}
