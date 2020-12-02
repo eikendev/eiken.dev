@@ -13,6 +13,7 @@ BASE_COMMAND="\
 	--tty \
 	--interactive \
 	--rm=true \
+	--net=host \
 	-v '$(pwd)':/src \
 	--security-opt label=disable \
 "
