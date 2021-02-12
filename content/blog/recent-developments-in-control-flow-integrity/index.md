@@ -2,7 +2,7 @@
 title: "Recent Developments in Control-Flow Integrity"
 date: 2020-09-12T21:52:00Z
 tags: ["security", "cfi"]
-images: ["/img/blog/recent-developments-in-control-flow-integrity/card.webp"]
+images: ["/img/blog/recent-developments-in-control-flow-integrity/card.png"]
 ---
 
 I was a bit busy in the past few months, but now I'm back to talk about some system security.
