@@ -2,7 +2,7 @@
 title: "Code Spotlight: the Reference Implementation of Ed25519 (Part 1)"
 date: 2020-11-22T19:00:00Z
 tags: ["crypto", "ecc", "ed25519"]
-images: ["/img/blog/code-spotlight-the-reference-implementation-of-ed25519-part-1/card.webp"]
+images: ["/img/blog/code-spotlight-the-reference-implementation-of-ed25519-part-1/card.png"]
 mathjax: true
 ---
 
