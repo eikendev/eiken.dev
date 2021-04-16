@@ -1,8 +1,0 @@
-Name = "ttrss"
-Priority = 5
-License = "MIT"
-Languages = ["Python"]
-RepositoryLink = "https://github.com/eikendev/ttrss"
-RepositoryIcon = "fab fa-github"
-DownloadLink = "https://github.com/eikendev/ttrss/archive/master.zip"
-Description = "Reading news is essential to keep up with modern technology. My proven method for doing so is using [Tiny Tiny RSS](https://tt-rss.org/), a powerful news feed aggregator. To be able to read my news offline I came up with this project to synchronize unread articles to my machine."

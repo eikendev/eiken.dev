@@ -1,0 +1,8 @@
+Name = "java-decompiler"
+Priority = 89
+License = "ISC"
+Languages = ["Dockerfile"]
+RepositoryLink = "https://github.com/eikendev/java-decompiler"
+RepositoryIcon = "fab fa-github"
+DownloadLink = "https://github.com/eikendev/java-decompiler/archive/master.zip"
+Description = "In black-box assessments of Android apps a good decompiler can save a lot of work. Luckily, there are many decompilers freely available, each with their individual strength. To make them easily accessible, I wrote a [Docker](https://www.docker.com/) image that decompiles your JAR and APK files using multiple decompilers."
