@@ -1,11 +1,6 @@
 <div class="mx-auto overflow-auto" style="position: relative; height:{{ .Get "height" }}px; max-width:{{ .Get "width" }}px">
-	<canvas class="mx-auto" id="{{ .Get "id" }}"></canvas>
+	<canvas class="mx-auto" id="chart-{{ .Get "id" }}" style="width:100%"></canvas>
 </div>
 {{ if .Get "id" }}
-<script type="text/javascript">
-	if (typeof ChartjsLoaders === 'undefined') {
-		var ChartjsLoaders = new Array();
-	}
-	ChartjsLoaders.push("{{ .Get "id" }}");
-</script>
+<script src="{{ .Get "id" }}.js" data-name="chart-{{ .Get "id" }}" defer></script>
 {{ end }}

@@ -9,7 +9,7 @@
 					<div class="d-flex flex-row align-items-center flex-wrap">
 						<div class="flex-grow-1">{{- .Title -}}</div>
 						<div>
-							{{ with .Params.tags }}{{ range . }}<span class="badge badge-secondary badge-pill mx-1 align-middle">{{.}}</span>{{ end }}{{ end }}
+							{{ with .Params.tags }}{{ range . }}<span class="badge bg-secondary badge-pill mx-1 align-middle">{{.}}</span>{{ end }}{{ end }}
 						</div>
 					</div>
 				</a>
@@ -17,7 +17,7 @@
 		</div>
 		<div class="text-center mt-5">
 			{{ with .Site.GetPage "section" "blog" }}
-			<a href="{{.Permalink}}" class="btn btn-primary"><i class="far fa-newspaper fa-lg mr-2"></i>More posts</a>
+			<a href="{{.Permalink}}" class="btn btn-primary"><i class="far fa-newspaper fa-lg me-2"></i>More posts</a>
 			{{ end }}
 		</div>
 	</div>
@@ -36,17 +36,17 @@
 						</a>
 						<div class="mb-1">
 							{{ with .License }}
-							<span class="badge badge-primary">{{.}}</span>
+							<span class="badge bg-primary">{{.}}</span>
 							{{ end }}
 							{{ range .Languages }}
-							<span class="badge badge-secondary">{{.}}</span>
+							<span class="badge bg-secondary">{{.}}</span>
 							{{ end }}
 						</div>
 						<p class="card-text">{{ .Description | markdownify }}</p>
 						<div class="d-flex justify-content-between align-items-center">
 							<div class="btn-group">
-								<a href="{{ .RepositoryLink }}" class="btn btn-sm btn-outline-gray7"><i class="mr-1 {{ .RepositoryIcon }}"></i>View</a>
-								<a href="{{ .DownloadLink }}" class="btn btn-sm btn-outline-gray7"><i class="mr-1 fas fa-download"></i>Download</a>
+								<a href="{{ .RepositoryLink }}" class="btn btn-sm btn-outline-gray7"><i class="me-1 {{ .RepositoryIcon }}"></i>View</a>
+								<a href="{{ .DownloadLink }}" class="btn btn-sm btn-outline-gray7"><i class="me-1 fas fa-download"></i>Download</a>
 							</div>
 						</div>
 					</div>

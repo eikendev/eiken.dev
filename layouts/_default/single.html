@@ -6,21 +6,21 @@
 			<div class="text-center mb-5">
 				{{ with .Params.tags }}
 				<div class="mb-4">
-					{{ range . }}<a href="{{ "tags" | absURL}}/{{ . | urlize }}" class="badge badge-secondary badge-pill mx-1">{{.}}</a>{{ end }}
+					{{ range . }}<a href="{{ "tags" | absURL}}/{{ . | urlize }}" class="badge bg-secondary badge-pill mx-1">{{.}}</a>{{ end }}
 				</div>
 				{{ end }}
 				<h1 class="mb-4">{{.Title}}</h1>
 				<div class="row justify-content-center">
-					<span class="my-1 mx-3 text-muted">
-						<i class="fas fa-calendar-day mr-2"></i><time datetime="{{ .PublishDate.Format "2006-01-02T15:04:05Z07:00" }}">{{ .PublishDate.Format "January 2, 2006" }}</time>
+					<span class="my-1 mx-3 col-auto text-muted">
+						<i class="fas fa-calendar-day me-2"></i><time datetime="{{ .PublishDate.Format "2006-01-02T15:04:05Z07:00" }}">{{ .PublishDate.Format "January 2, 2006" }}</time>
 					</span>
-					<span class="my-1 mx-3 text-muted">
-						<i class="fas fa-clock mr-2"></i>{{ .ReadingTime }} {{ if eq 1 .ReadingTime }}minute{{ else }}minutes{{ end }}
+					<span class="my-1 mx-3 col-auto text-muted">
+						<i class="fas fa-clock me-2"></i>{{ .ReadingTime }} {{ if eq 1 .ReadingTime }}minute{{ else }}minutes{{ end }}
 					</span>
 				</div>
 			</div>
     		{{- with .Content -}}
-				{{ . | replaceRE "(<h[1-9] id=\"([^\"]+)\".+)(</h[1-9]+>)" `${1}<a href="#${2}" class="hanchor" ariaLabel="Anchor"><i class="fas fa-link fa-xs ml-2"></i></a>${3}` | safeHTML }}
+				{{ . | replaceRE "(<h[1-9] id=\"([^\"]+)\".+)(</h[1-9]+>)" `${1}<a href="#${2}" class="hanchor" ariaLabel="Anchor"><i class="fas fa-link fa-xs ms-2"></i></a>${3}` | safeHTML }}
     		{{- end -}}
 		</article>
 		<div class="mt-5">

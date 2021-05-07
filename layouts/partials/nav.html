@@ -8,9 +8,9 @@
 			<div class="col-sm-4 offset-md-1 py-md-2">
 				<h4>Contact</h4>
 				<ul class="list-unstyled">
-					<li><a href="https://eikenberg.at/" class="text-white"><i class="mr-2 fas fa-globe-europe"></i>eikenberg.at</a></li>
-					<li><a href="{{ printf "https://twitter.com/%s" $.Site.Social.twitter }}" class="text-white"><i class="mr-2 fab fa-twitter"></i>{{ $.Site.Social.twitter }}</a></li>
-					<li><a href="#" class="text-white cryptedmail" data-name="hello" data-domain="eiken" data-tld="dev" onclick="window.location.href = 'mailto:' + this.dataset.name + '@' + this.dataset.domain + '.' + this.dataset.tld; return false;"><i class="mr-2 fas fa-envelope"></i></a></li>
+					<li><a href="https://eikenberg.at/" class="text-white"><i class="me-2 fas fa-globe-europe"></i>eikenberg.at</a></li>
+					<li><a href="{{ printf "https://twitter.com/%s" $.Site.Social.twitter }}" class="text-white"><i class="me-2 fab fa-twitter"></i>{{ $.Site.Social.twitter }}</a></li>
+					<li><a href="#" class="text-white cryptedmail" data-name="hello" data-domain="eiken" data-tld="dev" onclick="window.location.href = 'mailto:' + this.dataset.name + '@' + this.dataset.domain + '.' + this.dataset.tld; return false;"><i class="me-2 fas fa-envelope"></i></a></li>
 				</ul>
 			</div>
 		</div>
@@ -19,10 +19,10 @@
 <div class="navbar navbar-dark bg-darkgray5 shadow-sm">
 	<div class="container d-flex justify-content-between">
 		<a href="{{ $.Site.BaseURL }}" class="navbar-brand d-flex align-items-center">
-			<img src="{{ "img/logo.svg" | absURL }}" alt="" id="logo" class="mr-2" />
+			<img src="{{ "img/logo.svg" | absURL }}" alt="" id="logo" class="me-2" />
 			<strong>{{ $.Site.Title }}</strong>
 		</a>
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+		<button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
 	</div>

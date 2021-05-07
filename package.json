@@ -7,15 +7,14 @@
 	"author": "eikendev <raphael@eiken.dev>",
 	"private": true,
 	"dependencies": {
-		"@fortawesome/fontawesome-free": "^5.13.0",
-		"autoprefixer": "^9.7.4",
-		"bootstrap": "^4.4.1",
-		"chart.js": "^2.9.3",
-		"jquery": "^3.5.0",
-		"mathjax": "^3.0.1",
-		"popper.js": "^1.16.1",
-		"postcss-cli": "7.1.0",
-		"zooming": "^2.1.1"
+		"@fortawesome/fontawesome-free": "5.15.3",
+		"@popperjs/core": "2.9.2",
+		"autoprefixer": "10.2.5",
+		"bootstrap": "5",
+		"chart.js": "3.2.1",
+		"mathjax": "3.1.4",
+		"postcss-cli": "8.3.1",
+		"zooming": "2.1.1"
 	},
 	"browserslist": [
 		"> 1%"

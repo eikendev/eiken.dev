@@ -1,5 +1,5 @@
 var chartId = document.currentScript.getAttribute('data-name');
-var ctx = $('#' + chartId);
+var ctx = document.getElementById(chartId);
 
 new Chart(ctx, {
 	type: 'bar',
@@ -26,6 +26,7 @@ new Chart(ctx, {
 	options: {
 		responsive: true,
 		maintainAspectRatio: false,
+		width: 800,
 		scales: {
 			yAxes: [{
 				ticks: {

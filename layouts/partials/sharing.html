@@ -13,8 +13,8 @@
 
 <div class="row justify-content-center mb-3">
 	{{ range $services }}
-	<a class="btn btn-{{ .color }} m-1 mr-clear-lastchild" href="{{ .href }}" target="_blank" title="{{ .name }}">
-		<i class="fab {{ .icon }} mr-2"></i>{{ .name }}
+	<a class="btn btn-{{ .color }} m-1 col-auto mr-clear-lastchild" href="{{ .href }}" target="_blank" title="{{ .name }}">
+		<i class="fab {{ .icon }} me-2"></i>{{ .name }}
 	</a>
 	{{ end }}
 </div>

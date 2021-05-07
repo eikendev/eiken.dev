@@ -11,8 +11,8 @@
 <div class="container">
 	<div class="row justify-content-center mb-3">
 		{{ range $links }}
-		<a class="my-1 mx-3 mr-clear-lastchild text-white" href="{{ .href }}" title="{{if .hover}}{{ .hover }}{{else}}{{ .name }}{{end}}">
-			<i class="{{ .icon }} mr-2"></i>{{ .name }}
+		<a class="my-1 me-3 col-auto mr-clear-lastchild text-white" href="{{ .href }}" title="{{if .hover}}{{ .hover }}{{else}}{{ .name }}{{end}}">
+			<i class="{{ .icon }} me-2"></i>{{ .name }}
 		</a>
 		{{ end }}
 	</div>
