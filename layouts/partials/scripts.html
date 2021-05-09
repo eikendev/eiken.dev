@@ -2,7 +2,6 @@
 {{ $script_bootstrap := resources.Get "js/bootstrap.bundle.js" }}
 {{ $script_zooming := resources.Get "js/zooming.min.js" }}
 
-{{/* The order is important. We might want to use jQuery in our own Javascript code. */}}
 {{ $script := slice $script_site $script_bootstrap $script_zooming | resources.Concat "js/bundle.js" | resources.Minify | resources.Fingerprint "sha384" }}
 <script src="{{ $script.Permalink }}" integrity="{{ $script.Data.Integrity }}" crossorigin="anonymous"></script>
 

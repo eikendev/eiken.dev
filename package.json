@@ -8,11 +8,11 @@
 	"private": true,
 	"dependencies": {
 		"@fortawesome/fontawesome-free": "5.15.3",
-		"@popperjs/core": "2.9.2",
 		"autoprefixer": "10.2.5",
 		"bootstrap": "5",
 		"chart.js": "3.2.1",
 		"mathjax": "3.1.4",
+		"postcss": "8.2.14",
 		"postcss-cli": "8.3.1",
 		"zooming": "2.1.1"
 	},
