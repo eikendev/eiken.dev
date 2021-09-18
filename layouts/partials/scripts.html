@@ -2,20 +2,20 @@
 {{ $script_bootstrap := resources.Get "js/bootstrap.bundle.js" }}
 {{ $script_zooming := resources.Get "js/zooming.min.js" }}
 
-{{ $script := slice $script_site $script_bootstrap $script_zooming | resources.Concat "js/bundle.js" | resources.Minify | resources.Fingerprint "sha384" }}
-<script src="{{ $script.Permalink }}" integrity="{{ $script.Data.Integrity }}" crossorigin="anonymous"></script>
+{{ $script := slice $script_site $script_bootstrap $script_zooming | resources.Concat "js/bundle.js" | resources.Minify }}
+<script src="{{ $script.Permalink }}" crossorigin="anonymous"></script>
 
 {{ if .Params.chartjs }}
-	{{ $script := resources.Get "js/chart.js" | resources.Minify | resources.Fingerprint "sha384" }}
-	<script src="{{ $script.Permalink }}" integrity="{{ $script.Data.Integrity }}" crossorigin="anonymous"></script>
+	{{ $script := resources.Get "js/chart.js" | resources.Minify }}
+	<script src="{{ $script.Permalink }}" crossorigin="anonymous"></script>
 {{ end }}
 
 {{ $script_fontawesome := resources.Get "js/fontawesome.all.js" }}
 
-{{ $script := slice $script_fontawesome | resources.Concat "js/bundle-deferred.js" | resources.Minify | resources.Fingerprint "sha384" }}
-<script defer src="{{ $script.Permalink }}" integrity="{{ $script.Data.Integrity }}" crossorigin="anonymous"></script>
+{{ $script := slice $script_fontawesome | resources.Concat "js/bundle-deferred.js" | resources.Minify }}
+<script defer src="{{ $script.Permalink }}" crossorigin="anonymous"></script>
 
 {{ if .Params.mathjax }}
-	{{ $script := resources.Get "js/mathjax.js" | resources.Minify | resources.Fingerprint "sha384" }}
-	<script defer src="{{ $script.Permalink }}" integrity="{{ $script.Data.Integrity }}" crossorigin="anonymous"></script>
+	{{ $script := resources.Get "js/mathjax.js" | resources.Minify }}
+	<script defer src="{{ $script.Permalink }}" crossorigin="anonymous"></script>
 {{ end }}
