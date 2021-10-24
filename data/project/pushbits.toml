@@ -1,8 +1,8 @@
 Name = "PushBits"
-Priority = 110
+Priority = 130
 License = "ISC"
 Languages = ["Go"]
-RepositoryLink = "https://github.com/eikendev/pushbits"
+RepositoryLink = "https://github.com/pushbits/server"
 RepositoryIcon = "fab fa-github"
-DownloadLink = "https://github.com/eikendev/pushbits/archive/master.zip"
+DownloadLink = "https://github.com/pushbits/server/archive/master.zip"
 Description = "Inspired by [Pushover](https://pushover.net/) and [Gotify](https://gotify.net/), my intention with this *experimental* project is to build a push notification server that is minimalistic and secure. Since notifications are sent via [Matrix.org](https://matrix.org/), no additional clients need to be maintained. So far it features multiple users and application management."
