@@ -1,4 +1,4 @@
-HUGO_IMAGE='klakegg/hugo:ext'
+HUGO_IMAGE='docker.io/klakegg/hugo:ext'
 HUGO_PORT='1313'
 
 ENGINE_COMMAND="$(command -v podman 2>/dev/null || command -v docker 2>/dev/null)"
