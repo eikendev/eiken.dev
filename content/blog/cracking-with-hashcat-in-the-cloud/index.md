@@ -288,7 +288,7 @@ Also, a spot instance can suddenly terminate if other users are willing to pay m
 If we left this key away we would request an on-demand instance, which might be suitable in some situations.
 
 A `MaxPrice` of 0.4 seemed reasonable when I last checked all the prices in different regions.
-We don't want to set this too high, else our instance might be eaten by other bidders too fast.
+We don't want to set this too low, else our instance might be eaten by other bidders too fast.
 If every dime counts for you, adjust this with your target regions in mind.
 
 The `NetworkInterfaces` is related to networking.
@@ -296,7 +296,7 @@ It puts the instance in the correct Subnet and assigns it the right SecurityGrou
 We'll come to this in a second.
 
 One of the most important elements in this resource is the `UserData` key.
-This lets us provide commands that we want the instance to run right after boot.
+This lets us provide commands that we want the instance to run right after launch.
 We can use this to install additional software and configure the system.
 
 On AWS, we can do this through [cloud-init](https://cloud-init.io/), which describes itself as a "standard for customising cloud instances".
