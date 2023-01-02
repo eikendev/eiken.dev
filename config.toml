@@ -16,10 +16,11 @@ pygmentsUseClasses=true
 	github = "eikendev"
 	gitlab = "eikendev"
 	twitter = "eikendev"
+	mastodon = "eikendev@infosec.exchange"
 
 [params]
 	title = "eikendev"
-	author = "Raphael Eikenberg (eikendev)"
+	author = "eikendev"
 	description = "Coding projects and blog posts by eikendev. Always happy to learn something new. Also interested in infosec? Join my journey!"
 	keywords = "coding, programming, projects, infosec, information security, system security, portfolio"
 	images = ["/img/card.png"]
