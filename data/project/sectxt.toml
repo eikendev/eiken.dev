@@ -1,5 +1,5 @@
 Name = "sectxt"
-Priority = 120
+Priority = 78
 License = "ISC"
 Languages = ["Rust"]
 RepositoryLink = "https://github.com/eikendev/sectxt"

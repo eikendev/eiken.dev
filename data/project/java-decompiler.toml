@@ -1,5 +1,5 @@
 Name = "java-decompiler"
-Priority = 89
+Priority = 92
 License = "ISC"
 Languages = ["Dockerfile"]
 RepositoryLink = "https://github.com/eikendev/java-decompiler"
