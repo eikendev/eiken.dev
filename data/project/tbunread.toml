@@ -1,5 +1,5 @@
 Name = "tbunread"
-Priority = 101
+Priority = 92
 License = "ISC"
 Languages = ["Rust"]
 RepositoryLink = "https://github.com/eikendev/tbunread"

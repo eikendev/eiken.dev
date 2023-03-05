@@ -1,8 +1,0 @@
-Name = "secvault"
-Priority = 45
-License = "ISC"
-Languages = ["C"]
-RepositoryLink = "https://github.com/eikendev/secvault"
-RepositoryIcon = "fab fa-github"
-DownloadLink = "https://github.com/eikendev/airquality/archive/master.zip"
-Description = "With LKMs, the [Linux](https://www.linuxfoundation.org/projects/linux/) kernel offers a powerful interface to extend its functionality. secvault is a module that allows users to store secrets in kernel memory. Several commands are supported and can be called via an ioctl API."
