@@ -208,6 +208,7 @@ $navbar-light-active-color: rgba($black, 0.9);
 $navbar-light-disabled-color: rgba($black, 0.3);
 $navbar-light-toggler-border-color: rgba($black, 0.1);
 
+$table-color: inherit;
 $table-accent-bg: rgba($black, 0.05);
 $table-hover-bg: rgba($black, 0.075);
 $table-border-color: $gray-200;
@@ -264,6 +265,7 @@ $list-group-border-color: rgba($white, 0.1);
 $list-group-hover-bg: scale-color($list-group-bg, $lightness: 5%);
 $list-group-disabled-color: scale-color($list-group-bg, $lightness: 5%);
 $list-group-action-color: inherit;
+$list-group-action-hover-color: inherit;
 $list-group-action-active-bg: scale-color($list-group-bg, $lightness: 5%);
 
 $thumbnail-bg: $body-bg;

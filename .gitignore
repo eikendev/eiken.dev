@@ -1,4 +1,5 @@
 static/font/mathjax/*
+.hugo_build.lock
 
 ### Hugo
 # Generated files by hugo
