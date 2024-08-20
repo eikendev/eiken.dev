@@ -1,10 +1,10 @@
-{{ $service1_link := printf "https://github.com/%s" $.Site.Social.github }}
+{{ $service1_link := printf "https://github.com/%s" $.Site.Params.social.github }}
 {{ $service1 := dict "name" "GitHub" "href" $service1_link "color" "primary" "icon" "fab fa-github" }}
 
-{{ $service2_link := printf "https://gitlab.com/%s" $.Site.Social.gitlab }}
+{{ $service2_link := printf "https://gitlab.com/%s" $.Site.Params.social.gitlab }}
 {{ $service2 := dict "name" "GitLab" "href" $service2_link "color" "secondary" "icon" "fab fa-gitlab" }}
 
-{{ $service3_link := printf "https://twitter.com/%s" $.Site.Social.twitter }}
+{{ $service3_link := printf "https://twitter.com/%s" $.Site.Params.social.twitter }}
 {{ $service3 := dict "name" "Twitter" "href" $service3_link "color" "secondary" "icon" "fab fa-twitter" }}
 
 {{ $services := slice $service1 $service2 $service3 }}
