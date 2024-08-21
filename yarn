@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-. ./commands.sh
-
-COMMAND="$YARN_COMMAND $*"
-
-eval "$COMMAND"

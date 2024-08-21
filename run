@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+HUGO_IMAGE='docker.io/hugomods/hugo:latest'
+
+ENGINE_COMMAND="$(command -v podman 2>/dev/null || command -v docker 2>/dev/null)"
+
+log() {
+    printf "%s\n" "$*" >&2
+}
+
+if [ -z "$ENGINE_COMMAND" ]; then
+    log 'Neither Docker nor Podman are available.'
+    exit 1
+fi
+
+if ! $ENGINE_COMMAND info &>/dev/null; then
+    log "Failed to execute $ENGINE_COMMAND. Check if you have the correct permissions."
+    exit 1
+fi
+
+BASE_COMMAND="\
+    $ENGINE_COMMAND run \
+    --tty \
+    --interactive \
+    --rm=true \
+    --net=host \
+    -v '$PWD':/src:Z \
+"
+
+case "$1" in
+    hugo)
+        COMMAND="$BASE_COMMAND --entrypoint='hugo' $HUGO_IMAGE ${@:2}"
+        ;;
+    yarn)
+        COMMAND="$BASE_COMMAND --entrypoint='yarn' $HUGO_IMAGE ${@:2}"
+        ;;
+    *)
+        echo "Usage: $0 <hugo|yarn> [parameters]"
+        exit 1
+        ;;
+esac
+
+eval "$COMMAND"
