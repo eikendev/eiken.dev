@@ -27,8 +27,8 @@ pygmentsUseClasses=true
 	github = "eikendev"
 	gitlab = "eikendev"
 	twitter = "eikendev"
-	mastodon = "eikendev@infosec.exchange"
-	mastodonurl = "https://infosec.exchange/@eikendev"
+	bluesky = "@eikendev.bsky.social"
+	blueskyurl = "https://bsky.app/profile/eikendev.bsky.social"
 
 [permalinks]
 	blog = "blog/:year/:month/:title/"
