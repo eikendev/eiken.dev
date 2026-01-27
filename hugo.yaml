@@ -1,0 +1,58 @@
+baseURL: "https://www.eiken.dev/"
+languageCode: "en-us"
+title: "eikendev"
+footnoteReturnLinkContents: "↩"
+rssLimit: 20
+disableHugoGeneratorInject: true
+enableRobotsTXT: true
+enableGitInfo: true
+pluralizelisttitles: false
+pygmentsUseClasses: true
+
+taxonomies:
+  tag: "tags"
+
+params:
+  title: "eikendev"
+  description: "Coding projects and blog posts by eikendev. Always happy to learn something new. Also interested in infosec? Join my journey!"
+  keywords: "coding, programming, projects, infosec, information security, system security, portfolio"
+  images:
+    - "/img/card.png"
+  author:
+    name: "eikendev"
+    email: "hello@eiken.dev"
+  social:
+    github: "eikendev"
+    gitlab: "eikendev"
+    twitter: "eikendev"
+    bluesky: "@eikendev.bsky.social"
+    blueskyurl: "https://bsky.app/profile/eikendev.bsky.social"
+
+permalinks:
+  blog: "blog/:year/:month/:title/"
+
+sitemap:
+  changefreq: "weekly"
+  filename: "sitemap.xml"
+  priority: 0.5
+
+# https://jvns.ca/blog/2024/10/07/some-notes-on-upgrading-hugo/
+markup:
+  highlight:
+    codeFences: false
+    lineNos: true
+    lineNumbersInTable: true
+    tabWidth: 4
+  goldmark:
+    extensions:
+      footnote: true
+      strikethrough: true
+      table: true
+      taskList: true
+      typographer:
+        leftAngleQuote: "&lt;&lt;"
+        rightAngleQuote: "&gt;&gt;"
+    parser:
+      autoHeadingIDType: "blackfriday"
+    renderer:
+      unsafe: true

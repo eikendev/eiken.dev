@@ -3,7 +3,7 @@
 <section class="my-4">
 	<div class="container">
 		<div class="column">
-			{{ range .Data.Pages }}
+			{{ range .Pages }}
 			{{ .Render "summary" }}
 			{{ end }}
 		</div>

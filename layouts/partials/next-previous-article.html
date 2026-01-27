@@ -1,4 +1,4 @@
-{{ if or (.Page.Next) (.Page.Prev) }}
+{{ if or (.PrevInSection) (.NextInSection) }}
 <div class="mx-auto mt-5 text-center">
 	{{ with .PrevInSection }}
 	<a class="text-reset text-decoration-none" href="{{.Permalink}}">
