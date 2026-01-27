@@ -1,1 +1,0 @@
-../../node_modules/mathjax/es5/tex-chtml.js

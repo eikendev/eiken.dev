@@ -2,21 +2,17 @@ html {
 	overflow-y: scroll;
 }
 
-h2, h3, h4, h5, h6 {
+h2,
+h3,
+h4,
+h5,
+h6 {
 	@extend %headings26 !optional;
 }
 
 article.single {
 	%headings26 {
 		margin-top: 2rem;
-	}
-
-	// Code listings.
-	div.chroma {
-		margin-bottom: 1.5rem;
-	}
-	pre.chroma {
-		margin-bottom: 0;
 	}
 }
 
@@ -26,7 +22,7 @@ figure {
 	width: 100%;
 }
 
-figure > img {
+figure>img {
 	display: block;
 	margin: 0 auto 1rem auto;
 	max-width: 100%;
@@ -56,7 +52,7 @@ section.footnotes {
 	visibility: hidden;
 }
 
-%headings26:hover > .hanchor {
+%headings26:hover>.hanchor {
 	visibility: visible;
 }
 
@@ -80,9 +76,10 @@ section.footnotes {
 	margin-right: 0 !important;
 }
 
-// Prevent long expressions to stretch the width.
-.MathJax {
-	overflow-x: auto !important;
+// Prevent long expressions from stretching the width.
+.katex-display {
+	overflow-x: auto;
+	overflow-y: hidden;
 }
 
 // Fix a spacing issue in Chroma tables that only have a single line. This

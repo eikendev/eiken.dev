@@ -3,7 +3,6 @@ title: "Code Spotlight: the Reference Implementation of Ed25519 (Part 1)"
 date: 2020-11-22T19:00:00Z
 tags: ["crypto", "ecc", "ed25519"]
 images: ["/img/blog/code-spotlight-the-reference-implementation-of-ed25519-part-1/card.png"]
-mathjax: true
 ---
 
 Elliptic curve cryptography (ECC) has always been something I wanted to fully understand eventually.
@@ -180,10 +179,10 @@ This equation for the curve is provided by the scheme we use.
 Depending on the equation, we deal with a different _kind_ of curve.
 
 For Ed25519, a specific [twisted Edwards curve](https://eprint.iacr.org/2008/013.pdf) is used, and its equation is
-\\[ a x^2 + y^2 = 1 + d x^2 y^2 ,\\]
-where \\(a = -1\\) and \\(d = -\\frac{121665}{121666}.\\)
+\[ a x^2 + y^2 = 1 + d x^2 y^2 ,\]
+where \(a = -1\) and \(d = -\frac{121665}{121666}.\)
 So the points on the curve are the elements in the set
-\\[ \\left\\{ (x, y) \\in \\mathbb{R}^2\\ |\\ a x^2 + y^2 = 1 + d x^2 y^2 \\right\\} .\\]
+\[ \left\{ (x, y) \in \mathbb{R}^2\ |\ a x^2 + y^2 = 1 + d x^2 y^2 \right\} .\]
 
 The three resources I linked base their explanation on a curve with horizontal symmetry, i.e., their curve is symmetric about the x-axis.
 For Ed25519, however, the curve has vertical symmetry.
@@ -205,7 +204,7 @@ Especially check out [this interactive tool by Andrea Corbellini](https://andrea
 In case the two points _do_ lay on a horizontal line, there's a trick we can apply to make the addition work.
 In essence, a "fake" point is introduced to the curve, called the _point at infinity_.
 This point is now an actual element of the curve, so we can further refine our definition to the set
-\\[ \\left\\{ (x, y) \\in \\mathbb{R}^2\\ |\\ a x^2 + y^2 = 1 + d x^2 y^2 \\right\\}\\ \\cup\\ \\left\\{ 0 \\right\\} .\\]
+\[ \left\{ (x, y) \in \mathbb{R}^2\ |\ a x^2 + y^2 = 1 + d x^2 y^2 \right\}\ \cup\ \left\{ 0 \right\} .\]
 Lucky for us, Bernstein and his colleagues have come up with a formula for an addition that does not care about this exception.
 
 Lastly, note that we can also "add" a point to itself, and invert a point by inverting its x-coordinate (which always works because our curve is symmetric along the y-axis).
@@ -213,29 +212,31 @@ Altogether, the elements of the curve combined with the addition build a [group]
 This is why we will refer to the points as _group elements_.
 
 So if there is addition, do we also have multiplication?
-Say there is a point \\(P\\) on the curve.
-Using the addition, we could add the point \\(P\\) three times to itself like this: \\(P + P + P + P.\\)
+Say there is a point \(P\) on the curve.
+Using the addition, we could add the point \(P\) three times to itself like this: \(P + P + P + P.\)
 See where this is going?
 
 Simply put, we can "multiply" a group element with a _scalar_ (i.e., just a normal number) to retrieve another group element.
 This operation is known as _scalar multiplication_.
 The notation is a bit different than what we are used to, we usually write
-\\[ P + P + P + P = [4]P = [2 + 2]P = [2][2]P .\\]
+\[ P + P + P + P = [4]P = [2 + 2]P = [2][2]P .\]
 
 ### Base Point
 
-What's also to mention is that an instance of EdDSA needs to define a so-called _base point_ \\(B.\\)
+What's also to mention is that an instance of EdDSA needs to define a so-called _base point_ \(B.\)
 Why do we need it?
 Think about it as a reference location on the elliptic curve.
-If we add the base point to itself \\(r\\) times, denoted as \\([r]B,\\) everybody that knows \\(r\\) also knows the resulting point \\([r]B\\) on the curve, because \\(B\\) is public knowledge.
-In contrast, calculating \\(r\\) from \\([r]B\\) is very hard, and among cryptographers, this is referred to as the "elliptic curve discrete logarithm problem", or ECDLP.
+If we add the base point to itself \(r\) times, denoted as \([r]B,\) everybody that knows \(r\) also knows the resulting point \([r]B\) on the curve, because \(B\) is public knowledge.
+In contrast, calculating \(r\) from \([r]B\) is very hard, and among cryptographers, this is referred to as the "elliptic curve discrete logarithm problem", or ECDLP.
 
-For Ed25519, \\(B = (B_x, B_y)\\) is specified in RFC 7748, just like the curve, and it remains constant for any calculation with Ed25519.
+For Ed25519, \(B = (B_x, B_y)\) is specified in RFC 7748, just like the curve, and it remains constant for any calculation with Ed25519.
 In explicit numbers, we have
-\\begin{array}{rcl}
-B_x & = & 15112221349535400772501151409588531511454012693041857206046113283949847762202 \\\\
-B_y & = & 46316835694926478169428394003475163141307993866256225615783033603165251855960
-.\\end{array}
+\[
+\begin{array}{rcl}
+B_x & = & 15112221349535400772501151409588531511454012693041857206046113283949847762202 \\
+B_y & = & 46316835694926478169428394003475163141307993866256225615783033603165251855960 .
+\end{array}
+\]
 
 Yes I know, these numbers are large.
 At this point you should realize that an implementation probably needs specialized algorithms to reach acceptable speed.
@@ -246,38 +247,38 @@ Lastly, imagine ending up with points so large that our computers have problems 
 To make calculations feasible, it makes sense to introduce bounds on all values we deal with.
 The solution is modular arithmetic.
 
-Maybe you remember those congruence relations where we write \\[ a \\equiv b \\pmod n \\] for integers \\(a\\), \\(b\\), and \\(n\\).
-What we mean by that is that there exists some integer \\(k\\) such that \\[ a = k n + b .\\]
+Maybe you remember those congruence relations where we write \[ a \equiv b \pmod n \] for integers \(a\), \(b\), and \(n\).
+What we mean by that is that there exists some integer \(k\) such that \[ a = k n + b .\]
 If you've never heard of that, [Wikipedia](https://en.wikipedia.org/wiki/Modular_arithmetic) and [Khan Academy](https://www.khanacademy.org/computing/computer-science/cryptography/modarithmetic/a/what-is-modular-arithmetic) give some good introductions.
 
-To combine modular arithmetic with elliptic curves, we can define an elliptic curve over a [finite field](https://en.wikipedia.org/wiki/Finite_field) \\(\\mathbb{F}_p\\) where \\(p\\) is a prime number.
-The finite field \\(\\mathbb{F}_p\\) contains as elements all integers in the range \\([0, p - 1].\\)
+To combine modular arithmetic with elliptic curves, we can define an elliptic curve over a [finite field](https://en.wikipedia.org/wiki/Finite_field) \(\mathbb{F}_p\) where \(p\) is a prime number.
+The finite field \(\mathbb{F}_p\) contains as elements all integers in the range \([0, p - 1].\)
 
-For the finite field of curve25519, we have \\(p = 2^{255} - 19.\\)
+For the finite field of curve25519, we have \(p = 2^{255} - 19.\)
 This is also where the number 25519 in "Ed25519" comes from.
 
 What does this all mean for our curve?
 
 > Rather than allow any value for the points on the curve, we restrict ourselves to whole numbers in a fixed range.
 
-Essentially, we restrict the elements of our curve further so that the _coordinates_ of a point must be elements of the finite field (so they must be non-negative integers less than \\(p\\)), which is why we will call them _field elements_ from here.
+Essentially, we restrict the elements of our curve further so that the _coordinates_ of a point must be elements of the finite field (so they must be non-negative integers less than \(p\)), which is why we will call them _field elements_ from here.
 The curve over the finite field is now the set
-\\[ \\left\\{ (x, y) \\in (\\mathbb{F}_p)^2\\ |\\ a x^2 + y^2 = 1 + d x^2 y^2 \\right\\}\\ \\cup\\ \\left\\{ 0 \\right\\} .\\]
+\[ \left\{ (x, y) \in (\mathbb{F}_p)^2\ |\ a x^2 + y^2 = 1 + d x^2 y^2 \right\}\ \cup\ \left\{ 0 \right\} .\]
 
 What's crucial is that we must treat the coordinates differently now.
 Before they were real numbers, but now they are elements of our finite field.
-For instance, if we wanted to calculate the division \\[ x_c = \frac{x_a}{x_b} = x_a \cdot x_b^{-1} \\] for two coordinates \\(x_a\\) and \\(x_b\\), we would first have to find out the multiplicative inverse \\(x_b^{-1}.\\)
-This is so that \\(x_c\\) ends up being an element of the finite field, meaning we can't use the division we normally use for real numbers because it could result in fractions.
+For instance, if we wanted to calculate the division \[ x_c = \frac{x_a}{x_b} = x_a \cdot x_b^{-1} \] for two coordinates \(x_a\) and \(x_b\), we would first have to find out the multiplicative inverse \(x_b^{-1}.\)
+This is so that \(x_c\) ends up being an element of the finite field, meaning we can't use the division we normally use for real numbers because it could result in fractions.
 
-Also, after each operation we need to check if our result is still in \\(\\mathbb{F}_p.\\)
-As an example, think about an addition like \\[ (p - 1) + (p - 1) = 2p - 2 .\\]
-If the result exceeds \\(p-1\\) like in this case, then we need to _reduce_ the result \\(x_c\\) to a number \\[ x_c' \\equiv x_c \\pmod p ,\\] for which \\(x_c'\\) is an element of the finite field.
+Also, after each operation we need to check if our result is still in \(\mathbb{F}_p.\)
+As an example, think about an addition like \[ (p - 1) + (p - 1) = 2p - 2 .\]
+If the result exceeds \(p-1\) like in this case, then we need to _reduce_ the result \(x_c\) to a number \[ x_c' \equiv x_c \pmod p ,\] for which \(x_c'\) is an element of the finite field.
 
 How did introducing modular arithmetic change the arithmetic on the curve?
 It's important to note that the addition and the scalar multiplication still work as expected.
 The elements of the curve together with this addition still form a group.
 
-Since \\(\\mathbb{F}_p\\) is finite, however, \\((\\mathbb{F}_p)^2\\) must be finite, too, meaning we have only finitely many points left to operate on.
+Since \(\mathbb{F}_p\) is finite, however, \((\mathbb{F}_p)^2\) must be finite, too, meaning we have only finitely many points left to operate on.
 Thus, the group is now a _finite_ group.
 
 If you go back to the [interactive tool by Andrea](https://andrea.corbellini.name/ecc/interactive/modk-add.html), you will see that there are indeed only finitely many points on a curve over a finite field.
@@ -288,13 +289,13 @@ And what happens now when we take the base point and add it onto itself very oft
 The explanation for this is a bit more involved.
 
 In summary, we will use the base point as a _generator_.
-In other words, our base point \\(B,\\) can be used to reach a subset of all available points on the curve over the finite field by calculating the scalar multiples \\[ \\left\\{ [0]B, [1]B, [2]B, \ldots \\right\\} .\\]
-This set is the _subgroup_ generated by \\(B\\), and it is finite, too.
-Since this subgroup is of prime order \\(L,\\) meaning the number of elements in the subgroup is prime, it is _cyclic_.
-This means that after adding \\(B\\) onto itself often enough, we'll end up with the base point again.
-So the addition "wraps around" like in modular arithmetic, and in fact the subgroup behaves just like the integers modulo \\(L.\\)
+In other words, our base point \(B,\) can be used to reach a subset of all available points on the curve over the finite field by calculating the scalar multiples \[ \left\{ [0]B, [1]B, [2]B, \ldots \right\} .\]
+This set is the _subgroup_ generated by \(B\), and it is finite, too.
+Since this subgroup is of prime order \(L,\) meaning the number of elements in the subgroup is prime, it is _cyclic_.
+This means that after adding \(B\) onto itself often enough, we'll end up with the base point again.
+So the addition "wraps around" like in modular arithmetic, and in fact the subgroup behaves just like the integers modulo \(L.\)
 
-{{< figure src="./cyclicgroup.min.svg" alt="Finite and Cyclic Group" caption="In EdDSA, the base point generates a finite and cyclic subgroup of the elliptic curve. Note that \\(L\\) is the order of the subgroup that \\(B\\) generates. Because the subgroup is finite and cyclic, we have \\( [L]B = [0]B \\)." >}}
+{{< figure src="./cyclicgroup.min.svg" alt="Finite and Cyclic Group" caption="In EdDSA, the base point generates a finite and cyclic subgroup of the elliptic curve. Note that \(L\) is the order of the subgroup that \(B\) generates. Because the subgroup is finite and cyclic, we have \( [L]B = [0]B \)." >}}
 
 ### Elliptic Curves in Cryptography
 
@@ -313,8 +314,8 @@ I don't have strong preferences, but since different resources use different ter
 Before looking at any code, let me summarize quickly how the scheme works.
 The goal is not to understand any security implications, but rather to see how a signature is calculated.
 
-From here, remember that \\(||\\) is used to denote the concatenation of bytes, and that \\(\\mathrm{H}\\) is a [cryptographic hash function](https://en.wikipedia.org/wiki/Cryptographic_hash_function).
-In Ed25519, \\(\\mathrm{H}\\) is [SHA-512](https://en.wikipedia.org/wiki/SHA-2).
+From here, remember that \(||\) is used to denote the concatenation of bytes, and that \(\mathrm{H}\) is a [cryptographic hash function](https://en.wikipedia.org/wiki/Cryptographic_hash_function).
+In Ed25519, \(\mathrm{H}\) is [SHA-512](https://en.wikipedia.org/wiki/SHA-2).
 
 I will use a subscripted "b" to indicate that a variable is the encoding of something and not the mathematical value.
 Encodings are relevant for two reasons:
@@ -322,11 +323,11 @@ Encodings are relevant for two reasons:
 - If we calculate a hash of a point, the representation of that point must be exactly the same among different implementations. This is because if we want to agree with other parties on a hash output, the input to the hash function must be the same for everyone who wants to verify that hash output.
 
 Let's assume that we have a private key, which is a bunch of (truly) randomly generated bytes.
-- From this key, we derive the secret scalar \\(s\\) and the so-called _prefix_. The public key is then \\( A = [s]B .\\)
-- The prefix and the message \\(M\\) are used to derive the _nonce_ \\( r = \\mathrm{H}(\\mathrm{prefix}_b || M_b) ,\\) which itself is used to derive the _commitment_ \\( R = [r]B .\\)
-- Next, the _challenge_ is calculated as \\( k = \\mathrm{H}(R_b || A_b || M_b) .\\)
-- Finally, the _proof_ is calculated as \\( S = r + k s ,\\) where \\(s\\) is the secret scalar.
-- The resulting signature is the pair \\((R, S).\\)
+- From this key, we derive the secret scalar \(s\) and the so-called _prefix_. The public key is then \( A = [s]B .\)
+- The prefix and the message \(M\) are used to derive the _nonce_ \( r = \mathrm{H}(\mathrm{prefix}_b || M_b) ,\) which itself is used to derive the _commitment_ \( R = [r]B .\)
+- Next, the _challenge_ is calculated as \( k = \mathrm{H}(R_b || A_b || M_b) .\)
+- Finally, the _proof_ is calculated as \( S = r + k s ,\) where \(s\) is the secret scalar.
+- The resulting signature is the pair \((R, S).\)
 
 Note that I used the terminology (nonce, commitment, etc.) from [Schnorr signatures](https://en.wikipedia.org/wiki/Schnorr_signature), but the variable names are consistent with the relevant RFC.
 
@@ -334,7 +335,7 @@ Maybe you are overwhelmed by this mix of formulas now, so I tried to illustrate 
 
 {{< figure src="./signing.min.svg" alt="Data Flow in the Signing Procedure of Ed25519" caption="The data flow in the signing procedure of Ed25519. Inputs are colored in blue, and outputs in green. Further, points of the elliptic curve (and their encodings) are drawn as disks, while scalars are rectangles with rounded corners." >}}
 
-The base point \\(B\\) is treated as input in the figure because it can be different for other instances of EdDSA.
+The base point \(B\) is treated as input in the figure because it can be different for other instances of EdDSA.
 
 As you can see, there are three calculations of SHA-512 in total.
 For this reason, a high-performance[^runtimeperformance] Ed25519 implementation needs to rely on a fast SHA-512 implementation.
@@ -345,20 +346,20 @@ In case you want to have some more mathematical background than given here, I re
 Schnorr signatures are based on the same concept, and in [another blog post](https://cryptologie.net/article/497/eddsa-ed25519-ed25519-ietf-ed25519ph-ed25519ctx-hasheddsa-pureeddsa-wtf/) David perfectly points out two major differences.
 
 Aside from the differences he addresses, what confused me the most at first is that the schemes use the term "private key" for different things.
-- In Schnorr signatures, we have a private key \\(x\\) and calculate the public key \\(g^x.\\) The private key is used to calculate the proof \\[ d = e - x c .\\]
-- In Ed25519, we have a private key from which we derive the secret scalar \\(s.\\) As outlined above, it is this secret scalar \\(s\\) that is used to calculate the proof, not the private key directly.
+- In Schnorr signatures, we have a private key \(x\) and calculate the public key \(g^x.\) The private key is used to calculate the proof \[ d = e - x c .\]
+- In Ed25519, we have a private key from which we derive the secret scalar \(s.\) As outlined above, it is this secret scalar \(s\) that is used to calculate the proof, not the private key directly.
 
 I think the reason for this difference is that in Ed25519, we derive two values from the private key: the nonce and the secret scalar.
 In particular, an Ed25519 private key is hashed, and then one half of the digest is used as the secret scalar and the other half is used to derive the nonce.
 For Schnorr signatures, in contrast, the nonce is randomly generated.[^nonce]
 
 Finally, a difference I'm not fully certain about concerns the signatures themselves.
-- Schnorr signatures appear to consist of the pair \\((c, d),\\) with \\(c\\) being the _challenge_ and \\(d\\) being the proof.
-- Ed25519 signatures, however, are made of the pair \\((R, S),\\) so the _commitment_ and the proof.
+- Schnorr signatures appear to consist of the pair \((c, d),\) with \(c\) being the _challenge_ and \(d\) being the proof.
+- Ed25519 signatures, however, are made of the pair \((R, S),\) so the _commitment_ and the proof.
 
 This might have to do with how the verification is done.
-For Schnorr signatures, the verifier derives \\[ c' = H(m || y^c g^d) \\] from the signature and the public key \\(y = g^x,\\) and then checks \\(c = c'.\\)
-For Ed25519 signatures, the verifier derives the challenge \\(k\\) and then checks if \\[ 8[S]B = 8R + 8[k]A ,\\] which works for valid signatures because \\[ 8[r+ks]B = 8[r]B + 8[k][s]B .\\]
+For Schnorr signatures, the verifier derives \[ c' = H(m || y^c g^d) \] from the signature and the public key \(y = g^x,\) and then checks \(c = c'.\)
+For Ed25519 signatures, the verifier derives the challenge \(k\) and then checks if \[ 8[S]B = 8R + 8[k]A ,\] which works for valid signatures because \[ 8[r+ks]B = 8[r]B + 8[k][s]B .\]
 
 But as mentioned, this is where I'm not so sure myself, so take it with a grain of salt.
 
@@ -537,17 +538,17 @@ Let's read what the RFC requires us to do.
 
 > Compute the point [r]B. For efficiency, do this by first reducing r modulo L, the group order of B. Let the string R be the encoding of this point.
 
-\\(r\\) was already calculated in the last step, so we can do the scalar multiplication right away.
+\(r\) was already calculated in the last step, so we can do the scalar multiplication right away.
 ```c
 ge25519 rB;
 ge25519_scalarmult_base(&rB, &r);
 ```
 
-The RFC also tells us to _reduce_ \\(r\\).
+The RFC also tells us to _reduce_ \(r\).
 I briefly mentioned reductions earlier, but we'll discuss it when we look at the lower-level implementation.
-For now it's enough to know that the reduction of \\(r\\) is taken care of by `sc25519_from64bytes()` in the previous step.
+For now it's enough to know that the reduction of \(r\) is taken care of by `sc25519_from64bytes()` in the previous step.
 
-Then, the new point \\([r]B\\) (named `rB` in the code) is encoded as described in the RFC.
+Then, the new point \([r]B\) (named `rB` in the code) is encoded as described in the RFC.
 The encoding (`R` in the RFC) is directly written into the `signed_message` buffer.
 ```c
 ge25519_pack(signed_message, &rB);
@@ -564,7 +565,7 @@ Before we can retrieve that second puzzle piece, we first need to calculate the 
 > Compute SHA512(dom2(F, C) || R || A || PH(M)), and interpret the 64-octet digest as a little-endian integer k.
 
 As before, `dom2()` is the empty string and `PH()` is the identity function, meaning we can reduce it to `SHA512(R || A || M)`.
-We just moved the encoding of \\([r]B\\) into the beginning of the `signed_message` buffer, and the message (denoted as `M`) is already at its place, too.
+We just moved the encoding of \([r]B\) into the beginning of the `signed_message` buffer, and the message (denoted as `M`) is already at its place, too.
 Thus, we only need to move the public key (denoted as `A`) into the buffer and calculate the hash.
 ```c
 memmove(signed_message + 32, public_key, 32);
@@ -593,7 +594,7 @@ sc25519_mul(S, &k, &secret_scalar);
 sc25519_add(S, S, &r);
 ```
 
-Similar to before, the reduction of \\(k\\) has already happened in `sc25519_from64bytes()`.
+Similar to before, the reduction of \(k\) has already happened in `sc25519_from64bytes()`.
 
 ### Step 6: Forming the Signature
 
@@ -603,7 +604,7 @@ The RFC also specifies how exactly we are supposed to build the signature.
 > Form the signature of the concatenation of R (32 octets) and the little-endian encoding of S (32 octets; the three most significant bits of the final octet are always zero).
 
 At this stage, the `signed_message` buffer contains `R || A || M`.
-We are left with writing \\(S\\) into the buffer, so we retrieve `R || S || M`.
+We are left with writing \(S\) into the buffer, so we retrieve `R || S || M`.
 ```c
 sc25519_to32bytes(signed_message + 32, S);
 ```
@@ -615,7 +616,7 @@ Finally, the reference writes the output length.
 
 The final length of the output is the length of the message plus 64 bytes.
 This is because the signature has a length of 64 bytes (512 bits):
-Both the encoding of \\(R\\) and that of \\(S\\) have length 32 bytes.
+Both the encoding of \(R\) and that of \(S\) have length 32 bytes.
 
 ### Function Summary
 

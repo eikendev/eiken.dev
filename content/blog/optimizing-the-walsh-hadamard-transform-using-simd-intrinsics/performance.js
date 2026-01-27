@@ -28,11 +28,9 @@ new Chart(ctx, {
 		maintainAspectRatio: false,
 		width: 800,
 		scales: {
-			yAxes: [{
-				ticks: {
-					beginAtZero: true
-				}
-			}]
+			y: {
+				beginAtZero: true
+			}
 		}
 	}
 });

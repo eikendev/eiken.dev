@@ -1,13 +1,11 @@
 baseURL: "https://www.eiken.dev/"
 languageCode: "en-us"
 title: "eikendev"
-footnoteReturnLinkContents: "↩"
 rssLimit: 20
 disableHugoGeneratorInject: true
 enableRobotsTXT: true
 enableGitInfo: true
-pluralizelisttitles: false
-pygmentsUseClasses: true
+pluralizeListTitles: false
 
 taxonomies:
   tag: "tags"
@@ -39,9 +37,10 @@ sitemap:
 # https://jvns.ca/blog/2024/10/07/some-notes-on-upgrading-hugo/
 markup:
   highlight:
-    codeFences: false
+    codeFences: true
     lineNos: true
     lineNumbersInTable: true
+    noClasses: false
     tabWidth: 4
   goldmark:
     extensions:
@@ -52,6 +51,17 @@ markup:
       typographer:
         leftAngleQuote: "&lt;&lt;"
         rightAngleQuote: "&gt;&gt;"
+      passthrough:
+        delimiters:
+          block:
+          - - '\['
+            - '\]'
+          - - $$
+            - $$
+          inline:
+          - - '\('
+            - '\)'
+        enable: true
     parser:
       autoHeadingIDType: "blackfriday"
     renderer:

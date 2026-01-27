@@ -3,7 +3,6 @@ title: "Optimizing the Walsh-Hadamard Transform Using SIMD Intrinsics"
 date: 2020-04-13T00:58:27+02:00
 tags: ["performance", "simd", "intrinsics"]
 chartjs: true
-mathjax: true
 ---
 
 I'm currently studying fast numeric code at university, where I've been confronted with the problem of optimizing the [Walsh-Hadamard transform](https://en.wikipedia.org/wiki/Hadamard_transform) using SIMD intrinsics.
@@ -26,43 +25,43 @@ Even if Intel® AVX-512 instructions are supported on this chip, we'll be limiti
 ## Understanding the problem
 
 Alright, so what is the task?
-We're given a vector \\(x\\) with eight doubles, and want to transform it using the Walsh-Hadamard matrix \\(H_8\\).
-\\[
+We're given a vector \(x\) with eight doubles, and want to transform it using the Walsh-Hadamard matrix \(H_8\).
+\[
 	H_8 \cdot x =
 	\begin{bmatrix}
-        1 &  1 &  1 &  1 &  1 &  1 &  1 &  1 \\\\
-        1 & -1 &  1 & -1 &  1 & -1 &  1 & -1 \\\\
-        1 &  1 & -1 & -1 &  1 &  1 & -1 & -1 \\\\
-        1 & -1 & -1 &  1 &  1 & -1 & -1 &  1 \\\\
-        1 &  1 &  1 &  1 & -1 & -1 & -1 & -1 \\\\
-        1 & -1 &  1 & -1 & -1 &  1 & -1 &  1 \\\\
-        1 &  1 & -1 & -1 & -1 & -1 &  1 &  1 \\\\
+        1 &  1 &  1 &  1 &  1 &  1 &  1 &  1 \\
+        1 & -1 &  1 & -1 &  1 & -1 &  1 & -1 \\
+        1 &  1 & -1 & -1 &  1 &  1 & -1 & -1 \\
+        1 & -1 & -1 &  1 &  1 & -1 & -1 &  1 \\
+        1 &  1 &  1 &  1 & -1 & -1 & -1 & -1 \\
+        1 & -1 &  1 & -1 & -1 &  1 & -1 &  1 \\
+        1 &  1 & -1 & -1 & -1 & -1 &  1 &  1 \\
         1 & -1 & -1 &  1 & -1 &  1 &  1 & -1
 	\end{bmatrix}
 	\cdot
 	\begin{bmatrix}
-        x_0 \\\\
-        x_1 \\\\
-        x_2 \\\\
-        x_3 \\\\
-        x_4 \\\\
-        x_5 \\\\
-        x_6 \\\\
+        x_0 \\
+        x_1 \\
+        x_2 \\
+        x_3 \\
+        x_4 \\
+        x_5 \\
+        x_6 \\
         x_7
 	\end{bmatrix}
-\\]
+\]
 
 We can see right away that there sure is some pattern to the signs of the matrix.
 This is no coincidence.
 The Walsh-Hadamard transform can be defined as
-\\[
+\[
 	H_m =
 	\begin{bmatrix}
-        H_{m-1} & H_{m-1} \\\\
+        H_{m-1} & H_{m-1} \\
         H_{m-1} & -H_{m-1}
 	\end{bmatrix}
-\\]
-where \\(H_0 = 1\\) and \\(m > 0\\).
+\]
+where \(H_0 = 1\) and \(m > 0\).
 This means the matrix will always be square, and all four quarters are identical, except that the lower right quarter is negated.
 Of course, we will exploit this property later in our code.
 
@@ -71,7 +70,7 @@ First off, let me exactly define the input `A` and the expected output `C`.
 We want to apply the transform to all column vectors of `A`, where `A` is stored in a column-major order, which means the columns are contiguous in memory.
 This means with `A[0]`, we can access the first column, which consists of 8 doubles.
 `C` is a matrix of the same dimension as `A`, but all columns are the result of a transformation with a column of `A`.
-In essence, we are thereby calculating \\(C = H_8 \cdot A\\).
+In essence, we are thereby calculating \(C = H_8 \cdot A\).
 
 The following defines help us access the matrix sizes in code.
 
@@ -195,13 +194,13 @@ static const inline __m256d wht4x4(const __m256d aamm, const __m256d amam, __m25
 ```
 
 Let's approach this in a more abstract way.
-We have a tuple \\(a = (a_1, a_0, a_3, a_2)\\) as input, and want calculate \\[a' = (a_0 + a_1 + a_2 + a_3, a_0 - a_1 + a_2 - a_3, a_0 + a_1 - a_2 - a_3, a_0 - a_1 - a_2 + a_3).\\]
+We have a tuple \(a = (a_1, a_0, a_3, a_2)\) as input, and want calculate \[a' = (a_0 + a_1 + a_2 + a_3, a_0 - a_1 + a_2 - a_3, a_0 + a_1 - a_2 - a_3, a_0 - a_1 - a_2 + a_3).\]
 As a reminder, this is what is needed to calculate the upper left quarter in the loop of the simple implementation.
-`wht4x4()` calculates \\(a'\\) in four steps.
+`wht4x4()` calculates \(a'\) in four steps.
 
 First, we perform a permutation, where we swap the first half of the vector and the second half individually.
-This is needed, because we need to somehow "move" an \\(a_1\\) to the beginning of the vector, and a \\(a_0\\) to the second entry of the vector.
-The same holds for \\(a_2\\) and \\(a_3\\) respectively.
+This is needed, because we need to somehow "move" an \(a_1\) to the beginning of the vector, and a \(a_0\) to the second entry of the vector.
+The same holds for \(a_2\) and \(a_3\) respectively.
 
 In the second step, two arithmetic operations are performed in a single FMA instruction.
 FMA allows for a multiplication followed by an addition in a single instruction.
@@ -209,14 +208,14 @@ But it only comes at the cost of a multiplication, so it can give really good pe
 
 What does this FMA do then?
 It takes the vector we got from the first step, multiplies it with `amam`, and adds it to the input vector.
-`amam` contains the values \\((1, -1, 1, -1)\\), so the step results in the vector \\[(a_0 + a_1, a_0 - a_1, a_2 + a_3, a_2 - a_3).\\]
-With that, we're practically already halfway done with calculating \\(a'\\).
+`amam` contains the values \((1, -1, 1, -1)\), so the step results in the vector \[(a_0 + a_1, a_0 - a_1, a_2 + a_3, a_2 - a_3).\]
+With that, we're practically already halfway done with calculating \(a'\).
 
-In the next step, we take the vector that was just retrieved, and swap the lower half with the upper half, which gives \\[(a_2 + a_3, a_2 - a_3, a_0 + a_1, a_0 - a_1).\\]
+In the next step, we take the vector that was just retrieved, and swap the lower half with the upper half, which gives \[(a_2 + a_3, a_2 - a_3, a_0 + a_1, a_0 - a_1).\]
 
 Finally, we use another FMA to combine the two vectors from the previous steps.
-This time we make use of the constant `aamm`, which contains the values \\((1, 1, -1, -1)\\).
-And there we have \\(a'\\).
+This time we make use of the constant `aamm`, which contains the values \((1, 1, -1, -1)\).
+And there we have \(a'\).
 
 Note that the constants `amam` and `aamm` are only defined once in the beginning.
 The compiler *might* optimize this on its own, but you never know.
@@ -237,49 +236,49 @@ Is there anything left to optimize that's "easily" approachable?
 So far I've only told half the story, because in fact I read the assignment the wrong way.
 We were supposed to calculate the transform in three steps.
 
-The matrix can actually be decomposed so that \\(H_8 = T_3 \cdot T_2 \cdot T_1\\).
+The matrix can actually be decomposed so that \(H_8 = T_3 \cdot T_2 \cdot T_1\).
 In full verbosity, here are the complete matrices for that.
 
-\\[
+\[
 	T_1 =
 	\begin{bmatrix}
-		1 &    &    &    &  1 &    &    &    \\\\
-		  &  1 &    &    &    &  1 &    &    \\\\
-		  &    &  1 &    &    &    &  1 &    \\\\
-		  &    &    &  1 &    &    &    &  1 \\\\
-		1 &    &    &    & -1 &    &    &    \\\\
-		  &  1 &    &    &    & -1 &    &    \\\\
-		  &    &  1 &    &    &    & -1 &    \\\\
+		1 &    &    &    &  1 &    &    &    \\
+		  &  1 &    &    &    &  1 &    &    \\
+		  &    &  1 &    &    &    &  1 &    \\
+		  &    &    &  1 &    &    &    &  1 \\
+		1 &    &    &    & -1 &    &    &    \\
+		  &  1 &    &    &    & -1 &    &    \\
+		  &    &  1 &    &    &    & -1 &    \\
 		  &    &    &  1 &    &    &    & -1
 	\end{bmatrix}
 	\quad
 	T_2 =
 	\begin{bmatrix}
-		1 &    &  1 &    &    &    &    &    \\\\
-		  &  1 &    &  1 &    &    &    &    \\\\
-		1 &    & -1 &    &    &    &    &    \\\\
-		  &  1 &    & -1 &    &    &    &    \\\\
-		  &    &    &    &  1 &    &  1 &    \\\\
-		  &    &    &    &    &  1 &    &  1 \\\\
-		  &    &    &    &  1 &    & -1 &    \\\\
+		1 &    &  1 &    &    &    &    &    \\
+		  &  1 &    &  1 &    &    &    &    \\
+		1 &    & -1 &    &    &    &    &    \\
+		  &  1 &    & -1 &    &    &    &    \\
+		  &    &    &    &  1 &    &  1 &    \\
+		  &    &    &    &    &  1 &    &  1 \\
+		  &    &    &    &  1 &    & -1 &    \\
 		  &    &    &    &    &  1 &    & -1
 	\end{bmatrix}
 	\quad
 	T_3 =
 	\begin{bmatrix}
-		1 &  1 &    &    &    &    &    &    \\\\
-		1 & -1 &    &    &    &    &    &    \\\\
-		  &    &  1 &  1 &    &    &    &    \\\\
-		  &    &  1 & -1 &    &    &    &    \\\\
-		  &    &    &    &  1 &  1 &    &    \\\\
-		  &    &    &    &  1 & -1 &    &    \\\\
-		  &    &    &    &    &    &  1 &  1 \\\\
+		1 &  1 &    &    &    &    &    &    \\
+		1 & -1 &    &    &    &    &    &    \\
+		  &    &  1 &  1 &    &    &    &    \\
+		  &    &  1 & -1 &    &    &    &    \\
+		  &    &    &    &  1 &  1 &    &    \\
+		  &    &    &    &  1 & -1 &    &    \\
+		  &    &    &    &    &    &  1 &  1 \\
 		  &    &    &    &    &    &  1 & -1
 	\end{bmatrix}
-\\]
+\]
 
 Note that the spaces are filled with zeros, it's just a lot more readable this way.
-If you multiply these matrices by hand as given above, you will get the exact \\(H_8\\) which was introduced in the beginning.
+If you multiply these matrices by hand as given above, you will get the exact \(H_8\) which was introduced in the beginning.
 
 So let's try to implement this.
 This time we have three different transformations.
@@ -384,7 +383,7 @@ Then, the loop will increment in steps of four this time, because we will proces
 The reason for this will become clear in just a moment.
 
 In the loop, we first load the four rows from `A`.
-On each row, we apply the three different transformations \\(T_1\\), \\(T_2\\), and \\(T_3\\) in that order.
+On each row, we apply the three different transformations \(T_1\), \(T_2\), and \(T_3\) in that order.
 Afterwards, all four vectors are stored into `C`.
 
 The pattern is similar to our last implementation, except that this time
@@ -399,21 +398,21 @@ I omitted the code for handling this in the snippet, but I'll reference the full
 Now, the only thing left to understand is how each transformation is computed.
 Let's start with the first transformation.
 
-\\(T_1\\) is relatively simple.
-If you're not that familiar with matrix multiplication, here is what the transformation does for \\(x \in \mathbb{R}^8\\).
-\\[
+\(T_1\) is relatively simple.
+If you're not that familiar with matrix multiplication, here is what the transformation does for \(x \in \mathbb{R}^8\).
+\[
 	T_1 \cdot x =
 	\begin{bmatrix}
-		x_0 + x_4 \\\\
-		x_1 + x_5 \\\\
-		x_2 + x_6 \\\\
-		x_3 + x_7 \\\\
-		x_0 - x_4 \\\\
-		x_1 - x_5 \\\\
-		x_2 - x_6 \\\\
+		x_0 + x_4 \\
+		x_1 + x_5 \\
+		x_2 + x_6 \\
+		x_3 + x_7 \\
+		x_0 - x_4 \\
+		x_1 - x_5 \\
+		x_2 - x_6 \\
 		x_3 - x_7
 	\end{bmatrix}
-\\]
+\]
 More informally speaking, the lower half of the output is just the higher four doubles added to the lower ones, and the upper half is the higher four doubles subtracted from the lower ones.
 This is exactly what `_mm256_add_pd()` and `_mm256_sub_pd()` do!
 For both functions I introduced a wrapper with an appropriate name.
@@ -437,19 +436,19 @@ static const inline __m256d transform1b(__m256d a, __m256d b)
 
 Next up is the second transformation.
 Again, let me show you what we need to calculate.
-\\[
+\[
 	T_2 \cdot x =
 	\begin{bmatrix}
-		x_0 + x_2 \\\\
-		x_1 + x_3 \\\\
-		x_0 - x_2 \\\\
-		x_1 - x_3 \\\\
-		x_4 + x_6 \\\\
-		x_5 + x_7 \\\\
-		x_4 - x_6 \\\\
+		x_0 + x_2 \\
+		x_1 + x_3 \\
+		x_0 - x_2 \\
+		x_1 - x_3 \\
+		x_4 + x_6 \\
+		x_5 + x_7 \\
+		x_4 - x_6 \\
 		x_5 - x_7
 	\end{bmatrix}
-\\]
+\]
 
 Do you see how the first half of that vector is arithmetically independent from the second half, and their arithmetic patterns are the same?
 This means we can write a single function that operates only on one half.
@@ -473,19 +472,19 @@ static const inline __m256d transform2(const __m256d aamm, __m256d a)
 Lastly, with the third transformation it is kind of the same deal.
 This is just the other half of the `wht4x4()` function.
 For completeness, here is the calculation in vector form.
-\\[
+\[
 	T_3 \cdot x =
 	\begin{bmatrix}
-		x_0 + x_1 \\\\
-		x_0 - x_1 \\\\
-		x_2 + x_3 \\\\
-		x_2 - x_3 \\\\
-		x_4 + x_5 \\\\
-		x_4 - x_5 \\\\
-		x_6 + x_7 \\\\
+		x_0 + x_1 \\
+		x_0 - x_1 \\
+		x_2 + x_3 \\
+		x_2 - x_3 \\
+		x_4 + x_5 \\
+		x_4 - x_5 \\
+		x_6 + x_7 \\
 		x_6 - x_7
 	\end{bmatrix}
-\\]
+\]
 
 Again, both halves can be calculated independently.
 

@@ -17,17 +17,14 @@ build: dependencies
 ifneq (,$(findstring docker,${ENGINE_COMMAND}))
 	sudo chown -R ${shell id -u ${USER}}:${shell id -g ${USER}} ./public/
 endif
-	mkdir -p ./public/font/mathjax
-	cp node_modules/mathjax/es5/output/chtml/fonts/woff-v2/* ./public/font/mathjax/
 
 .PHONY: server
 server: dependencies
-	mkdir -p static/font/mathjax
-	cp node_modules/mathjax/es5/output/chtml/fonts/woff-v2/* static/font/mathjax/
 	$(HUGO) server --minify --buildDrafts
 
 .PHONY: clean
 clean:
+	rm -f .hugo_build.lock
 	rm -rf ./node_modules/
 	rm -rf ./public/
 	rm -rf ./resources/_gen/

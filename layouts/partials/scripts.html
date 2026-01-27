@@ -2,20 +2,14 @@
 {{ $script_bootstrap := resources.Get "js/bootstrap.bundle.js" }}
 {{ $script_zooming := resources.Get "js/zooming.min.js" }}
 
-{{ $script := slice $script_site $script_bootstrap $script_zooming | resources.Concat "js/bundle.js" | resources.Minify }}
-<script src="{{ $script.Permalink }}" crossorigin="anonymous"></script>
+<script src="{{ $script_zooming.Permalink }}" crossorigin="anonymous"></script>
 
-{{ if .Params.chartjs }}
-	{{ $script := resources.Get "js/chart.js" | resources.Minify }}
-	<script src="{{ $script.Permalink }}" crossorigin="anonymous"></script>
-{{ end }}
+{{ $script := slice $script_site $script_bootstrap | resources.Concat "js/bundle.js" | js.Build (dict
+"minify" hugo.IsProduction) }}
+<script src="{{ $script.Permalink }}" crossorigin="anonymous"></script>
 
 {{ $script_fontawesome := resources.Get "js/fontawesome.all.js" }}
 
-{{ $script := slice $script_fontawesome | resources.Concat "js/bundle-deferred.js" | resources.Minify }}
+{{ $script := slice $script_fontawesome | resources.Concat "js/bundle-deferred.js" | js.Build (dict "minify"
+hugo.IsProduction) }}
 <script defer src="{{ $script.Permalink }}" crossorigin="anonymous"></script>
-
-{{ if .Params.mathjax }}
-	{{ $script := resources.Get "js/mathjax.js" | resources.Minify }}
-	<script defer src="{{ $script.Permalink }}" crossorigin="anonymous"></script>
-{{ end }}
