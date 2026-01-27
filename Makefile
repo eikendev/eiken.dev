@@ -19,7 +19,6 @@ ifneq (,$(findstring docker,${ENGINE_COMMAND}))
 endif
 	mkdir -p ./public/font/mathjax
 	cp node_modules/mathjax/es5/output/chtml/fonts/woff-v2/* ./public/font/mathjax/
-	./scripts/extract > ./public/allthelinks.txt
 
 .PHONY: server
 server: dependencies
