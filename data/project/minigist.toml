@@ -1,6 +1,6 @@
 Name = "minigist"
 Priority = 150
-License = "TBD"
+License = "MIT"
 Languages = ["Python"]
 RepositoryLink = "https://github.com/eikendev/minigist"
 RepositoryIcon = "fab fa-github"

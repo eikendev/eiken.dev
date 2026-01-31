@@ -1,6 +1,6 @@
 Name = "taskseed"
 Priority = 140
-License = "TBD"
+License = "MIT"
 Languages = ["Go"]
 RepositoryLink = "https://github.com/eikendev/taskseed"
 RepositoryIcon = "fab fa-github"
