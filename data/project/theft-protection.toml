@@ -1,8 +1,0 @@
-Name = "Theft Protection"
-Priority = 86
-License = "ISC"
-Languages = ["C++"]
-RepositoryLink = "https://github.com/eikendev/theft-protection"
-RepositoryIcon = "fab fa-github"
-DownloadLink = "https://github.com/eikendev/theft-protection/archive/master.zip"
-Description = "As the first embedded device I built outside of curricular activity, this project cost me quite a bit of trial and error. The core of the device is an [Arduino Nano](https://store.arduino.cc/arduino-nano)-compatible board attached to an accelerometer, an NFC reader, and an alarm buzzer. Once armed via NFC, it makes loud noises if moved in any direction."

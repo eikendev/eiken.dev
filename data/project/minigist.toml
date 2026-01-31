@@ -1,0 +1,7 @@
+Name = "minigist"
+Priority = 150
+License = "TBD"
+Languages = ["Python"]
+RepositoryLink = "https://github.com/eikendev/minigist"
+RepositoryIcon = "fab fa-github"
+Description = "Summarizes Miniflux unread articles with an LLM and writes structured summaries back to entries with per-feed prompts."

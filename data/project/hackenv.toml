@@ -1,8 +1,7 @@
 Name = "hackenv"
-Priority = 95
+Priority = 130
 License = "ISC"
 Languages = ["Go"]
 RepositoryLink = "https://github.com/eikendev/hackenv"
 RepositoryIcon = "fab fa-github"
-DownloadLink = "https://github.com/eikendev/hackenv/archive/master.zip"
-Description = "When having to run binaries during a CTF, I feel the urge to run it inside a sandboxed environment, even when knowing the challenge was created in good faith. Previously, I used [Podman](https://podman.io/) as a beautiful [Docker](https://www.docker.com/) alternative. With this project, I aim to move towards using a virtual machine while keeping a similar level of comfort."
+Description = "Provisions short-lived security testing VMs (Kali/Parrot) with libvirt, streamlined SSH, shared folders, and UI access for CTFs and labs."

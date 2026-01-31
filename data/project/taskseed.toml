@@ -1,0 +1,7 @@
+Name = "taskseed"
+Priority = 140
+License = "TBD"
+Languages = ["Go"]
+RepositoryLink = "https://github.com/eikendev/taskseed"
+RepositoryIcon = "fab fa-github"
+Description = "Expands CalDAV recurring task rules into individual upcoming tasks so all clients (even without RRULE support) stay consistent."

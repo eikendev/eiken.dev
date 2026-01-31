@@ -4,5 +4,4 @@ License = "ISC"
 Languages = ["Dockerfile"]
 RepositoryLink = "https://github.com/eikendev/java-decompiler"
 RepositoryIcon = "fab fa-github"
-DownloadLink = "https://github.com/eikendev/java-decompiler/archive/master.zip"
-Description = "A good decompiler can save a lot of work. There are many Java decompilers freely available, each with their individual strength, but some are a bit difficult to install. I wrote this [Docker](https://www.docker.com/) image to make them better accessible in one place."
+Description = "Bundles popular Java decompilers (CFR, Fernflower, Krakatau, Procyon) in a single Docker image to reduce setup friction."

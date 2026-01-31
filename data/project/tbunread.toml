@@ -4,5 +4,4 @@ License = "ISC"
 Languages = ["Rust"]
 RepositoryLink = "https://github.com/eikendev/tbunread"
 RepositoryIcon = "fab fa-github"
-DownloadLink = "https://github.com/eikendev/tbunread/archive/master.zip"
-Description = "After using [Neomutt](https://neomutt.org/) together with [Notmuch](https://notmuchmail.org/) for quite a while, I switched back to [Thunderbird](https://www.thunderbird.net/) for higher reliability. However, Thunderbird is not really scriptable, so I had to come up with a way to at least show me very basic status information for my email accounts."
+Description = "Reports unread Thunderbird IMAP counts per account for dashboards or status scripts by reading configured maildirs."
