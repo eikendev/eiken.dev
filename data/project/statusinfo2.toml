@@ -1,0 +1,7 @@
+Name = "statusinfo2"
+Priority = 160
+Languages = ["Rust"]
+License = "MIT"
+RepositoryLink = "https://github.com/eikendev/statusinfo2"
+RepositoryIcon = "fab fa-github"
+Description = "Summarizes CPU temperature and memory usage for Linux desktops via a lightweight CLI suited for terminals and status bars."
