@@ -1,6 +1,6 @@
 Name = "tbunread"
 Priority = 92
-License = "ISC"
+License = "MIT"
 Languages = ["Rust"]
 RepositoryLink = "https://github.com/eikendev/tbunread"
 RepositoryIcon = "fab fa-github"

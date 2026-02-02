@@ -1,7 +1,7 @@
 Name = "cheergo"
 Priority = 118
 Languages = ["Go"]
-License = "ISC"
+License = "MIT"
 RepositoryLink = "https://github.com/eikendev/cheergo"
 RepositoryIcon = "fab fa-github"
 Description = "Notifies maintainers about new stars, watches, and forks via a lightweight local CLI that keeps engagement signals out of GitHub's UI."

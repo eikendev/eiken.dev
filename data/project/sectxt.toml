@@ -1,6 +1,6 @@
 Name = "sectxt"
 Priority = 120
-License = "ISC"
+License = "MIT"
 Languages = ["Rust"]
 RepositoryLink = "https://github.com/eikendev/sectxt"
 RepositoryIcon = "fab fa-github"

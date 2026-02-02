@@ -1,6 +1,6 @@
 Name = "PushBits"
 Priority = 110
-License = "ISC"
+License = "MIT"
 Languages = ["Go"]
 RepositoryLink = "https://github.com/pushbits/server"
 RepositoryIcon = "fab fa-github"

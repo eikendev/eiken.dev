@@ -1,6 +1,6 @@
 Name = "hackenv"
 Priority = 130
-License = "ISC"
+License = "MIT"
 Languages = ["Go"]
 RepositoryLink = "https://github.com/eikendev/hackenv"
 RepositoryIcon = "fab fa-github"

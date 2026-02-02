@@ -1,6 +1,6 @@
 Name = "java-decompiler"
 Priority = 90
-License = "ISC"
+License = "MIT"
 Languages = ["Dockerfile"]
 RepositoryLink = "https://github.com/eikendev/java-decompiler"
 RepositoryIcon = "fab fa-github"

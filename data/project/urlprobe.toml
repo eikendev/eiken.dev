@@ -1,6 +1,6 @@
 Name = "urlprobe"
 Priority = 80
-License = "ISC"
+License = "MIT"
 Languages = ["Rust"]
 RepositoryLink = "https://github.com/eikendev/urlprobe"
 RepositoryIcon = "fab fa-github"
