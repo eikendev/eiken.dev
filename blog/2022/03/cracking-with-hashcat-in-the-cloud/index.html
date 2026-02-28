@@ -1,0 +1,414 @@
+<!doctype html><html lang=en-us dir=ltr class=h-100 itemscope itemtype=http://schema.org/BlogPosting><head><meta charset=UTF-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1"><meta name=author content="eikendev"><meta name=description content="Thanks to the global chip shortage, for about two years certain electronic items are really hard to buy.
+This includes graphics cards, those things that make your display useful.
+They&rsquo;re also beasts at cracking password hashes.
+Admittedly, I waited for the situation to resolve so I can buy a graphics card for a sane price and improve my hashcat experience, but I now think this is unlikely to happen anytime soon.
+Time to find a modern solution."><meta name=keywords content="aws,cloud,cracking,hashcat"><meta property="og:url" content="https://www.eiken.dev/blog/2022/03/cracking-with-hashcat-in-the-cloud/"><meta property="og:site_name" content="eikendev"><meta property="og:title" content="Cracking With Hashcat in the Cloud"><meta property="og:description" content="Thanks to the global chip shortage, for about two years certain electronic items are really hard to buy. This includes graphics cards, those things that make your display useful. They’re also beasts at cracking password hashes. Admittedly, I waited for the situation to resolve so I can buy a graphics card for a sane price and improve my hashcat experience, but I now think this is unlikely to happen anytime soon. Time to find a modern solution."><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="blog"><meta property="article:published_time" content="2022-03-16T21:00:00+00:00"><meta property="article:modified_time" content="2022-03-20T11:55:33+01:00"><meta property="article:tag" content="Aws"><meta property="article:tag" content="Cloud"><meta property="article:tag" content="Cracking"><meta property="article:tag" content="Hashcat"><meta property="og:image" content="https://www.eiken.dev/img/blog/cracking-with-hashcat-in-the-cloud/card.png"><meta itemprop=name content="Cracking With Hashcat in the Cloud"><meta itemprop=description content="Thanks to the global chip shortage, for about two years certain electronic items are really hard to buy. This includes graphics cards, those things that make your display useful. They’re also beasts at cracking password hashes. Admittedly, I waited for the situation to resolve so I can buy a graphics card for a sane price and improve my hashcat experience, but I now think this is unlikely to happen anytime soon. Time to find a modern solution."><meta itemprop=datePublished content="2022-03-16T21:00:00+00:00"><meta itemprop=dateModified content="2022-03-20T11:55:33+01:00"><meta itemprop=wordCount content="3338"><meta itemprop=image content="https://www.eiken.dev/img/blog/cracking-with-hashcat-in-the-cloud/card.png"><meta itemprop=keywords content="Aws,Cloud,Cracking,Hashcat"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://www.eiken.dev/img/blog/cracking-with-hashcat-in-the-cloud/card.png"><meta name=twitter:title content="Cracking With Hashcat in the Cloud"><meta name=twitter:description content="Thanks to the global chip shortage, for about two years certain electronic items are really hard to buy. This includes graphics cards, those things that make your display useful. They’re also beasts at cracking password hashes. Admittedly, I waited for the situation to resolve so I can buy a graphics card for a sane price and improve my hashcat experience, but I now think this is unlikely to happen anytime soon. Time to find a modern solution."><meta name=twitter:site content="@eikendev"><meta name=twitter:creator content="@eikendev"><title>Cracking With Hashcat in the Cloud | eikendev</title><link rel=canonical href=https://www.eiken.dev/blog/2022/03/cracking-with-hashcat-in-the-cloud/><link rel=apple-touch-icon sizes=180x180 href=https://www.eiken.dev/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=https://www.eiken.dev/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=https://www.eiken.dev/favicon-16x16.png><link rel=manifest href=https://www.eiken.dev/site.webmanifest><link rel=mask-icon href=https://www.eiken.dev/safari-pinned-tab.svg color=#111111><meta name=msapplication-TileColor content="#111111"><meta name=theme-color content="#111111"><link rel=stylesheet href=https://www.eiken.dev/css/style.e47064076eef653a3c3649d97d9ecd23ed89999ed92c5d273c661f716bdf7016b7d826c0612ed003067d14daffa407e5.css integrity=sha384-5HBkB27vZTo8NknZfZ7NI+2JmZ7ZLF0nPGYfcWvfcBa32CbAYS7QAwZ9FNr/pAfl></head><body class="d-flex flex-column h-100"><nav><div class="collapse bg-darkgray5 text-body" id=navbarHeader><div class="container py-3"><div class=row><div class="col-sm-8 col-md-7 py-md-2"><h4>About</h4><p>Coding projects and blog posts by eikendev. Always happy to learn something new. Also interested in infosec? Join my journey!</p></div><div class="col-sm-4 offset-md-1 py-md-2"><h4>Contact</h4><ul class=list-unstyled><li><a href=https://www.eikenberg.at/ class=text-white><i class="me-2 fas fa-globe-europe"></i>eikenberg.at</a></li><li><a href=https://bsky.app/profile/eikendev.bsky.social rel=me class=text-white><i class="me-2 fab fa-bluesky"></i>@eikendev.bsky.social</a></li></ul></div></div></div></div><div class="navbar navbar-dark bg-darkgray5 shadow-sm"><div class="container d-flex justify-content-between"><a href=https://www.eiken.dev/ class="navbar-brand d-flex align-items-center"><img src=https://www.eiken.dev/img/logo.svg alt id=logo class=me-2>
+<strong>eikendev</strong>
+</a><button class="navbar-toggler collapsed" type=button data-bs-toggle=collapse data-bs-target=#navbarHeader aria-controls=navbarHeader aria-expanded=false aria-label="Toggle navigation">
+<span class=navbar-toggler-icon></span></button></div></div></nav><main class=flex-shrink-0><section class=py-5><div class="py-md-3 py-lg-5 container"><article class=single><div class="text-center mb-5"><div class=mb-4><a href=https://www.eiken.dev/tags/aws class="badge bg-secondary badge-pill mx-1">aws</a><a href=https://www.eiken.dev/tags/cloud class="badge bg-secondary badge-pill mx-1">cloud</a><a href=https://www.eiken.dev/tags/cracking class="badge bg-secondary badge-pill mx-1">cracking</a><a href=https://www.eiken.dev/tags/hashcat class="badge bg-secondary badge-pill mx-1">hashcat</a></div><h1 class=mb-4>Cracking With Hashcat in the Cloud</h1><div class="row justify-content-center"><span class="my-1 mx-3 col-auto text-muted"><i class="fas fa-calendar-day me-2"></i><time datetime=2022-03-16T21:00:00Z>March 16, 2022</time>
+</span><span class="my-1 mx-3 col-auto text-muted"><i class="fas fa-clock me-2"></i>16 minutes</span></div></div><p>Thanks to the global chip shortage, for about two years certain electronic items are really hard to buy.
+This includes graphics cards, those things that make your display useful.
+They&rsquo;re also beasts at cracking password hashes.
+Admittedly, I waited for the situation to resolve so I can buy a graphics card for a sane price and improve my <a href=https://hashcat.net/hashcat/>hashcat</a> experience, but I now think this is unlikely to happen anytime soon.
+Time to find a modern solution.</p><h2 id=cloud-to-the-rescue>Cloud to the Rescue<a href=#cloud-to-the-rescue class=hanchor arialabel=Anchor><i class="fas fa-link fa-xs ms-2"></i></a></h2><p>hashcat is an incredibly powerful piece of software when used on the right hardware.
+Sadly, my graphics card is too old to be supported by the latest driver, so I find myself resorting to <a href=https://www.openwall.com/john/>john</a> every time I want to crack a hash.
+This comes with the drawback of forcing a high load on my system, leaving me unable to work in parallel.
+What can I do?
+Buy a new graphics card for my system?
+Build a dedicated cracking system?
+Both options are unfavorable in the current market situation.
+So I came up with this idea to use cloud computing.<sup id=fnref:1><a href=#fn:1 class=footnote-ref role=doc-noteref>1</a></sup></p><p>Okay, let me guess what you&rsquo;re thinking: this guy just throws the word &ldquo;cloud&rdquo; at his problem and we&rsquo;re done?
+Well, maybe, but that&rsquo;s not the whole story.
+The closer I got to a solution, the more advantages I discovered of using the cloud for this:</p><ul><li>I do not need to care about the maintenance of the hardware.</li><li>There are times when I&rsquo;m busy and don&rsquo;t use hashcat for a while or so. During these breaks, the bought card would lose value without serving any purpose.</li><li>The cloud scales better than a local hardware setup. Need better performance <em>this</em> time? Simply spawn a more powerful machine in the cloud.</li></ul><p>Here is the game plan:
+Cloud services like <a href=https://aws.amazon.com/>AWS</a>, <a href=https://azure.microsoft.com/>Azure</a>, and <a href=https://cloud.google.com/>GCP</a> offer systems that come equipped with strong graphics cards.
+They have the correct drivers pre-installed, just as if they were made for GPU-heavy computations.
+I want to use this hardware and make it as easy as possible to access a high-performance hashcat installation.
+In this post, I&rsquo;ll show you my results and how you can benefit from the project.
+If you want to skip this post and start cracking, check the final code in my <a href=https://github.com/eikendev/cloud-cracking>GitHub repository</a>.</p><p>And as always, this may read as if I knew what I was doing, but I&rsquo;m myself new to the topic.
+Makes it more fun for everyone, <em>right</em>?</p><h2 id=preparation-work>Preparation Work<a href=#preparation-work class=hanchor arialabel=Anchor><i class="fas fa-link fa-xs ms-2"></i></a></h2><p>The first thing to do is to define the scope:</p><ul><li>The system should be accessible from the Internet, so I can use it even when I&rsquo;m traveling with my laptop.</li><li>I want to be able to spin up a system in minimum time, and only spend money when actually cracking.</li><li>Since we have good hardware, let&rsquo;s try to get as much out of it as possible.</li><li>Being careless with resources in the cloud can result in significant bills. Safeguards <em>are</em> necessary.</li></ul><p>Ideally, the end product should tick all of these boxes.</p><p>Before we can do anything on the technical side, we must pick a cloud service provider.
+I&rsquo;ll go with AWS here because a brief look revealed it&rsquo;s the cheapest option.<sup id=fnref:2><a href=#fn:2 class=footnote-ref role=doc-noteref>2</a></sup></p><p>So we&rsquo;ll need an AWS account.
+If you don&rsquo;t already have one, simply go and create a root account on AWS.
+The instances we spawn are not free, so make sure to provide valid payment details.<sup id=fnref:3><a href=#fn:3 class=footnote-ref role=doc-noteref>3</a></sup></p><p>It is good practice to <a href=https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create.html>create a separate IAM role</a> for our purposes.
+This allows us to limit the permissions and access to our resources.
+I&rsquo;ll call the user <code>cracking</code> and assign it the following permissions:<sup id=fnref:4><a href=#fn:4 class=footnote-ref role=doc-noteref>4</a></sup></p><ul><li><code>AmazonEC2FullAccess</code></li><li><code>AmazonVPCFullAccess</code></li><li><code>AWSCloudFormationFullAccess</code></li></ul><p>Next, download the <a href=https://aws.amazon.com/cli/>AWS command-line tool</a>, which is a great helper to automate light tasks.
+I&rsquo;m using v1 here because Fedora ships it by default.
+After installing, run <code>aws configure</code> and use the IAM role to login.
+Also, specify the default region where you want to create your hashcat instance.</p><p>To access the instances we spawn, we use SSH, so we need to <a href=https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html#having-ec2-create-your-key-pair>create a key pair</a> on AWS.
+Remember the name you assign this key.
+You can also import a key pair that&rsquo;s already been created locally.
+Watch out for trailing newlines in the imported key, AWS seemed not to like these when I last tried.</p><p>One step is missing: our quota.
+Basically, when we request a machine on AWS, we can select from a range of <a href=https://aws.amazon.com/ec2/instance-types/>different instance types</a> which are grouped based on their purpose.
+One of the groups is the &ldquo;P Instances&rdquo; group; these are meant for GPU-intensive tasks, so it&rsquo;s the group we use here.
+Unfortunately, at the time of writing, AWS won&rsquo;t allow us to spawn any P instances by default.
+We, therefore, need to <a href=https://docs.aws.amazon.com/servicequotas/latest/userguide/request-quota-increase.html>request a quota increase</a> for P instances.
+I&rsquo;ll request a quota of 4 under &ldquo;All P Spot Instance Requests&rdquo; and &ldquo;Running On-Demand P instances&rdquo;.<sup id=fnref:5><a href=#fn:5 class=footnote-ref role=doc-noteref>5</a></sup></p><p>The value of GPUs naturally drives demand for GPUs in the cloud.
+So it might be if you have not yet increased your quotas, that AWS denies your request.
+Here&rsquo;s a reply I received regarding my limit increase request for &ldquo;All P Spot Instance Requests&rdquo; in Northern Virginia:</p><blockquote><p>Hi there,</p><p>Thank you for your patience while we were awaiting feedback from the Service team.</p><p>The Service team has advised that at this time, we are unable to approve your increase request. Due to the recent unprecedented demand for GPU instances, quota increases for GPU instances are now facilitated by our AWS sales teams. Please reach out to your Account team or contact AWS sales with a detailed description of your use-case and GPU requirements: <a href=https://aws.amazon.com/contact-us/sales-support/>https://aws.amazon.com/contact-us/sales-support/</a></p><p>[&mldr;]</p></blockquote><p>If you receive this, try to select another region.
+While doing so keep in mind that not all regions support P instances.</p><h2 id=hashcat-instance-as-code>Hashcat Instance as Code<a href=#hashcat-instance-as-code class=hanchor arialabel=Anchor><i class="fas fa-link fa-xs ms-2"></i></a></h2><p>We can now go and launch instances.
+But clicking through the web interface doesn&rsquo;t do for me.
+Much better is to have a clean, repeatable way: <a href=https://aws.amazon.com/cloudformation/>CloudFormation</a>.
+Using CloudFormation we can define our instance in a YAML file, called &ldquo;template&rdquo;.
+This lets us spawn our hashcat machine with a single command.</p><p>There are <a href=https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-anatomy.html>better resources</a> to learn how to create templates.
+But on a very basic level, the format knows several high-level YAML keys like <code>Parameters</code>, <code>Mappings</code>, <code>Resources</code>, and <code>Outputs</code>.
+The core of the file is in <code>Resources</code>: here we define what is actually being created with our template, the other keys give additional information and functionality.
+When AWS reads our template and instantiates the resources, they are grouped in a so-called &ldquo;stack&rdquo;.</p><h3 id=parameters>Parameters<a href=#parameters class=hanchor arialabel=Anchor><i class="fas fa-link fa-xs ms-2"></i></a></h3><p>Let&rsquo;s start with the parameters.
+These let us supply user-specific information during creation and reference them in other parts of the file.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>Parameters</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>paramKeyPair</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>Description</span><span class=p>:</span><span class=w> </span><span class=l>The key pair for connecting via SSH</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>Type</span><span class=p>:</span><span class=w> </span><span class=l>AWS::EC2::KeyPair::KeyName</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>paramInstanceType</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>Description</span><span class=p>:</span><span class=w> </span><span class=l>The EC2 instance type</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>Type</span><span class=p>:</span><span class=w> </span><span class=l>String</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>Default</span><span class=p>:</span><span class=w> </span><span class=l>p2.xlarge</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>AllowedValues</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>p2.xlarge</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>p2.8xlarge</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>p2.16xlarge</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>We have two parameters: <code>paramKeyPair</code> and <code>paramInstanceType</code>.
+The descriptions in the snippet indicate what each does.
+Upon creation, these parameters are supplied, so they can be referenced in the rest of the template.</p><p>One comment regarding <code>paramInstanceType</code>: it is limited to the variants of P2 instances using the <code>AllowedValues</code> modifier.
+There are also P3 (and P4) instances, which are newer, but more expensive.
+They are also overkill depending on your use case.</p><h3 id=mappings>Mappings<a href=#mappings class=hanchor arialabel=Anchor><i class="fas fa-link fa-xs ms-2"></i></a></h3><p>To make sure we have the correct driver pre-installed on the box, we tell AWS to use the <code>AWS Deep Learning Base AMI</code> image.
+We do this by providing an ID for the image but turns out the ID is region-specific.
+To support multiple regions, we create a map that contains the correct image ID for many regions.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>Mappings</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>RegionMap</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>us-east-1</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>ami</span><span class=p>:</span><span class=w> </span><span class=l>ami-0365f1c02d110fa96</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>us-west-2</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>ami</span><span class=p>:</span><span class=w> </span><span class=l>ami-01242c3178ffa1b87</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>us-west-1</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>ami</span><span class=p>:</span><span class=w> </span><span class=l>ami-08ce7082680a0d51d</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>eu-west-1</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>ami</span><span class=p>:</span><span class=w> </span><span class=l>ami-0e13b805a2eba9cbb</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>This way, we can later look up the ID for the region we create the instance in.</p><p>One thing to note here is that looking up the IDs can be a bit cumbersome.
+I wrote a little script to automate this for many regions:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>print_id <span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>	<span class=nb>local</span> region
+</span></span><span class=line><span class=cl>	<span class=nv>region</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=nv>id</span><span class=o>=</span><span class=s2>&#34;</span><span class=k>$(</span>aws ec2 describe-images --region <span class=nv>$region</span> --owners amazon --filters <span class=s1>&#39;Name=name,Values=AWS Deep Learning Base AMI (Ubuntu 18.04)*&#39;</span> <span class=p>|</span> jq -r <span class=s1>&#39;.Images[0].ImageId&#39;</span><span class=k>)</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=nb>printf</span> <span class=s2>&#34;%s: %s\n&#34;</span> <span class=s2>&#34;</span><span class=nv>$region</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=nv>$id</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>while</span> <span class=nb>read</span> -r region<span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>	print_id <span class=s2>&#34;</span><span class=nv>$region</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>done</span> &lt;./regions.txt
+</span></span></code></pre></td></tr></table></div></div><p>The <code>regions.txt</code> file contains the regions to look up the IDs for, line by line.
+Feel free to repurpose that for your own template.
+Alternatively, you can get fancy and use a Lambda function, but this here works fine for me.</p><h3 id=outputs>Outputs<a href=#outputs class=hanchor arialabel=Anchor><i class="fas fa-link fa-xs ms-2"></i></a></h3><p>After creating the instance, we will want to connect to it over SSH.
+This will require knowledge of the IP address associated with the instance.
+To look it up conveniently, we write the IP address as an output of the CloudFormation template:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>Outputs</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>PublicIp</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>Description</span><span class=p>:</span><span class=w> </span><span class=l>The public IPv4 address of the hashcat instance</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>Value</span><span class=p>:</span><span class=w> </span>!<span class=l>GetAtt hashcatInstance.PublicIp</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>Note that we do not directly provide a value.
+Instead, we use the <code>!GetAtt</code> function to instruct AWS to read the value from the <code>hashcatInstance</code> resource.
+Think of this as a reference to a property of a resource we specify in the next section.</p><p>When we later query information about our stack, we will get back the IP as an output in JSON:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=s2>&#34;Outputs&#34;</span><span class=err>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&#34;OutputKey&#34;</span><span class=p>:</span> <span class=s2>&#34;PublicIp&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&#34;OutputValue&#34;</span><span class=p>:</span> <span class=s2>&#34;3.86.125.30&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&#34;Description&#34;</span><span class=p>:</span> <span class=s2>&#34;The public IPv4 address of the hashcat instance&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>]</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=resources>Resources<a href=#resources class=hanchor arialabel=Anchor><i class="fas fa-link fa-xs ms-2"></i></a></h3><p>Now it&rsquo;s time for the core piece.
+Let&rsquo;s try to make this as generic as possible and compatible with most environments.
+Here is what I propose:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>Resources</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=c># [...]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>hashcatSecurityGroup</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>Type</span><span class=p>:</span><span class=w> </span><span class=l>AWS::EC2::SecurityGroup</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>Properties</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>GroupName</span><span class=p>:</span><span class=w> </span><span class=l>Security Group to allow access to the hashcat instance</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>GroupDescription</span><span class=p>:</span><span class=w> </span><span class=l>Allows inbound SSH traffic from any source</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>SecurityGroupIngress</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=nt>IpProtocol</span><span class=p>:</span><span class=w> </span><span class=l>tcp</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>FromPort</span><span class=p>:</span><span class=w> </span><span class=m>22</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>ToPort</span><span class=p>:</span><span class=w> </span><span class=m>22</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>CidrIp</span><span class=p>:</span><span class=w> </span><span class=m>0.0.0.0</span><span class=l>/0</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=nt>IpProtocol</span><span class=p>:</span><span class=w> </span><span class=l>tcp</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>FromPort</span><span class=p>:</span><span class=w> </span><span class=m>22</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>ToPort</span><span class=p>:</span><span class=w> </span><span class=m>22</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>CidrIpv6</span><span class=p>:</span><span class=w> </span><span class=s1>&#39;::/0&#39;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>VpcId</span><span class=p>:</span><span class=w> </span>!<span class=l>Ref hashcatVPC</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>hashcatLaunchTemplate</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>Type</span><span class=p>:</span><span class=w> </span><span class=l>AWS::EC2::LaunchTemplate</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>Properties</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>LaunchTemplateData</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>InstanceType</span><span class=p>:</span><span class=w> </span>!<span class=l>Ref paramInstanceType</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>KeyName</span><span class=p>:</span><span class=w> </span>!<span class=l>Ref paramKeyPair</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>ImageId</span><span class=p>:</span><span class=w> </span>!<span class=l>FindInMap</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span>- <span class=l>RegionMap</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span>- !<span class=l>Ref &#39;AWS::Region&#39;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span>- <span class=l>ami</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>InstanceMarketOptions</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>MarketType</span><span class=p>:</span><span class=w> </span><span class=l>spot</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>SpotOptions</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>              </span><span class=nt>InstanceInterruptionBehavior</span><span class=p>:</span><span class=w> </span><span class=l>terminate</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>              </span><span class=nt>MaxPrice</span><span class=p>:</span><span class=w> </span><span class=m>0.4</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>              </span><span class=nt>SpotInstanceType</span><span class=p>:</span><span class=w> </span><span class=l>one-time</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>NetworkInterfaces</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span>- <span class=nt>AssociatePublicIpAddress</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>DeleteOnTermination</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>DeviceIndex</span><span class=p>:</span><span class=w> </span><span class=m>0</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>SubnetId</span><span class=p>:</span><span class=w> </span>!<span class=l>Ref hashcatSubnet</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>Groups</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>              </span>- !<span class=l>Ref hashcatSecurityGroup</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>UserData</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>Fn::Base64</span><span class=p>:</span><span class=w> </span>!<span class=l>Sub |</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=c>#cloud-config</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>repo_update</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>packages</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>              </span>- <span class=l>build-essential</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>runcmd</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>              </span>- <span class=l>touch /tmp/.cloudinit_started</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>              </span>- <span class=l>systemctl disable --now unattended-upgrades</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>              </span>- <span class=l>curl -sLo /tmp/rockyou.tgz &#39;https://github.com/danielmiessler/SecLists/raw/master/Passwords/Leaked-Databases/rockyou.txt.tar.gz&#39;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>              </span>- <span class=l>tar -xf /tmp/rockyou.tgz -C /opt &amp;&amp; rm -f /tmp/rockyou.tgz</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>              </span>- <span class=l>curl -sLo /tmp/hashcat.tgz &#34;$(curl -s https://api.github.com/repos/hashcat/hashcat/releases/latest | grep &#39;tarball_url&#39; | awk &#39;{print $2}&#39; | tail -c +2 | head -c -3)&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>              </span>- <span class=l>tar -xf /tmp/hashcat.tgz -C /opt &amp;&amp; rm -f /tmp/hashcat.tgz</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>              </span>- <span class=l>cd /opt/hashcat-* &amp;&amp; make -j4 &amp;&amp; make install</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>              </span>- <span class=l>shutdown -P +1440</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>              </span>- <span class=l>touch /tmp/.cloudinit_completed</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>hashcatInstance</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>Type</span><span class=p>:</span><span class=w> </span><span class=l>AWS::EC2::Instance</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>DependsOn</span><span class=p>:</span><span class=w> </span><span class=l>hashcatRoute</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>Properties</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>LaunchTemplate</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>LaunchTemplateId</span><span class=p>:</span><span class=w> </span>!<span class=l>Ref hashcatLaunchTemplate</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>Version</span><span class=p>:</span><span class=w> </span>!<span class=l>GetAtt hashcatLaunchTemplate.LatestVersionNumber</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>Yeah, I admit, that&rsquo;s a bit to digest.
+Let me break it down for you, bottom to top.</p><p>The <code>hashcatInstance</code> is the actual Instance.
+This is what it&rsquo;s all about in the end.
+There isn&rsquo;t much to its configuration, except that it uses our <code>hashcatLaunchTemplate</code>.</p><p>The <code>hashcatLaunchTemplate</code> is the recipe for AWS to create our Instance.
+Here we specify the type from the parameters, together with the key pair for SSH.
+We also specify the ID of the image that we defined in the <code>RegionMap</code>.
+Look how <code>!FindInMap</code> is used to retrieve the value from the map.</p><p>An important key is <code>InstanceMarketOptions</code>.
+This option says that we want a spot instance, not an on-demand one.
+I haven&rsquo;t said this in the beginning, but the former is cheaper albeit not always available, whereas the latter is more expensive but usually available.
+Also, a spot instance can suddenly terminate if other users are willing to pay more for it than you, so it&rsquo;s more &ldquo;market-driven&rdquo; than the on-demand instances with a fixed price.
+If we left this key away we would request an on-demand instance, which might be suitable in some situations.</p><p>A <code>MaxPrice</code> of 0.4 seemed reasonable when I last checked all the prices in different regions.
+We don&rsquo;t want to set this too low, else our instance might be eaten by other bidders too fast.
+If every dime counts for you, adjust this with your target regions in mind.</p><p>The <code>NetworkInterfaces</code> is related to networking.
+It puts the instance in the correct Subnet and assigns it the right SecurityGroup.
+We&rsquo;ll come to this in a second.</p><p>One of the most important elements in this resource is the <code>UserData</code> key.
+This lets us provide commands that we want the instance to run right after launch.
+We can use this to install additional software and configure the system.</p><p>On AWS, we can do this through <a href=https://cloud-init.io/>cloud-init</a>, which describes itself as a &ldquo;standard for customising cloud instances&rdquo;.
+I would myself describe it like an <a href=https://www.ansible.com/>Ansible</a> for machines in the cloud, with a more lightweight configuration.</p><p>Here are the high-level steps we perform in the configuration above:</p><ul><li>Before running custom commands, we list the <code>build-essential</code> package to be installed. It contains common tools for building software, including <a href=https://www.gnu.org/software/make/>Make</a>.</li><li>We then download the rockyou password list, which is my go-to list for challenges on <a href=https://www.hackthebox.com/>Hack The Box</a>, and extract it to <code>/opt</code>.</li><li>At the heart of the configuration, we download and install hashcat. Doing this gives us better performance than installing via the package manager, details follow below.</li><li>Lastly, we set the machine to power off after a day (24 hours, 1440 minutes). This is a safeguard so we don&rsquo;t let the instance run until we catch it on the next bill.</li><li>The files <code>.cloudinit_started</code> and <code>.cloudinit_completed</code> are created so we can quickly check if the installation has started and been completed.</li></ul><p>And with this, only the <code>hashcatSecurityGroup</code> is left.
+This resource can be considered as a bunch of firewall rules for our instance.
+We allow inbound traffic on port 22, which is commonly used for SSH.
+If you have a fixed IP address of your machine at home, feel free to extend the SecurityGroup so only your machine can connect.
+For me, it was important to also give an IPv6 rule, because it&rsquo;s 2022.</p><p>Finally, note that I left out some parts at the <code>[...]</code> marker.
+This is networking stuff that I won&rsquo;t explain here in detail.
+In summary, it creates a VPC that we use our SecurityGroup for, and this then requires us to create an InternetGateway, Subnet, and RouteTable.</p><h2 id=establish-a-connection>Establish a Connection<a href=#establish-a-connection class=hanchor arialabel=Anchor><i class="fas fa-link fa-xs ms-2"></i></a></h2><p>The hard part is done.
+Using the template is simple.
+Still, how about we wrap a Makefile around it?
+Provided that we have the template in <code>./hashcat.yaml</code>, I&rsquo;m using a <code>./Makefile</code> with these contents:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-make data-lang=make><span class=line><span class=cl><span class=nv>STACK_NAME</span> <span class=o>:=</span> hashcat
+</span></span><span class=line><span class=cl><span class=nv>KEY_NAME</span> <span class=o>:=</span> aws
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nf>.PHONY</span><span class=o>:</span> <span class=n>create</span>
+</span></span><span class=line><span class=cl><span class=nf>create</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>	aws cloudformation create-stack --stack-name <span class=k>$(</span>STACK_NAME<span class=k>)</span> --parameters <span class=nv>ParameterKey</span><span class=o>=</span>paramKeyPair,ParameterValue<span class=o>=</span><span class=k>$(</span>KEY_NAME<span class=k>)</span> --template-body file://hashcat.yaml
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nf>.PHONY</span><span class=o>:</span> <span class=n>delete</span>
+</span></span><span class=line><span class=cl><span class=nf>delete</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>	aws cloudformation delete-stack --stack-name <span class=k>$(</span>STACK_NAME<span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nf>.PHONY</span><span class=o>:</span> <span class=n>describe</span>
+</span></span><span class=line><span class=cl><span class=nf>describe</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>	aws cloudformation describe-stacks --stack-name <span class=k>$(</span>STACK_NAME<span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nf>.PHONY</span><span class=o>:</span> <span class=n>get_status</span>
+</span></span><span class=line><span class=cl><span class=nf>get_status</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>	aws cloudformation describe-stacks --stack-name <span class=k>$(</span>STACK_NAME<span class=k>)</span> <span class=p>|</span> jq -r <span class=s1>&#39;.Stacks[0].StackStatus&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nf>.PHONY</span><span class=o>:</span> <span class=n>get_ip</span>
+</span></span><span class=line><span class=cl><span class=nf>get_ip</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>	aws cloudformation describe-stacks --stack-name <span class=k>$(</span>STACK_NAME<span class=k>)</span> <span class=p>|</span> jq -r <span class=s1>&#39;.Stacks[0].Outputs | map(select(.OutputKey | contains (&#34;PublicIp&#34;)))[0].OutputValue&#39;</span>
+</span></span></code></pre></td></tr></table></div></div><p>As you can see, this uses the AWS command-line tool.
+Everything is done with the <code>cloudformation</code> subcommand in the region specified during configuration.</p><p>With <code>make create</code>, we request AWS to read our template and create the specified resources.
+Note how we specify the <code>paramKeyPair</code> on the command line.
+You can get an explanation of the syntax with <code>aws cloudformation create-stack help</code>.</p><p>Our request may take a while, up to a minute, to complete.
+During this time, you can observe the status of your request with <code>make get_status</code>.
+While the stack is being created, this returns <code>CREATE_IN_PROGRESS</code>.
+When the operation is complete, the status changes to <code>CREATE_COMPLETE</code>, and we can retrieve the IP address of the new instance with <code>make get_ip</code>:<sup id=fnref:6><a href=#fn:6 class=footnote-ref role=doc-noteref>6</a></sup></p><pre tabindex=0><code>$ make get_ip
+3.86.125.30
+</code></pre><p>Now let&rsquo;s SSH onto the machine:</p><pre tabindex=0><code>$ ssh -i ~/path/to/your/ssh/key ubuntu@3.86.125.30
+</code></pre><p>Here we can see the <code>.cloudinit_started</code> file was already created:</p><pre tabindex=0><code>$ ls /tmp/.cloudinit_*
+/tmp/.cloudinit_started
+</code></pre><p>It only takes a bit until the installation of hashcat is complete:</p><pre tabindex=0><code>$ ls /tmp/.cloudinit_*
+/tmp/.cloudinit_completed  /tmp/.cloudinit_started
+</code></pre><p>You can also confirm this by reading what&rsquo;s in <code>/var/log/cloud-init-output.log</code>.</p><p>This means hashcat must be ready, and it is indeed!</p><pre tabindex=0><code>$ which hashcat
+/usr/local/bin/hashcat
+</code></pre><p>When we&rsquo;re done using hashcat, we close the SSH session and run <code>make delete</code>.
+Everything is clean again, all resources are removed.
+And even if we forgot to delete the stack, the machine would terminate after 24 hours.</p><h2 id=it-s-all-about-performance>It&rsquo;s All About Performance<a href=#it-s-all-about-performance class=hanchor arialabel=Anchor><i class="fas fa-link fa-xs ms-2"></i></a></h2><p>Ready for it?
+I&rsquo;ll take a password from rockyou which appears a bit later in the list and hash it with MD5:</p><pre tabindex=0><code>$ wc -l rockyou.txt
+14344391 rockyou.txt
+
+$ sed -n 11000000p &lt; rockyou.txt
+KASKAS8
+
+$ printf &#39;KASKAS8&#39; | md5sum
+e8f535bb8c05c354404381b2021a5368  -
+</code></pre><p>Okay, now we put this on the cloud machine and crack it:</p><pre tabindex=0><code>$ echo &#34;e8f535bb8c05c354404381b2021a5368&#34; &gt;&gt; hashes.txt
+$ hashcat -m 0 hashes.txt /opt/rockyou.txt
+[...]
+
+e8f535bb8c05c354404381b2021a5368:KASKAS8
+
+Session..........: hashcat
+Status...........: Cracked
+Hash.Mode........: 0 (MD5)
+Hash.Target......: e8f535bb8c05c354404381b2021a5368
+Time.Started.....: Mon Mar 14 21:18:01 2022 (2 secs)
+Time.Estimated...: Mon Mar 14 21:18:03 2022 (0 secs)
+Kernel.Feature...: Pure Kernel
+Guess.Base.......: File (/opt/rockyou.txt)
+Guess.Queue......: 1/1 (100.00%)
+Speed.#1.........:  4504.3 kH/s (8.55ms) @ Accel:512 Loops:1 Thr:64 Vec:1
+Recovered........: 1/1 (100.00%) Digests
+Progress.........: 11075584/14344384 (77.21%)
+Rejected.........: 0/11075584 (0.00%)
+Restore.Point....: 10649600/14344384 (74.24%)
+Restore.Sub.#1...: Salt:0 Amplifier:0-1 Iteration:0-1
+Candidate.Engine.: Device Generator
+Candidates.#1....: SEXY#1ALLDAY -&gt; IloveSanMahua17
+Hardware.Mon.#1..: Temp: 38c Util: 34% Core: 627MHz Mem:2505MHz Bus:16
+</code></pre><p>Only takes two seconds!
+It&rsquo;s only MD5, yes, but it&rsquo;s a whole lot faster than my setup with john.</p><p>We can run proper benchmarks with <code>hashcat -b</code>:</p><div class=table-responsive><table class="table table-striped table-bordered"><thead><tr><th>Algorithm</th><th style=text-align:right>Compiled locally</th><th style=text-align:right>From repository</th></tr></thead><tbody><tr><td>MD5</td><td style=text-align:right>4594.1 MH/s</td><td style=text-align:right>4538.2 MH/s</td></tr><tr><td>SHA1</td><td style=text-align:right>1734.2 MH/s</td><td style=text-align:right>1687.4 MH/s</td></tr><tr><td>SHA2-256</td><td style=text-align:right>819.6 MH/s</td><td style=text-align:right>815.7 MH/s</td></tr><tr><td>SHA2-512</td><td style=text-align:right>256.2 MH/s</td><td style=text-align:right>255.0 MH/s</td></tr><tr><td>WPA-PBKDF2-PMKID+EAPOL</td><td style=text-align:right>88754.0 H/s</td><td style=text-align:right>87002.0 H/s</td></tr><tr><td>NTLM</td><td style=text-align:right>7438.2 MH/s</td><td style=text-align:right>7358.9 MH/s</td></tr><tr><td>LM</td><td style=text-align:right>4312.7 MH/s</td><td style=text-align:right>4338.6 MH/s</td></tr><tr><td>NetNTLMv1 / NetNTLMv1+ESS</td><td style=text-align:right>4413.9 MH/s</td><td style=text-align:right>4197.3 MH/s</td></tr></tbody></table></div><p>Here you also see a comparison between our own build and the build from the repository.
+Why is the build faster for almost all algorithms?
+My guess is that building hashcat on our own hardware allows the compiler to use its full instruction set, while the repository version must be more generic.
+To be confirmed.</p><p>Either way, it&rsquo;s best to run the most recent version of hashcat if we aim for speed.</p><h2 id=conclusion>Conclusion<a href=#conclusion class=hanchor arialabel=Anchor><i class="fas fa-link fa-xs ms-2"></i></a></h2><p>The word &ldquo;cloud&rdquo; can be annoying at times, but I feel this project made me realize more of its strengths.
+I will definitely continue using this setup and advance it further.
+Of course, this may change just like the market does.
+If you are curious to try it out, please head over to my <a href=https://github.com/eikendev/cloud-cracking>GitHub repository</a>.
+Leaving a star will encourage me to improve the tool.</p><div class=footnotes role=doc-endnotes><hr><ol><li id=fn:1><p>I&rsquo;m not the first one to use hashcat in the cloud. In fact, there are many posts showing how this is done. The difference is that I want a properly automated solution.&#160;<a href=#fnref:1 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p></li><li id=fn:2><p>This may vary depending on the hardware you configure.&#160;<a href=#fnref:2 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p></li><li id=fn:3><p>And if you&rsquo;re unfamiliar with all the pricing just like me, <a href=https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-create.html>create a cost budget</a> and configure notifications for it. I use this to trigger an alert if my spending goes beyond a reasonable threshold.&#160;<a href=#fnref:3 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p></li><li id=fn:4><p>It would be even better to make the permissions as narrow as possible. But I lack the time to figure out the policies manually, and I have not found an automated approach that is not a hack. I&rsquo;ll leave it be, for now, after all, it would potentially block any future adjustments we make.&#160;<a href=#fnref:4 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p></li><li id=fn:5><p>Be aware the quotas are limiting the vCPUs of your instances. If you go for a different instance type, make sure to request a high-enough quota.&#160;<a href=#fnref:5 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p></li><li id=fn:6><p>This reads the IP from the output we specified ourselves!&#160;<a href=#fnref:6 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p></li></ol></div></article><div class=mt-5><div class="row row-cols-2 justify-content-center"><div class="col-12 col-lg-8"><div class="card shadow-sm"><div class=card-body><h5 class="text-center mb-3">If you liked this article, share it with your friends!</h5><div class="row justify-content-center mb-3"><a class="btn btn-primary m-1 col-auto mr-clear-lastchild" href="https://twitter.com/intent/tweet?url=https://www.eiken.dev/blog/2022/03/cracking-with-hashcat-in-the-cloud/&amp;text=Cracking%20With%20Hashcat%20in%20the%20Cloud" target=_blank title=Twitter><i class="fab fa-twitter me-2"></i>Twitter
+</a><a class="btn btn-secondary m-1 col-auto mr-clear-lastchild" href="https://www.reddit.com/submit?url=https://www.eiken.dev/blog/2022/03/cracking-with-hashcat-in-the-cloud/&amp;title=Cracking%20With%20Hashcat%20in%20the%20Cloud" target=_blank title=Reddit><i class="fab fa-reddit-alien me-2"></i>Reddit
+</a><a class="btn btn-secondary m-1 col-auto mr-clear-lastchild" href="https://news.ycombinator.com/submitlink?u=https://www.eiken.dev/blog/2022/03/cracking-with-hashcat-in-the-cloud/&amp;t=Cracking%20With%20Hashcat%20in%20the%20Cloud" target=_blank title="Hacker News"><i class="fab fa-hacker-news me-2"></i>Hacker News</a></div><div class=text-center>Never miss new content by following me on <a href=https://bsky.app/profile/eikendev.bsky.social>Bluesky</a>.</div></div></div></div></div><div class="mx-auto mt-5 text-center"><a class="text-reset text-decoration-none" href=https://www.eiken.dev/blog/2021/02/how-to-break-your-jar-in-2021-decompilation-guide-for-jars-and-apks/><div>Previous: <i>How to Break Your JAR in 2021 - Decompilation Guide for JARs and APKs</i></div></a></div></div></div></section></main><footer class="footer mt-auto py-3 bg-darkgray5"><div class=container><div class="row justify-content-center mb-3"><a class="my-1 me-3 col-auto mr-clear-lastchild text-white" href=https://www.eikenberg.at/ title=eikenberg.at><i class="fas fa-globe-europe me-2"></i>eikenberg.at
+</a><a class="my-1 me-3 col-auto mr-clear-lastchild text-white" href=/index.xml title=Feed><i class="fas fa-rss me-2"></i>Feed
+</a><a class="my-1 me-3 col-auto mr-clear-lastchild text-white" href=https://creativecommons.org/licenses/by/4.0/ title="Attribution 4.0 International (CC BY 4.0)"><i class="fab fa-creative-commons me-2"></i>License</a></div><p class="text-center text-muted mb-clear-lastchild"><small>Copyright © eikendev</small></p></div></footer><script src=https://www.eiken.dev/js/zooming.min.js crossorigin=anonymous></script><script src=https://www.eiken.dev/js/bundle.js crossorigin=anonymous></script><script defer src=https://www.eiken.dev/js/bundle-deferred.js crossorigin=anonymous></script></body></html>
