@@ -9,7 +9,7 @@
 	"dependencies": {
 		"@fortawesome/fontawesome-free": "^7.2.0",
 		"@popperjs/core": "^2.0.0",
-		"autoprefixer": "^10.4.24",
+		"autoprefixer": "^10.4.27",
 		"bootstrap": "^5.3.8",
 		"chart.js": "^4.5.1",
 		"postcss": "^8.5.6",
