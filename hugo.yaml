@@ -10,6 +10,24 @@ pluralizeListTitles: false
 taxonomies:
   tag: "tags"
 
+# JS dependencies live in node_modules; mount the individual files into assets
+# so Hugo Pipes (js.Build) can process them. Defining any assets mount removes
+# the default one, so it is re-declared explicitly below.
+module:
+  mounts:
+    - source: assets
+      target: assets
+    - source: node_modules/bootstrap/dist/js/bootstrap.bundle.min.js
+      target: assets/js/bootstrap.bundle.js
+    - source: node_modules/chart.js/dist/chart.js
+      target: assets/js/chart.js
+    - source: node_modules/chart.js/dist/chunks/helpers.dataset.js
+      target: assets/js/chunks/helpers.dataset.js
+    - source: node_modules/@fortawesome/fontawesome-free/js/all.min.js
+      target: assets/js/fontawesome.all.js
+    - source: node_modules/zooming/build/zooming.min.js
+      target: assets/js/zooming.min.js
+
 params:
   title: "eikendev"
   description: "Coding projects and blog posts by eikendev. Always happy to learn something new. Also interested in infosec? Join my journey!"

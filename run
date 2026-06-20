@@ -31,11 +31,11 @@ case "$1" in
     hugo)
         COMMAND="$BASE_COMMAND --entrypoint='hugo' $HUGO_IMAGE ${@:2}"
         ;;
-    yarn)
-        COMMAND="$BASE_COMMAND --env COREPACK_ENABLE_DOWNLOAD_PROMPT=0 --entrypoint='corepack' $HUGO_IMAGE yarn ${@:2}"
+    npm)
+        COMMAND="$BASE_COMMAND --entrypoint='npm' $HUGO_IMAGE ${@:2}"
         ;;
     *)
-        echo "Usage: $0 <hugo|yarn> [parameters]"
+        echo "Usage: $0 <hugo|npm> [parameters]"
         exit 1
         ;;
 esac

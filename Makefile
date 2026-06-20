@@ -1,14 +1,14 @@
 ENGINE_COMMAND := ${shell . ./run; echo $$ENGINE_COMMAND}
 
 HUGO := ./run hugo
-YARN := ./run yarn
+NPM := ./run npm
 
 .PHONY: all
 all: build
 
 .PHONY: dependencies
 dependencies:
-	$(YARN) install
+	$(NPM) install
 
 .PHONY: build
 build: dependencies
