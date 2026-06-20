@@ -32,7 +32,7 @@ case "$1" in
         COMMAND="$BASE_COMMAND --entrypoint='hugo' $HUGO_IMAGE ${@:2}"
         ;;
     yarn)
-        COMMAND="$BASE_COMMAND --entrypoint='yarn' $HUGO_IMAGE ${@:2}"
+        COMMAND="$BASE_COMMAND --env COREPACK_ENABLE_DOWNLOAD_PROMPT=0 --entrypoint='corepack' $HUGO_IMAGE yarn ${@:2}"
         ;;
     *)
         echo "Usage: $0 <hugo|yarn> [parameters]"
