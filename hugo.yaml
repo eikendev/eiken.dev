@@ -1,7 +1,6 @@
 baseURL: "https://www.eiken.dev/"
-languageCode: "en-us"
+locale: "en-US"
 title: "eikendev"
-rssLimit: 20
 disableHugoGeneratorInject: true
 enableRobotsTXT: true
 enableGitInfo: true
@@ -9,6 +8,10 @@ pluralizeListTitles: false
 
 taxonomies:
   tag: "tags"
+
+services:
+  rss:
+    limit: 20
 
 # JS dependencies live in node_modules; mount the individual files into assets
 # so Hugo Pipes (js.Build) can process them. Defining any assets mount removes

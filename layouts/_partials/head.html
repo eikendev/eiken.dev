@@ -5,9 +5,9 @@
 <meta name="description" content="{{if .IsHome}}{{ $.Site.Params.description }}{{else if (eq .Params.Description nil)}}{{.Summary}}{{else}}{{.Params.Description}}{{end}}">
 <meta name="keywords" content="{{if or (.IsHome) (eq .Params.Tags nil)}}{{ $.Site.Params.keywords }}{{else}}{{ delimit .Params.Tags ", " }}{{end}}" />
 
-{{- template "_internal/opengraph.html" . -}}
-{{- template "_internal/schema.html" . -}}
-{{- template "_internal/twitter_cards.html" . -}}
+{{- partial "opengraph.html" . -}}
+{{- partial "schema.html" . -}}
+{{- partial "twitter_cards.html" . -}}
 
 {{ with .Site.Params.social.twitter -}}
 <meta name="twitter:creator" content="@{{ . }}"/>
