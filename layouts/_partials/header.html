@@ -1,18 +1,52 @@
-{{ $service1_link := printf "https://github.com/%s" $.Site.Params.social.github }}
-{{ $service1 := dict "name" "GitHub" "href" $service1_link "color" "primary" "icon" "fab fa-github" }}
-
-{{ $service2_link := printf "https://gitlab.com/%s" $.Site.Params.social.gitlab }}
-{{ $service2 := dict "name" "GitLab" "href" $service2_link "color" "secondary" "icon" "fab fa-gitlab" }}
-
-{{ $service3_link := $.Site.Params.social.blueskyurl }}
-{{ $service3 := dict "name" "Bluesky" "href" $service3_link "color" "secondary" "icon" "fab fa-bluesky" }}
-
-{{ $services := slice $service1 $service2 $service3 }}
-
-<div class="container">
-	<h1>Hello world.</h1>
-	<p class="lead text-muted">My name is Raphael. I have a big passion for information security and security engineering. Below you'll find some projects of mine that I'd love for you to check out. If you have any thoughts, suggestions, or just want to chat about all things tech - don't be shy and reach out!</p>
-	<div class="mt-4">
-		{{ range $services }}<a href="{{ .href }}" class="btn btn-{{ .color }} my-2 mx-2"><i class="{{ .icon }} fa-lg me-2"></i>{{ .name }}</a>{{ end }}
+{{ $page := . }}
+<header
+	class="sticky top-0 z-30 border-b border-outlinev bg-bg/80 backdrop-blur-[16px]"
+>
+	<div
+		class="mx-auto flex min-h-16 max-w-[1100px] flex-wrap items-center gap-3 px-[clamp(16px,4vw,24px)] py-2.5"
+	>
+		<a href="{{ "/" | relURL }}" class="flex items-center gap-2.5">
+			<span
+				class="inline-flex [&>svg]:h-[26px] [&>svg]:w-[26px]"
+				aria-hidden="true"
+			>
+				{{ (resources.Get "img/logo.svg").Content | safeHTML }}
+			</span>
+			<span class="font-mono text-base font-semibold tracking-tight"
+				>{{ site.Title }}</span
+			>
+		</a>
+		<nav class="ml-auto flex flex-wrap items-center gap-2">
+			<div
+				class="flex items-center gap-0.5 rounded-full border border-outlinev bg-s1 p-[3px]"
+			>
+				{{ range hugo.Data.links.nav }}
+					{{ $url := .url | relURL }}
+					{{ $active := cond (eq .url "/") (eq $page.RelPermalink $url) (hasPrefix $page.RelPermalink $url) }}
+					<a
+						href="{{ $url }}"
+						class="{{ if $active }}
+							bg-s3 text-on
+						{{ else }}
+							text-onv hover:text-on
+						{{ end }} inline-flex items-center gap-[7px] rounded-full px-3.5 py-2 font-mono text-[13px] transition-colors"
+					>
+						{{ partial "icon.html" (dict "name" .icon "size" 14) }}
+						{{ .name }}
+					</a>
+				{{ end }}
+			</div>
+			<button
+				type="button"
+				data-theme-toggle
+				aria-label="Toggle color scheme"
+				class="inline-flex h-[38px] cursor-pointer items-center gap-2 rounded-full border border-outlinev bg-s1 px-3.5 font-mono text-xs text-onv transition-colors hover:bg-s3 hover:text-on"
+			>
+				<span data-theme-icon class="inline-flex"
+					>{{ partial "icon.html" (dict "name" "auto" "size" 15) }}</span
+				>
+				<span data-theme-label>auto</span>
+			</button>
+		</nav>
 	</div>
-</div>
+</header>

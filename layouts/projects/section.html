@@ -1,0 +1,53 @@
+{{ define "main" }}
+	{{ $all := sort hugo.Data.project "Priority" "desc" }}
+	{{ $langs := slice }}
+	{{ range $all }}
+		{{ range .Languages }}{{ $langs = $langs | append . }}{{ end }}
+	{{ end }}
+	<section class="pt-[clamp(44px,6vw,72px)] pb-8">
+		<h1
+			class="m-0 mb-3.5 text-[clamp(34px,6vw,60px)] leading-[1.02] font-semibold tracking-[-.035em]"
+		>
+			{{ .Title }}
+		</h1>
+		{{ with .Params.lede }}
+			<p
+				class="m-0 mb-7 max-w-[56ch] text-[17px] leading-[1.65] text-onv"
+			>
+				{{ . }}
+			</p>
+		{{ end }}
+		<div class="flex flex-wrap gap-2" data-filters>
+			<button
+				type="button"
+				data-filter="all"
+				data-active
+				class="h-[34px] cursor-pointer rounded-full border border-transparent bg-pc px-4 font-mono text-xs text-onpc transition-colors"
+			>
+				all
+			</button>
+			{{ range $langs | uniq | sort }}
+				<button
+					type="button"
+					data-filter="{{ . | urlize }}"
+					class="h-[34px] cursor-pointer rounded-full border border-outlinev bg-transparent px-4 font-mono text-xs text-onv transition-colors hover:bg-s1"
+				>
+					{{ lower . }}
+				</button>
+			{{ end }}
+		</div>
+	</section>
+	<section
+		class="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-4 pb-6"
+		data-projects
+	>
+		{{ range $all }}
+			<div
+				data-langs="{{ delimit (apply .Languages "urlize" ".") " " }}"
+				class="contents"
+			>
+				{{ partial "project-card.html" . }}
+			</div>
+		{{ end }}
+	</section>
+{{ end }}

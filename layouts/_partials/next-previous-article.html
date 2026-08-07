@@ -1,18 +1,32 @@
-{{ if or (.PrevInSection) (.NextInSection) }}
-<div class="mx-auto mt-5 text-center">
-	{{ with .PrevInSection }}
-	<a class="text-reset text-decoration-none" href="{{.Permalink}}">
-		<div>
-			Previous: <i>{{.Title}}</i>
-		</div>
-	</a>
-	{{ end }}
-	{{ with .NextInSection }}
-	<a class="text-reset text-decoration-none" href="{{.Permalink}}">
-		<div>
-			Next: <i>{{.Title}}</i>
-		</div>
-	</a>
-	{{ end }}
-</div>
+{{ if or .PrevInSection .NextInSection }}
+	<nav class="mt-8 grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-4">
+		{{ with .PrevInSection }}
+			<a
+				href="{{ .RelPermalink }}"
+				class="flex flex-col gap-2 rounded-[20px] border border-outlinev bg-s1 p-5 transition hover:border-outline hover:bg-s2"
+			>
+				<span
+					class="font-mono text-[11px] tracking-[.12em] text-onv uppercase"
+					>previous</span
+				>
+				<span class="text-[15px] leading-[1.4] font-medium text-pretty"
+					>{{ .Title }}</span
+				>
+			</a>
+		{{ end }}
+		{{ with .NextInSection }}
+			<a
+				href="{{ .RelPermalink }}"
+				class="flex flex-col gap-2 rounded-[20px] border border-outlinev bg-s1 p-5 text-right transition hover:border-outline hover:bg-s2"
+			>
+				<span
+					class="font-mono text-[11px] tracking-[.12em] text-onv uppercase"
+					>next</span
+				>
+				<span class="text-[15px] leading-[1.4] font-medium text-pretty"
+					>{{ .Title }}</span
+				>
+			</a>
+		{{ end }}
+	</nav>
 {{ end }}

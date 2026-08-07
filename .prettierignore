@@ -1,0 +1,7 @@
+node_modules
+public
+resources
+
+# Generated syntax highlighting themes (see `make syntax`).
+assets/css/chroma-dark.css
+assets/css/chroma-light.css

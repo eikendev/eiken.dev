@@ -1,0 +1,46 @@
+{{/* FontAwesome icons by semantic name. Usage: {{ partial "icon.html" (dict "name" "home" "size" 15) }}
+Emits an FA icon element; the deferred FontAwesome bundle (see baseof.html)
+swaps it for an inline SVG that scales with font-size. Add a key here to add an
+icon; keys are shared by nav, buttons, meta rows, project cards, social and
+sharing links. */}}
+{{ $size := default 15 .size }}
+{{ $map := dict
+	"home"       "fa-solid fa-house"
+	"blog"       "fa-solid fa-newspaper"
+	"projects"   "fa-solid fa-diagram-project"
+	"auto"       "fa-solid fa-circle-half-stroke"
+	"dark"       "fa-solid fa-moon"
+	"light"      "fa-solid fa-sun"
+	"arrow"      "fa-solid fa-arrow-right"
+	"arrowleft"  "fa-solid fa-arrow-left"
+	"external"   "fa-solid fa-arrow-up-right-from-square"
+	"license"    "fa-solid fa-scale-balanced"
+	"calendar"   "fa-solid fa-calendar-day"
+	"clock"      "fa-solid fa-clock"
+	"info"       "fa-solid fa-circle-info"
+	"cpu"        "fa-solid fa-microchip"
+	"bot"        "fa-solid fa-robot"
+	"shield"     "fa-solid fa-shield-halved"
+	"file"       "fa-solid fa-file"
+	"bell"       "fa-solid fa-bell"
+	"mail"       "fa-solid fa-envelope"
+	"box"        "fa-solid fa-box"
+	"link"       "fa-solid fa-link"
+	"globe"      "fa-solid fa-globe"
+	"code"       "fa-solid fa-code"
+	"terminal"   "fa-solid fa-terminal"
+	"rss"        "fa-solid fa-rss"
+	"github"     "fa-brands fa-github"
+	"gitlab"     "fa-brands fa-gitlab"
+	"bluesky"    "fa-brands fa-bluesky"
+	"reddit"     "fa-brands fa-reddit-alien"
+	"hackernews" "fa-brands fa-hacker-news"
+	"linkedin"   "fa-brands fa-linkedin-in"
+	"twitter"    "fa-brands fa-twitter"
+}}
+{{ $cls := index $map .name | default "fa-solid fa-circle" }}
+<i
+	class="{{ $cls }}"
+	style="font-size:{{ $size }}px;line-height:1"
+	aria-hidden="true"
+></i>

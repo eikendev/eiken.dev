@@ -3,5 +3,5 @@ Priority = 120
 License = "MIT"
 Languages = ["Rust"]
 RepositoryLink = "https://github.com/eikendev/sectxt"
-RepositoryIcon = "fab fa-github"
+Icon = "file"
 Description = "Validates security.txt (RFC 9116) files by probing for reachable disclosure contacts in a consistent, machine-readable format."

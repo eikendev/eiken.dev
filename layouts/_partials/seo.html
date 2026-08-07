@@ -1,0 +1,35 @@
+{{ $title := cond .IsHome site.Title (printf "%s | %s" .Title site.Title) }}
+{{ $desc := "" }}
+{{ if .IsHome }}
+	{{ $desc = site.Params.description }}
+{{ else }}
+	{{ $desc = or .Description .Summary site.Params.description }}
+{{ end }}
+{{ $keywords := site.Params.keywords }}
+{{ if and (not .IsHome) .Params.tags }}
+	{{ $keywords = delimit .Params.tags ", " }}
+{{ end }}
+
+
+<meta name="author" content="{{ site.Params.author.name }}" />
+<meta
+	name="description"
+	content="{{ $desc | plainify | chomp | truncate 200 }}"
+/>
+<meta name="keywords" content="{{ $keywords }}" />
+
+{{/* Hugo's embedded OpenGraph, schema and Twitter card templates */}}
+{{- partial "opengraph.html" . -}}
+{{- partial "schema.html" . -}}
+{{- partial "twitter_cards.html" . -}}
+
+{{ with site.Params.social.twitter }}
+	<meta name="twitter:creator" content="@{{ . }}" />
+{{ end }}
+
+
+<title>{{ $title }}</title>
+<link rel="canonical" href="{{ .Permalink }}" />
+{{ if .Params.noindex }}
+	<meta name="robots" content="noindex,nofollow" />
+{{ end }}

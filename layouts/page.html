@@ -1,41 +1,61 @@
 {{ define "main" }}
-
-<section class="py-5">
-	<div class="py-md-3 py-lg-5 container">
-		<article class="single">
-			<div class="text-center mb-5">
-				{{ with .Params.tags }}
-				<div class="mb-4">
-					{{ range . }}<a href="{{ "tags" | absURL}}/{{ . | urlize }}" class="badge bg-secondary badge-pill mx-1">{{.}}</a>{{ end }}
-				</div>
-				{{ end }}
-				<h1 class="mb-4">{{.Title}}</h1>
-				<div class="row justify-content-center">
-					<span class="my-1 mx-3 col-auto text-muted">
-						<i class="fas fa-calendar-day me-2"></i><time datetime="{{ .PublishDate.Format "2006-01-02T15:04:05Z07:00" }}">{{ .PublishDate.Format "January 2, 2006" }}</time>
-					</span>
-					<span class="my-1 mx-3 col-auto text-muted">
-						<i class="fas fa-clock me-2"></i>{{ .ReadingTime }} {{ if eq 1 .ReadingTime }}minute{{ else }}minutes{{ end }}
-					</span>
-				</div>
-			</div>
-    		{{- with .Content -}}
-				{{ . | replaceRE "(<h[1-9] id=\"([^\"]+)\".+)(</h[1-9]+>)" `${1}<a href="#${2}" class="hanchor" ariaLabel="Anchor"><i class="fas fa-link fa-xs ms-2"></i></a>${3}` | safeHTML }}
-    		{{- end -}}
-		</article>
-		<div class="mt-5">
-			<div class="row row-cols-2 justify-content-center">
-				<div class="col-12 col-lg-8">
-					<div class="card shadow-sm">
-						<div class="card-body">
-							{{- partial "sharing.html" . -}}
-						</div>
-					</div>
-				</div>
-			</div>
-			{{- partial "next-previous-article.html" . -}}
+	<article class="max-w-[70ch] animate-rise pt-[clamp(36px,5vw,64px)] pb-6">
+		<a
+			href="{{ "/blog/" | relURL }}"
+			class="mb-7 inline-flex items-center gap-[7px] font-mono text-[13px] text-onv transition-colors hover:text-primary!"
+		>
+			{{ partial "icon.html" (dict "name" "arrowleft" "size" 14) }}
+			back to blog
+		</a>
+		<div
+			class="mb-[18px] flex flex-wrap items-center gap-3.5 font-mono text-xs text-onv"
+		>
+			<span class="inline-flex items-center gap-[7px]">
+				{{ partial "icon.html" (dict "name" "calendar" "size" 14) }}
+				<time
+					datetime="{{ .PublishDate.Format "2006-01-02T15:04:05Z07:00" }}"
+					>{{ .PublishDate.Format "2006.01" }}</time
+				>
+			</span>
+			<span class="inline-flex items-center gap-[7px]">
+				{{ partial "icon.html" (dict "name" "clock" "size" 14) }}
+				{{ .ReadingTime }} min read
+			</span>
+			{{ if and site.Params.showLastmod (gt (.Lastmod.Sub .PublishDate).Hours 24) }}
+				<span class="inline-flex items-center gap-[7px]"
+					>updated {{ .Lastmod.Format "2006.01" }}</span
+				>
+			{{ end }}
 		</div>
-	</div>
-</section>
+		<h1
+			class="m-0 mb-5 text-[clamp(30px,5vw,46px)] leading-[1.08] font-semibold tracking-[-.03em] text-pretty"
+		>
+			{{ .Title }}
+		</h1>
+		{{ with .Description }}
+			<p class="m-0 mb-6 text-[19px] leading-[1.6] text-pretty text-onv">
+				{{ . }}
+			</p>
+		{{ end }}
+		<div class="flex flex-wrap gap-1.5 border-b border-outlinev pb-7">
+			{{ range .Params.tags }}
+				<a
+					href="{{ (printf "/tags/%s/" (. | urlize)) | relURL }}"
+					class="rounded-full border border-outlinev px-2.5 py-[3px] font-mono text-[11px] text-onv transition-colors hover:border-outline hover:text-on!"
+					>{{ . }}</a
+				>
+			{{ end }}
+		</div>
 
+		{{/* prose styling for rendered markdown */}}
+		<div
+			class="pt-8 [&_.footnotes]:mt-10 [&_.footnotes]:border-t [&_.footnotes]:border-outlinev [&_.footnotes]:pt-5 [&_.footnotes]:text-[15px] [&_.footnotes]:text-onv [&_.footnotes_hr]:hidden [&_.hanchor]:ml-2 [&_.hanchor]:text-onv [&_.hanchor]:no-underline [&_.hanchor]:opacity-0 [&_:not(pre)>code]:rounded [&_:not(pre)>code]:bg-s2 [&_:not(pre)>code]:px-1.5 [&_:not(pre)>code]:py-0.5 [&_:not(pre)>code]:font-mono [&_:not(pre)>code]:text-[.9em] [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-2 [&_blockquote]:my-7 [&_blockquote]:rounded-2xl [&_blockquote]:border [&_blockquote]:border-l-[3px] [&_blockquote]:border-outlinev [&_blockquote]:border-l-primary [&_blockquote]:bg-s1 [&_blockquote]:px-5 [&_blockquote]:py-[18px] [&_blockquote_p]:mb-0 [&_blockquote_p]:text-[15px] [&_blockquote_p]:text-onv [&_figcaption]:mt-2 [&_figcaption]:font-mono [&_figcaption]:text-xs [&_figcaption]:text-onv [&_figure]:my-7 [&_h2]:mt-11 [&_h2]:mb-3.5 [&_h2]:text-2xl [&_h2]:font-semibold [&_h2]:tracking-[-.02em] [&_h2:hover_.hanchor]:opacity-100 [&_h3]:mt-8 [&_h3]:mb-3 [&_h3]:text-xl [&_h3]:font-semibold [&_h3:hover_.hanchor]:opacity-100 [&_img]:rounded-2xl [&_img]:border [&_img]:border-outlinev [&_li]:mb-2 [&_li]:text-[17px] [&_li]:leading-[1.75] [&_ol]:mb-5 [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:m-0 [&_p]:mb-5 [&_p]:text-[17px] [&_p]:leading-[1.75] [&_p]:text-pretty [&_p]:text-on [&_pre]:mb-6 [&_pre]:overflow-x-auto [&_pre]:rounded-2xl [&_pre]:border [&_pre]:border-outlinev [&_pre]:bg-s1 [&_pre]:p-5 [&_pre]:font-mono [&_pre]:text-[13.5px] [&_pre]:leading-[1.75] [&_table]:mb-6 [&_table]:w-full [&_table]:border-collapse [&_table]:text-[15px] [&_td]:border-b [&_td]:border-outlinev [&_td]:px-3 [&_td]:py-2 [&_th]:border-b [&_th]:border-outline [&_th]:px-3 [&_th]:py-2 [&_th]:text-left [&_th]:font-mono [&_th]:text-xs [&_th]:tracking-wide [&_th]:text-onv [&_th]:uppercase [&_ul]:mb-5 [&_ul]:list-disc [&_ul]:pl-6"
+		>
+			{{/* inject a #-anchor link into each h2–h4 heading */}}
+			{{ .Content | replaceRE "(<h[2-4] id=\"([^\"]+)\".*?)(</h[2-4]>)" `${1}<a href="#${2}" class="hanchor" aria-label="Anchor">#</a>${3}` | safeHTML }}
+		</div>
+
+		{{ partial "sharing.html" . }}
+		{{ partial "next-previous-article.html" . }}
+	</article>
 {{ end }}

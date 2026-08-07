@@ -13,28 +13,76 @@ services:
   rss:
     limit: 20
 
-# JS dependencies live in node_modules; mount the individual files into assets
-# so Hugo Pipes (js.Build) can process them. Defining any assets mount removes
-# the default one, so it is re-declared explicitly below.
+permalinks:
+  blog: "blog/:year/:month/:title/"
+
+sitemap:
+  changefreq: "weekly"
+  filename: "sitemap.xml"
+  priority: 0.5
+
+minify:
+  minifyOutput: true
+  tdewolff:
+    html:
+      keepDocumentTags: true
+
+# Tailwind reads the class list Hugo writes to hugo_stats.json while building.
+# Declaring any mount removes the default assets mount, so it is re-declared,
+# along with the JS dependencies (Chart.js, FontAwesome) and the self-hosted
+# fonts, all mounted straight out of node_modules.
+build:
+  buildStats:
+    enable: true
+  cachebusters:
+    - source: "assets/notwatching/hugo_stats\\.json"
+      target: css
 module:
   mounts:
     - source: assets
       target: assets
-    - source: node_modules/bootstrap/dist/js/bootstrap.bundle.min.js
-      target: assets/js/bootstrap.bundle.js
+    - source: static
+      target: static
+    - source: hugo_stats.json
+      target: assets/notwatching/hugo_stats.json
+      disableWatch: true
+    # Chart.js: bundled on demand for posts with `chartjs: true`.
     - source: node_modules/chart.js/dist/chart.js
       target: assets/js/chart.js
     - source: node_modules/chart.js/dist/chunks/helpers.dataset.js
       target: assets/js/chunks/helpers.dataset.js
-    - source: node_modules/@fortawesome/fontawesome-free/js/all.min.js
-      target: assets/js/fontawesome.all.js
-    - source: node_modules/zooming/build/zooming.min.js
-      target: assets/js/zooming.min.js
+    # FontAwesome (slim): core engine plus only the solid and brands packs.
+    - source: node_modules/@fortawesome/fontawesome-free/js/fontawesome.min.js
+      target: assets/js/fontawesome.min.js
+    - source: node_modules/@fortawesome/fontawesome-free/js/solid.min.js
+      target: assets/js/fa-solid.min.js
+    - source: node_modules/@fortawesome/fontawesome-free/js/brands.min.js
+      target: assets/js/fa-brands.min.js
+    # Self-hosted IBM Plex, served from /fonts/ (see @font-face in main.css).
+    # Only the exact weights used are mounted, so the published site does not
+    # carry every fontsource weight/subset/format.
+    - source: node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-400-normal.woff2
+      target: static/fonts/ibm-plex-sans/ibm-plex-sans-latin-400-normal.woff2
+    - source: node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-500-normal.woff2
+      target: static/fonts/ibm-plex-sans/ibm-plex-sans-latin-500-normal.woff2
+    - source: node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-600-normal.woff2
+      target: static/fonts/ibm-plex-sans/ibm-plex-sans-latin-600-normal.woff2
+    - source: node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-700-normal.woff2
+      target: static/fonts/ibm-plex-sans/ibm-plex-sans-latin-700-normal.woff2
+    - source: node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2
+      target: static/fonts/ibm-plex-mono/ibm-plex-mono-latin-400-normal.woff2
+    - source: node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-500-normal.woff2
+      target: static/fonts/ibm-plex-mono/ibm-plex-mono-latin-500-normal.woff2
+    - source: node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-600-normal.woff2
+      target: static/fonts/ibm-plex-mono/ibm-plex-mono-latin-600-normal.woff2
 
 params:
   title: "eikendev"
   description: "Coding projects and blog posts by eikendev. Always happy to learn something new. Also interested in infosec? Join my journey!"
   keywords: "coding, programming, projects, infosec, information security, system security, portfolio"
+  copyright: "Copyright © eikendev"
+  themeColor: "#111111"
+  showLastmod: true
   images:
     - "/img/card.png"
   author:
@@ -47,15 +95,26 @@ params:
     bluesky: "@eikendev.bsky.social"
     blueskyurl: "https://bsky.app/profile/eikendev.bsky.social"
 
-permalinks:
-  blog: "blog/:year/:month/:title/"
+  # Hero and contact copy. The rotating pill reads roles in order.
+  headline: "Hello world."
+  intro: >-
+    My name is Raphael. I have a big passion for information security and security
+    engineering. Below you'll find some projects of mine that I'd love for you to
+    check out. If you have any thoughts, suggestions, or just want to chat about all
+    things tech, don't be shy and reach out!
+  roles:
+    - "security engineering"
+    - "cybersecurity"
+    - "reverse engineering"
+    - "rust and go"
+    - "linux tinkering"
+  contact:
+    title: "Say hello."
+    body: "Thoughts, suggestions, or just want to chat about all things tech? Reach out."
 
-sitemap:
-  changefreq: "weekly"
-  filename: "sitemap.xml"
-  priority: 0.5
+# Nav, social, contact and footer links: data/links.yaml
+# Projects: data/project/*.toml, one file each, sorted by Priority
 
-# https://jvns.ca/blog/2024/10/07/some-notes-on-upgrading-hugo/
 markup:
   highlight:
     codeFences: true
@@ -75,13 +134,10 @@ markup:
       passthrough:
         delimiters:
           block:
-          - - '\['
-            - '\]'
-          - - $$
-            - $$
+            - ['\[', '\]']
+            - ["$$", "$$"]
           inline:
-          - - '\('
-            - '\)'
+            - ['\(', '\)']
         enable: true
     parser:
       autoHeadingIDType: "blackfriday"

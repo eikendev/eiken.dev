@@ -1,0 +1,29 @@
+{{/* expects one entry from hugo.Data.project */}}
+<a
+	href="{{ .RepositoryLink }}"
+	class="flex flex-col gap-3 rounded-[20px] border border-outlinev bg-s1 p-[22px] transition hover:-translate-y-0.5 hover:border-outline hover:bg-s2"
+>
+	<div class="flex items-center gap-2.5">
+		<span class="inline-flex text-primary"
+			>{{ partial "icon.html" (dict "name" (.Icon | default "terminal") "size" 16) }}</span
+		>
+		<span class="font-mono text-base font-semibold">{{ .Name }}</span>
+		<span class="ml-auto flex flex-wrap justify-end gap-1.5">
+			{{ range .Languages }}
+				<span
+					class="rounded-full bg-pc px-2.5 py-[3px] font-mono text-[11px] text-onpc"
+					>{{ . }}</span
+				>
+			{{ end }}
+		</span>
+	</div>
+	<p class="m-0 text-sm leading-[1.55] text-pretty text-onv">
+		{{ .Description | markdownify }}
+	</p>
+	<span
+		class="mt-auto flex items-center gap-[7px] pt-1.5 font-mono text-[11px] text-onv"
+	>
+		{{ partial "icon.html" (dict "name" "license" "size" 13) }}
+		{{ .License | default "no license" }}
+	</span>
+</a>

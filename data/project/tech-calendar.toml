@@ -3,5 +3,5 @@ Priority = 115
 Languages = ["Python"]
 License = "MIT"
 RepositoryLink = "https://github.com/eikendev/tech-calendar"
-RepositoryIcon = "fab fa-github"
+Icon = "calendar"
 Description = "Generates a subscribable .ics feed of upcoming earnings dates for major tech companies for quick import into calendar apps."

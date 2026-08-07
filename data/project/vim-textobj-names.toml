@@ -3,5 +3,5 @@ Priority = 35
 License = "MIT"
 Languages = ["Vim script"]
 RepositoryLink = "https://github.com/eikendev/vim-textobj-names"
-RepositoryIcon = "fab fa-github"
+Icon = "code"
 Description = "Adds Vim/Neovim text objects for identifiers with delimiters like -, _, or / to speed refactors."

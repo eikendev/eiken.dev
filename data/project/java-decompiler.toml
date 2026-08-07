@@ -3,5 +3,5 @@ Priority = 90
 License = "MIT"
 Languages = ["Dockerfile"]
 RepositoryLink = "https://github.com/eikendev/java-decompiler"
-RepositoryIcon = "fab fa-github"
+Icon = "box"
 Description = "Bundles popular Java decompilers (CFR, Fernflower, Krakatau, Procyon) in a single Docker image to reduce setup friction."

@@ -1,0 +1,9 @@
+{{ with resources.Get "img/logo.svg" }}
+	<link rel="icon" href="{{ .RelPermalink }}" type="image/svg+xml" />
+{{ end }}
+<link rel="icon" href="{{ "favicon.ico" | relURL }}" sizes="32x32" />
+<link rel="apple-touch-icon" href="{{ "apple-touch-icon.png" | relURL }}" />
+<meta
+	name="theme-color"
+	content="{{ site.Params.themeColor | default "#111111" }}"
+/>

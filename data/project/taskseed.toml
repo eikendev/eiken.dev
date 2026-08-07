@@ -3,5 +3,5 @@ Priority = 140
 License = "MIT"
 Languages = ["Go"]
 RepositoryLink = "https://github.com/eikendev/taskseed"
-RepositoryIcon = "fab fa-github"
+Icon = "calendar"
 Description = "Expands CalDAV recurring task rules into individual upcoming tasks so all clients (even without RRULE support) stay consistent."

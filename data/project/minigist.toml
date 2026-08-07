@@ -3,5 +3,5 @@ Priority = 150
 License = "MIT"
 Languages = ["Python"]
 RepositoryLink = "https://github.com/eikendev/minigist"
-RepositoryIcon = "fab fa-github"
+Icon = "bot"
 Description = "Summarizes Miniflux unread articles with an LLM and writes structured summaries back to entries with per-feed prompts."

@@ -2,5 +2,5 @@ Name = "dotfiles"
 Priority = 15
 Languages = ["Shell", "Vim script"]
 RepositoryLink = "https://github.com/eikendev/dotfiles"
-RepositoryIcon = "fab fa-github"
+Icon = "terminal"
 Description = "My day-to-day shell and Neovim setup, with curated configs (fish, fzf, etc.) that reflect how I can be most productive."

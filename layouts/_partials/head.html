@@ -1,53 +1,63 @@
-<meta charset="UTF-8" />
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="author" content="{{ $.Site.Params.author.name }}" />
-<meta name="description" content="{{if .IsHome}}{{ $.Site.Params.description }}{{else if (eq .Params.Description nil)}}{{.Summary}}{{else}}{{.Params.Description}}{{end}}">
-<meta name="keywords" content="{{if or (.IsHome) (eq .Params.Tags nil)}}{{ $.Site.Params.keywords }}{{else}}{{ delimit .Params.Tags ", " }}{{end}}" />
+{{ $css := resources.Get "css/main.css" | css.TailwindCSS (dict "minify" hugo.IsProduction) }}
+{{ if hugo.IsProduction }}{{ $css = $css | fingerprint "sha384" }}{{ end }}
 
-{{- partial "opengraph.html" . -}}
-{{- partial "schema.html" . -}}
-{{- partial "twitter_cards.html" . -}}
 
-{{ with .Site.Params.social.twitter -}}
-<meta name="twitter:creator" content="@{{ . }}"/>
-{{ end -}}
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+{{ partial "seo.html" . }}
+{{ partial "favicons.html" . }}
 
-<title>{{ if not .IsHome }}{{ with .Title }}{{ . }} | {{end}}{{end}}{{ $.Site.Title }}</title>
 
-<link rel="canonical" href="{{ .Permalink }}">
+<link
+	rel="stylesheet"
+	href="{{ $css.RelPermalink }}"
+	{{ with $css.Data.Integrity }}integrity="{{ . }}"{{ end }}
+/>
 
-{{ range .AlternativeOutputFormats -}}
-	{{ printf `<link rel="%s" type="%s" href="%s" title="%s" />` .Rel .MediaType.Type .Permalink $.Site.Title | safeHTML }}
-{{ end -}}
+{{ range .AlternativeOutputFormats }}
+	<link
+		rel="{{ .Rel }}"
+		type="{{ .MediaType.Type }}"
+		href="{{ .Permalink }}"
+		title="{{ site.Title }}"
+	/>
+{{ end }}
 
-<link rel="apple-touch-icon" sizes="180x180" href="{{ "apple-touch-icon.png" | absURL }}" />
-<link rel="icon" type="image/png" sizes="32x32" href="{{ "favicon-32x32.png" | absURL }}" />
-<link rel="icon" type="image/png" sizes="16x16" href="{{ "favicon-16x16.png" | absURL }}" />
-<link rel="manifest" href="{{ "site.webmanifest" | absURL }}" />
-<link rel="mask-icon" href="{{ "safari-pinned-tab.svg" | absURL }}" color="#111111" />
-<meta name="msapplication-TileColor" content="#111111">
-<meta name="theme-color" content="#111111">
-
-{{ $options := (dict "targetPath" "css/style.css" "outputStyle" "compressed" "enableSourceMap" true "includePaths" (slice "node_modules")) }}
-{{ $style := resources.Get "css/main.scss" | toCSS $options | postCSS (dict "config" "./assets/css/postcss.config.js") | fingerprint "sha384" }}
-<link rel="stylesheet" href="{{ $style.Permalink }}" integrity="{{ $style.Data.Integrity }}">
-
+{{/* KaTeX stylesheet only on pages that actually rendered math.
+	.WordCount forces the content to render before Store is read.
+*/}}
 {{ $noop := .WordCount }}
 {{ if .Page.Store.Get "hasMath" }}
-<link
-  rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex.min.css"
-  integrity="sha384-WcoG4HRXMzYzfCgiyfrySxx90XSl2rxY5mnVY5TwtWE6KLrArNKn0T/mOgNL0Mmi"
-  crossorigin="anonymous"
->
+	<link
+		rel="stylesheet"
+		href="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex.min.css"
+		integrity="sha384-WcoG4HRXMzYzfCgiyfrySxx90XSl2rxY5mnVY5TwtWE6KLrArNKn0T/mOgNL0Mmi"
+		crossorigin="anonymous"
+	/>
 {{ end }}
 
+{{/* Chart.js, bundled on demand for posts with `chartjs: true` in front matter.
+	Exposes window.Chart so each post's per-chart script can draw into its canvas.
+*/}}
 {{ if .Params.chartjs }}
-{{ $script := resources.Get "js/chart.js" | js.Build (dict "minify" hugo.IsProduction "format" "esm") }}
-<script type="module">
-import { Chart, registerables } from "{{ $script.RelPermalink }}";
-Chart.register(...registerables);
-window.Chart = Chart;
-</script>
+	{{ $chart := resources.Get "js/chart.js" | js.Build (dict "minify" hugo.IsProduction "format" "esm") }}
+  <script type="module">
+    import { Chart, registerables } from "{{ $chart.RelPermalink }}";
+    Chart.register(...registerables);
+    window.Chart = Chart;
+  </script>
 {{ end }}
+
+
+<script>
+	// apply the stored theme before first paint so there is no flash
+	(function () {
+		var m = localStorage.getItem("eikendev-mode") || "system";
+		var dark =
+			m === "system"
+				? window.matchMedia("(prefers-color-scheme: dark)").matches
+				: m === "dark";
+		if (!dark) document.documentElement.classList.add("light");
+		document.documentElement.dataset.mode = m;
+	})();
+</script>

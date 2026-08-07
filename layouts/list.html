@@ -1,13 +1,45 @@
 {{ define "main" }}
-
-<section class="my-4">
-	<div class="container">
-		<div class="column">
-			{{ range .Pages }}
-			{{ .Render "summary" }}
-			{{ end }}
-		</div>
-	</div>
-</section>
-
+	<section class="pt-[clamp(44px,6vw,72px)] pb-9">
+		<h1
+			class="m-0 mb-3.5 text-[clamp(34px,6vw,60px)] leading-[1.02] font-semibold tracking-[-.035em]"
+		>
+			{{ .Title }}
+		</h1>
+		{{ with .Params.lede }}
+			<p class="m-0 max-w-[56ch] text-[17px] leading-[1.65] text-onv">
+				{{ . }}
+			</p>
+		{{ end }}
+	</section>
+	<section class="border-t border-outlinev">
+		{{ range .Pages.ByDate.Reverse }}
+			<a
+				href="{{ .RelPermalink }}"
+				class="-mx-4 flex flex-wrap gap-x-[26px] gap-y-2.5 rounded-[14px] border-b border-outlinev px-4 py-[26px] transition-colors hover:bg-s1"
+			>
+				<span
+					class="w-[74px] flex-none pt-[5px] font-mono text-xs text-onv"
+					>{{ .Date.Format "2006.01" }}</span
+				>
+				<span class="flex flex-[1_1_260px] flex-col gap-3">
+					<span
+						class="flex items-center gap-2.5 text-[clamp(18px,2.4vw,21px)] leading-[1.32] font-medium tracking-[-.01em] text-pretty"
+					>
+						{{ .Title }}
+						<span class="inline-flex flex-none text-onv"
+							>{{ partial "icon.html" (dict "name" "arrow" "size" 15) }}</span
+						>
+					</span>
+					<span class="flex flex-wrap gap-1.5">
+						{{ range .Params.tags }}
+							<span
+								class="rounded-full border border-outlinev px-2.5 py-[3px] font-mono text-[11px] text-onv"
+								>{{ . }}</span
+							>
+						{{ end }}
+					</span>
+				</span>
+			</a>
+		{{ end }}
+	</section>
 {{ end }}

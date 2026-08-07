@@ -1,0 +1,52 @@
+{{ $all := sort hugo.Data.project "Priority" "desc" }}
+{{ $featured := first 6 $all }}
+{{ $rest := after 6 $all }}
+<section class="pt-[clamp(48px,6vw,72px)]">
+	<div
+		class="flex flex-wrap items-center gap-4 border-b border-outlinev pb-5"
+	>
+		<h2
+			class="m-0 flex items-center gap-2.5 font-mono text-[13px] tracking-[.12em] text-onv uppercase"
+		>
+			{{ partial "icon.html" (dict "name" "projects") }}
+			selected projects
+		</h2>
+		<a
+			href="{{ "/projects/" | relURL }}"
+			class="ml-auto inline-flex items-center gap-1.5 font-mono text-[13px] text-primary"
+		>
+			all
+			{{ len $all }}
+			{{ partial "icon.html" (dict "name" "arrow" "size" 14) }}
+		</a>
+	</div>
+	<div
+		class="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-4 pt-6"
+	>
+		{{ range $featured }}{{ partial "project-card.html" . }}{{ end }}
+		<a
+			href="{{ "/projects/" | relURL }}"
+			class="flex flex-col gap-3 rounded-[20px] border border-dashed border-outline p-[22px] transition hover:-translate-y-0.5 hover:border-primary hover:bg-s1"
+		>
+			<div class="flex items-center gap-2.5">
+				<span class="font-mono text-base font-semibold text-primary"
+					>+{{ len $rest }} more</span
+				>
+				<span class="ml-auto inline-flex text-primary"
+					>{{ partial "icon.html" (dict "name" "arrow" "size" 16) }}</span
+				>
+			</div>
+			<div class="flex flex-wrap gap-1.5">
+				{{ range $rest }}
+					<span
+						class="rounded-full border border-outlinev px-2.5 py-[3px] font-mono text-[11px] text-onv"
+						>{{ .Name }}</span
+					>
+				{{ end }}
+			</div>
+			<span class="mt-auto pt-1.5 font-mono text-[11px] text-onv"
+				>view all projects</span
+			>
+		</a>
+	</div>
+</section>

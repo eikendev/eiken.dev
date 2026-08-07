@@ -1,24 +1,26 @@
-{{ $service1_url := printf "https://twitter.com/intent/tweet?url=%s&text=%s" .Permalink .Title }}
-{{ $service1 := dict "name" "Twitter" "href" $service1_url "color" "primary" "icon" "fa-twitter" }}
-
-{{ $service2_url := printf "https://www.reddit.com/submit?url=%s&title=%s" .Permalink .Title }}
-{{ $service2 := dict "name" "Reddit" "href" $service2_url "color" "secondary" "icon" "fa-reddit-alien" }}
-
-{{ $service3_url := printf "https://news.ycombinator.com/submitlink?u=%s&t=%s" .Permalink .Title }}
-{{ $service3 := dict "name" "Hacker News" "href" $service3_url "color" "secondary" "icon" "fa-hacker-news" }}
-
-{{ $services := slice $service1 $service2 $service3 }}
-
-<h5 class="text-center mb-3">If you liked this article, share it with your friends!</h5>
-
-<div class="row justify-content-center mb-3">
-	{{ range $services }}
-	<a class="btn btn-{{ .color }} m-1 col-auto mr-clear-lastchild" href="{{ .href }}" target="_blank" title="{{ .name }}">
-		<i class="fab {{ .icon }} me-2"></i>{{ .name }}
-	</a>
-	{{ end }}
-</div>
-
-<div class="text-center">
-	Never miss new content by following me on <a href="{{ $.Site.Params.social.blueskyurl }}">Bluesky</a>.
+{{ $enc := dict "url" (.Permalink | urlquery) "title" (.Title | urlquery) }}
+{{ $services := slice
+	(dict "name" "Hacker News" "icon" "hackernews" "href" (printf "https://news.ycombinator.com/submitlink?u=%s&t=%s" $enc.url $enc.title))
+	(dict "name" "Reddit"      "icon" "reddit"     "href" (printf "https://www.reddit.com/submit?url=%s&title=%s" $enc.url $enc.title))
+	(dict "name" "Bluesky"     "icon" "bluesky"    "href" (printf "https://bsky.app/intent/compose?text=%s%%20%s" $enc.title $enc.url))
+}}
+<div
+	class="mt-12 flex flex-wrap items-center gap-4 border-t border-outlinev pt-7"
+>
+	<p class="m-0 font-mono text-xs tracking-[.12em] text-onv uppercase">
+		share this
+	</p>
+	<div class="ml-auto flex flex-wrap gap-2">
+		{{ range $services }}
+			<a
+				href="{{ .href }}"
+				target="_blank"
+				rel="noopener"
+				class="inline-flex h-[34px] items-center gap-2 rounded-full border border-outlinev px-4 font-mono text-xs text-onv transition-colors hover:border-outline hover:text-on!"
+			>
+				{{ partial "icon.html" (dict "name" .icon "size" 13) }}
+				{{ .name }}
+			</a>
+		{{ end }}
+	</div>
 </div>

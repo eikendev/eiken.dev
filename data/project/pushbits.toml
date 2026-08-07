@@ -3,5 +3,5 @@ Priority = 110
 License = "MIT"
 Languages = ["Go"]
 RepositoryLink = "https://github.com/pushbits/server"
-RepositoryIcon = "fab fa-github"
+Icon = "mail"
 Description = "Delivers self-hosted push notifications over Matrix with a web API, user/app management, and multi-user support."

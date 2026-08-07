@@ -1,0 +1,36 @@
+# data/links.yaml
+# Nav, hero buttons, contact and footer links. Icons are keys in partials/icon.html.
+nav:
+  - { name: home,     url: /,          icon: home }
+  - { name: blog,     url: /blog/,     icon: blog }
+  - { name: projects, url: /projects/, icon: projects }
+
+social:
+  - name: GitHub
+    url: https://github.com/eikendev
+    icon: github
+    class: bg-fill text-onfill! shadow-[0_1px_2px_rgba(0,0,0,.4),0_8px_26px_rgba(0,0,0,.24)] hover:-translate-y-px hover:brightness-110
+  - name: GitLab
+    url: https://gitlab.com/eikendev
+    icon: gitlab
+    class: bg-s3 text-on hover:bg-pc hover:text-onpc
+  - name: Bluesky
+    url: https://bsky.app/profile/eikendev.bsky.social
+    icon: bluesky
+    class: border border-outline text-on hover:bg-s2
+
+contact:
+  - name: eikenberg.at
+    url: https://www.eikenberg.at/
+    icon: globe
+    class: bg-fill text-onfill! hover:brightness-110
+  - name: LinkedIn
+    url: https://www.linkedin.com/in/raphael-eikenberg/
+    icon: linkedin
+    class: border border-outline hover:bg-s2
+
+footer:
+  - { name: eikenberg.at, url: "https://www.eikenberg.at/" }
+  - { name: Feed,         url: /index.xml }
+  - { name: Tags,         url: /tags/ }
+  - { name: License,      url: "https://creativecommons.org/licenses/by/4.0/" }

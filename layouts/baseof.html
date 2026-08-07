@@ -1,32 +1,47 @@
-<!DOCTYPE html>
-
-{{ $itemtype := "WebPage" }}
-{{ if .IsPage }}{{ $itemtype = "BlogPosting" }}{{ end }}
-
-<html lang="{{ with .Site.Language.Locale }}{{ . }}{{ else }}en-US{{ end }}" dir="ltr" class="h-100" itemscope itemtype="http://schema.org/{{ $itemtype }}">
+<!doctype html>
+<html lang="{{ site.Language.Lang | default "en" }}">
 	<head>
-		{{- partial "head.html" . -}}
+		{{ partial "head.html" . }}
 	</head>
-
-	<body class="d-flex flex-column h-100">
-		<nav>
-			{{- partial "nav.html" . -}}
-		</nav>
-
-		{{ if .IsHome }}
-		<header class="jumbotron text-center py-5 mb-0">
-			{{- partial "header.html" . -}}
-		</header>
-		{{end}}
-
-		<main class="flex-shrink-0">
-			{{- block "main" . }}{{- end }}
+	<body
+		class="min-h-screen overflow-x-hidden bg-bg font-sans text-on antialiased"
+	>
+		{{ partial "layers.html" . }}
+		{{ partial "header.html" . }}
+		<main
+			class="relative z-1 mx-auto max-w-[1100px] px-[clamp(16px,4vw,24px)] pb-10"
+		>
+			{{ block "main" . }}{{ end }}
+			{{ partial "contact.html" . }}
 		</main>
+		{{ partial "footer.html" . }}
+		{{/* FontAwesome (slim): core engine + solid + brands, concatenated into one
+			deferred bundle. The packs register with the core, which then swaps every
+			<i class="fa-…"> emitted by partials/icon.html for an inline SVG.
+		*/}}
+		{{ $fa := slice
+			(resources.Get "js/fontawesome.min.js")
+			(resources.Get "js/fa-solid.min.js")
+			(resources.Get "js/fa-brands.min.js")
+			| resources.Concat "js/fontawesome.js"
+		}}
+		{{ if hugo.IsProduction }}
+			{{ $fa = $fa | fingerprint "sha512" }}
+		{{ end }}
+		<script
+			src="{{ $fa.RelPermalink }}"
+			{{ with $fa.Data.Integrity }}integrity="{{ . }}"{{ end }}
+			defer
+		></script>
 
-		<footer class="footer mt-auto py-3 bg-darkgray5">
-			{{- partial "footer.html" . -}}
-		</footer>
-
-		{{- partial "scripts.html" . -}}
+		{{ $js := resources.Get "js/site.js" | js.Build (dict "minify" hugo.IsProduction "target" "es2019") }}
+		{{ if hugo.IsProduction }}
+			{{ $js = $js | fingerprint "sha512" }}
+		{{ end }}
+		<script
+			src="{{ $js.RelPermalink }}"
+			{{ with $js.Data.Integrity }}integrity="{{ . }}"{{ end }}
+			defer
+		></script>
 	</body>
 </html>

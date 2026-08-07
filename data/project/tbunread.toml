@@ -3,5 +3,5 @@ Priority = 92
 License = "MIT"
 Languages = ["Rust"]
 RepositoryLink = "https://github.com/eikendev/tbunread"
-RepositoryIcon = "fab fa-github"
+Icon = "mail"
 Description = "Reports unread Thunderbird IMAP counts per account for dashboards or status scripts by reading configured maildirs."

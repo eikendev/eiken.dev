@@ -1,13 +1,41 @@
 {{ define "main" }}
-
-<section class="py-5">
-	<div class="container">
-		<h2 class="text-center mb-5">Page not found</h2>
-		<p class="text-center">Oops! This page does not exist. Maybe it was moved elsewhere?</p>
-		<div class="text-center mt-5">
-			<a href="{{ "/" | relURL }}" class="btn btn-primary"><i class="fas fa-arrow-circle-left fa-lg me-2"></i>Back to home page</a>
+	<section class="grid min-h-[52vh] items-center py-[clamp(48px,8vw,96px)]">
+		<div>
+			<p
+				class="m-0 mb-5 font-mono text-[13px] tracking-[.12em] text-onv uppercase"
+			>
+				error 404
+			</p>
+			<h1
+				class="m-0 mb-4 text-[clamp(40px,7vw,72px)] leading-none font-semibold tracking-[-.04em]"
+			>
+				No such path.<span
+					class="ml-1 animate-caret text-primary [text-shadow:0_0_22px_currentColor]"
+					>_</span
+				>
+			</h1>
+			<p
+				class="m-0 mb-8 max-w-[46ch] text-[17px] leading-[1.65] text-onv"
+			>
+				This page does not exist, or it moved somewhere else. The links
+				below still work.
+			</p>
+			<div class="flex flex-wrap gap-3">
+				<a
+					href="{{ "/" | relURL }}"
+					class="inline-flex h-11 items-center gap-2.5 rounded-full bg-fill px-[22px] text-sm font-semibold text-onfill! transition hover:brightness-110"
+				>
+					{{ partial "icon.html" (dict "name" "home" "size" 16) }}
+					Home
+				</a>
+				<a
+					href="{{ "/blog/" | relURL }}"
+					class="inline-flex h-11 items-center gap-2.5 rounded-full border border-outline px-[22px] text-sm font-semibold transition-colors hover:bg-s2"
+				>
+					{{ partial "icon.html" (dict "name" "blog" "size" 16) }}
+					Blog
+				</a>
+			</div>
 		</div>
-	</div>
-</section>
-
+	</section>
 {{ end }}

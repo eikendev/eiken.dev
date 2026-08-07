@@ -1,0 +1,46 @@
+<section
+	class="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-[clamp(32px,5vw,64px)] pt-[clamp(48px,7vw,96px)] pb-[clamp(48px,6vw,80px)]"
+>
+	<div>
+		<div
+			class="mb-6 inline-flex min-h-4 items-center gap-2.5 rounded-full bg-pc px-3.5 py-[7px] font-mono text-xs tracking-[.09em] text-onpc uppercase"
+		>
+			<span
+				class="size-1.5 flex-none animate-cell rounded-full bg-primary"
+			></span>
+			<span
+				class="inline-block transition duration-200"
+				data-roles="{{ site.Params.roles | jsonify }}"
+				>{{ index site.Params.roles 0 }}</span
+			>
+		</div>
+		<h1
+			class="m-0 mb-[22px] text-[clamp(40px,7vw,76px)] leading-none font-semibold tracking-[-.04em]"
+		>
+			<span data-type="{{ site.Params.headline }}"
+				>{{ site.Params.headline }}</span
+			><span
+				class="ml-1 animate-caret text-primary [text-shadow:0_0_22px_currentColor]"
+				>_</span
+			>
+		</h1>
+		<p
+			class="m-0 mb-[34px] max-w-[54ch] text-[17px] leading-[1.66] text-pretty text-onv"
+		>
+			{{ site.Params.intro }}
+		</p>
+		<div class="flex flex-wrap gap-3">
+			{{ range hugo.Data.links.social }}
+				<a
+					href="{{ .url }}"
+					rel="me noopener"
+					class="{{ .class }} inline-flex h-11 items-center gap-2.5 rounded-full px-[22px] text-sm font-semibold transition"
+				>
+					{{ partial "icon.html" (dict "name" .icon "size" 17) }}
+					{{ .name }}
+				</a>
+			{{ end }}
+		</div>
+	</div>
+	{{ partial "hero-graphic.html" . }}
+</section>

@@ -1,6 +1,16 @@
-<div class="mx-auto overflow-auto" style="position: relative; height:{{ .Get "height" }}px; max-width:{{ .Get "width" }}px">
-	<canvas class="mx-auto" id="chart-{{ .Get "id" }}" style="width:100%"></canvas>
+{{/* Chart.js canvas. Set `chartjs: true` in the post's front matter to load the
+	library (see head.html), then reference this chart's id.
+*/}}
+<div
+	class="mx-auto mb-6 overflow-auto rounded-2xl border border-outlinev bg-s1 p-4"
+	style="position:relative; height:{{ .Get "height" }}px; max-width:{{ .Get "width" }}px"
+>
+	<canvas
+		class="mx-auto"
+		id="chart-{{ .Get "id" }}"
+		style="width:100%"
+	></canvas>
 </div>
-{{ if .Get "id" }}
-<script src="{{ .Get "id" }}.js" data-name="chart-{{ .Get "id" }}" defer></script>
+{{ with .Get "id" }}
+	<script src="{{ . }}.js" data-name="chart-{{ . }}" defer></script>
 {{ end }}

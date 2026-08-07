@@ -1,0 +1,20 @@
+{{ define "main" }}
+	<section class="pt-[clamp(44px,6vw,72px)] pb-9">
+		<h1
+			class="m-0 mb-3.5 text-[clamp(34px,6vw,60px)] leading-[1.02] font-semibold tracking-[-.035em]"
+		>
+			Tags
+		</h1>
+	</section>
+	<section class="flex flex-wrap gap-2 border-t border-outlinev pt-8 pb-6">
+		{{ range .Data.Terms.Alphabetical }}
+			<a
+				href="{{ .Page.RelPermalink }}"
+				class="inline-flex h-[34px] items-center gap-2 rounded-full border border-outlinev px-4 font-mono text-xs text-onv transition-colors hover:border-outline hover:text-on!"
+			>
+				{{ .Page.Title }}
+				<span class="text-onv opacity-70">{{ .Count }}</span>
+			</a>
+		{{ end }}
+	</section>
+{{ end }}

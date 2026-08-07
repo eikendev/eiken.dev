@@ -1,22 +1,24 @@
 {
-	"name": "eiken.dev",
-	"version": "0.0.1",
-	"description": "My personal portfolio",
-	"main": "index.js",
-	"repository": "https://github.com/eikendev/eiken.dev",
-	"author": "eikendev <raphael@eiken.dev>",
-	"private": true,
-	"dependencies": {
-		"@fortawesome/fontawesome-free": "^7.3.1",
-		"@popperjs/core": "^2.0.0",
-		"autoprefixer": "^10.5.4",
-		"bootstrap": "^5.3.8",
-		"chart.js": "^4.5.1",
-		"postcss": "^8.5.25",
-		"postcss-cli": "^11.0.1",
-		"zooming": "^2.0.0"
-	},
-	"browserslist": [
-		"> 1%"
-	]
+  "name": "eiken.dev",
+  "version": "0.0.1",
+  "description": "My personal portfolio",
+  "repository": "https://github.com/eikendev/eiken.dev",
+  "author": "eikendev <raphael@eiken.dev>",
+  "private": true,
+  "scripts": {
+    "format": "prettier --write 'layouts/**/*.html' 'assets/**/*.css' 'assets/**/*.js'"
+  },
+  "dependencies": {
+    "@fontsource/ibm-plex-mono": "^5.0.0",
+    "@fontsource/ibm-plex-sans": "^5.0.0",
+    "@fortawesome/fontawesome-free": "^7.2.0",
+    "chart.js": "^4.5.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.0.0",
+    "prettier": "^3.9.6",
+    "prettier-plugin-go-template": "^0.0.15",
+    "prettier-plugin-tailwindcss": "^0.8.1",
+    "tailwindcss": "^4.0.0"
+  }
 }

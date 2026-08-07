@@ -3,5 +3,5 @@ Priority = 80
 License = "MIT"
 Languages = ["Rust"]
 RepositoryLink = "https://github.com/eikendev/urlprobe"
-RepositoryIcon = "fab fa-github"
+Icon = "link"
 Description = "Checks URL availability in bulk with a small CLI suited for CI, link health checks, or monitoring."

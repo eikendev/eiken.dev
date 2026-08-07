@@ -1,0 +1,47 @@
+{{ $posts := first 4 (where site.RegularPages "Section" "blog") }}
+<section>
+	<div
+		class="flex flex-wrap items-center gap-4 border-b border-outlinev pb-4"
+	>
+		<h2
+			class="m-0 flex items-center gap-2.5 font-mono text-[13px] tracking-[.12em] text-onv uppercase"
+		>
+			{{ partial "icon.html" (dict "name" "blog") }}
+			recent posts
+		</h2>
+		<a
+			href="{{ "/blog/" | relURL }}"
+			class="ml-auto inline-flex items-center gap-1.5 font-mono text-[13px] text-primary"
+		>
+			all posts
+			{{ partial "icon.html" (dict "name" "arrow" "size" 14) }}
+		</a>
+	</div>
+	<div class="flex flex-col">
+		{{ range $posts }}
+			<a
+				href="{{ .RelPermalink }}"
+				class="-mx-4 flex flex-wrap items-center gap-x-5 gap-y-2 rounded-xl border-b border-outlinev px-4 py-[18px] transition-colors hover:bg-s1"
+			>
+				<span class="w-[66px] flex-none font-mono text-xs text-onv"
+					>{{ .Date.Format "2006.01" }}</span
+				>
+				<span
+					class="flex-[1_1_260px] text-[17px] leading-[1.4] font-medium text-pretty"
+					>{{ .Title }}</span
+				>
+				<span class="flex flex-wrap items-center gap-1.5">
+					{{ range .Params.tags }}
+						<span
+							class="rounded-full border border-outlinev px-2.5 py-[3px] font-mono text-[11px] text-onv"
+							>{{ . }}</span
+						>
+					{{ end }}
+					<span class="inline-flex text-onv"
+						>{{ partial "icon.html" (dict "name" "arrow" "size" 15) }}</span
+					>
+				</span>
+			</a>
+		{{ end }}
+	</div>
+</section>
