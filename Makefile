@@ -40,11 +40,11 @@ server: dependencies syntax
 
 # Format templates (Go-template-aware), CSS and JS with Prettier.
 .PHONY: format
-format: dependencies
+format: dependencies syntax
 	$(NPM) run format
 
 .PHONY: format-check
-format-check: dependencies
+format-check: dependencies syntax
 	$(NPM) run format:check
 
 .PHONY: validate-html
