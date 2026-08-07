@@ -4,10 +4,27 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # `make test` builds the site; Hugo uses Git info for .Lastmod (enableGitInfo).
+
+      - name: Test
+        run: make test
+
   deploy:
     name: Build and Deploy
+    needs: test
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
