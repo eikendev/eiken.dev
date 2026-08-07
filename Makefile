@@ -43,6 +43,21 @@ server: dependencies syntax
 format: dependencies
 	$(NPM) run format
 
+.PHONY: format-check
+format-check: dependencies
+	$(NPM) run format:check
+
+.PHONY: validate-html
+validate-html: build
+	$(NPM) run test:html
+
+.PHONY: audit
+audit:
+	$(NPM) audit --audit-level=high
+
+.PHONY: test
+test: format-check audit validate-html
+
 .PHONY: clean
 clean:
 	rm -f .hugo_build.lock

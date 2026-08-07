@@ -6,7 +6,9 @@
   "author": "eikendev <raphael@eiken.dev>",
   "private": true,
   "scripts": {
-    "format": "prettier --write 'layouts/**/*.html' 'assets/**/*.css' 'assets/**/*.js'"
+    "format": "prettier --write 'layouts/**/*.html' 'assets/**/*.css' 'assets/**/*.js'",
+    "format:check": "prettier --check 'layouts/**/*.html' 'assets/**/*.css' 'assets/**/*.js'",
+    "test:html": "html-validate 'public/**/*.html'"
   },
   "dependencies": {
     "@fontsource/ibm-plex-mono": "^5.0.0",
@@ -16,6 +18,7 @@
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.0.0",
+    "html-validate": "^11.6.2",
     "prettier": "^3.9.6",
     "prettier-plugin-go-template": "^0.0.15",
     "prettier-plugin-tailwindcss": "^0.8.1",
