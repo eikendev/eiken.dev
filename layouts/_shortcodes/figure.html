@@ -1,0 +1,14 @@
+{{ $img := .Page.Resources.Get (.Get "src") }}
+<figure>
+	{{ with $img }}
+		<img
+			src="{{ .RelPermalink }}"
+			alt="{{ $.Get "alt" }}"
+			loading="lazy"
+			decoding="async"
+		/>
+	{{ end }}
+	{{ with .Get "caption" }}
+		<figcaption>{{ . | markdownify }}</figcaption>
+	{{ end }}
+</figure>
