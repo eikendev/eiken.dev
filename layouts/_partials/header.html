@@ -45,9 +45,17 @@
 				aria-label="Toggle color scheme"
 				class="inline-flex h-[38px] cursor-pointer items-center gap-2 rounded-full border border-outlinev bg-s1 px-3.5 font-mono text-xs text-onv transition-colors hover:bg-s3 hover:text-on"
 			>
-				<span data-theme-icon class="inline-flex"
-					>{{ partial "icon.html" (dict "name" "auto" "size" 15) }}</span
-				>
+				<span data-theme-icon class="inline-flex">
+					<span data-icon-for="system" class="inline-flex"
+						>{{ partial "icon.html" (dict "name" "auto" "size" 15) }}</span
+					>
+					<span data-icon-for="dark" class="hidden inline-flex"
+						>{{ partial "icon.html" (dict "name" "dark" "size" 15) }}</span
+					>
+					<span data-icon-for="light" class="hidden inline-flex"
+						>{{ partial "icon.html" (dict "name" "light" "size" 15) }}</span
+					>
+				</span>
 				<span data-theme-label>auto</span>
 			</button>
 		</nav>

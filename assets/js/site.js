@@ -1,11 +1,5 @@
 // three-state theme control: auto -> dark -> light, persisted in localStorage
 const ORDER = ["system", "dark", "light"];
-// FontAwesome markup; the deferred FA bundle swaps these <i> tags for SVGs.
-const ICONS = {
-	system: '<i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>',
-	dark: '<i class="fa-solid fa-moon" aria-hidden="true"></i>',
-	light: '<i class="fa-solid fa-sun" aria-hidden="true"></i>',
-};
 
 const mq = window.matchMedia("(prefers-color-scheme: dark)");
 
@@ -14,7 +8,9 @@ function apply(mode) {
 	document.documentElement.classList.toggle("light", !dark);
 	document.documentElement.dataset.mode = mode;
 	document.querySelectorAll("[data-theme-icon]").forEach((el) => {
-		el.innerHTML = ICONS[mode];
+		el.querySelectorAll("[data-icon-for]").forEach((i) => {
+			i.classList.toggle("hidden", i.dataset.iconFor !== mode);
+		});
 	});
 	document.querySelectorAll("[data-theme-label]").forEach((el) => {
 		el.textContent = mode === "system" ? "auto" : mode;

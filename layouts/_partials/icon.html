@@ -1,46 +1,46 @@
 {{/* FontAwesome icons by semantic name. Usage: {{ partial "icon.html" (dict "name" "home" "size" 15) }}
-Emits an FA icon element; the deferred FontAwesome bundle (see baseof.html)
-swaps it for an inline SVG that scales with font-size. Add a key here to add an
-icon; keys are shared by nav, buttons, meta rows, project cards, social and
-sharing links. */}}
+Inlines the icon's raw SVG (mounted from the FontAwesome free package, see
+hugo.yaml) at build time. Add a key here to add an icon; keys are shared by nav,
+buttons, meta rows, project cards, social and sharing links. */}}
 {{ $size := default 15 .size }}
 {{ $map := dict
-	"home"       "fa-solid fa-house"
-	"blog"       "fa-solid fa-newspaper"
-	"projects"   "fa-solid fa-diagram-project"
-	"auto"       "fa-solid fa-circle-half-stroke"
-	"dark"       "fa-solid fa-moon"
-	"light"      "fa-solid fa-sun"
-	"arrow"      "fa-solid fa-arrow-right"
-	"arrowleft"  "fa-solid fa-arrow-left"
-	"external"   "fa-solid fa-arrow-up-right-from-square"
-	"license"    "fa-solid fa-scale-balanced"
-	"calendar"   "fa-solid fa-calendar-day"
-	"clock"      "fa-solid fa-clock"
-	"info"       "fa-solid fa-circle-info"
-	"cpu"        "fa-solid fa-microchip"
-	"bot"        "fa-solid fa-robot"
-	"shield"     "fa-solid fa-shield-halved"
-	"file"       "fa-solid fa-file"
-	"bell"       "fa-solid fa-bell"
-	"mail"       "fa-solid fa-envelope"
-	"box"        "fa-solid fa-box"
-	"link"       "fa-solid fa-link"
-	"globe"      "fa-solid fa-globe"
-	"code"       "fa-solid fa-code"
-	"terminal"   "fa-solid fa-terminal"
-	"rss"        "fa-solid fa-rss"
-	"github"     "fa-brands fa-github"
-	"gitlab"     "fa-brands fa-gitlab"
-	"bluesky"    "fa-brands fa-bluesky"
-	"reddit"     "fa-brands fa-reddit-alien"
-	"hackernews" "fa-brands fa-hacker-news"
-	"linkedin"   "fa-brands fa-linkedin-in"
-	"twitter"    "fa-brands fa-twitter"
+	"home"       "solid/house"
+	"blog"       "solid/newspaper"
+	"projects"   "solid/diagram-project"
+	"auto"       "solid/circle-half-stroke"
+	"dark"       "solid/moon"
+	"light"      "solid/sun"
+	"arrow"      "solid/arrow-right"
+	"arrowleft"  "solid/arrow-left"
+	"external"   "solid/arrow-up-right-from-square"
+	"license"    "solid/scale-balanced"
+	"calendar"   "solid/calendar-day"
+	"clock"      "solid/clock"
+	"info"       "solid/circle-info"
+	"cpu"        "solid/microchip"
+	"bot"        "solid/robot"
+	"shield"     "solid/shield-halved"
+	"file"       "solid/file"
+	"bell"       "solid/bell"
+	"mail"       "solid/envelope"
+	"box"        "solid/box"
+	"link"       "solid/link"
+	"globe"      "solid/globe"
+	"code"       "solid/code"
+	"terminal"   "solid/terminal"
+	"rss"        "solid/rss"
+	"github"     "brands/github"
+	"gitlab"     "brands/gitlab"
+	"bluesky"    "brands/bluesky"
+	"reddit"     "brands/reddit-alien"
+	"hackernews" "brands/hacker-news"
+	"linkedin"   "brands/linkedin-in"
+	"twitter"    "brands/twitter"
 }}
-{{ $cls := index $map .name | default "fa-solid fa-circle" }}
-<i
-	class="{{ $cls }}"
-	style="font-size:{{ $size }}px;line-height:1"
-	aria-hidden="true"
-></i>
+{{ $rel := index $map .name | default "solid/circle" }}
+{{ with resources.Get (printf "icons/fontawesome/%s.svg" $rel) }}
+	{{/* Height-only sizing: FA glyphs have non-square viewBoxes, so forcing
+		width too would distort them. Width:auto preserves aspect ratio.
+	*/}}
+	{{ .Content | replaceRE `<svg ` (printf `<svg aria-hidden="true" style="height:%dpx;width:auto" ` $size) | safeHTML }}
+{{ end }}
