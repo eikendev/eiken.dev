@@ -9,7 +9,9 @@ function apply(mode) {
 	document.documentElement.dataset.mode = mode;
 	document.querySelectorAll("[data-theme-icon]").forEach((el) => {
 		el.querySelectorAll("[data-icon-for]").forEach((i) => {
-			i.classList.toggle("hidden", i.dataset.iconFor !== mode);
+			const active = i.dataset.iconFor === mode;
+			i.classList.toggle("hidden", !active);
+			i.classList.toggle("inline-flex", active);
 		});
 	});
 	document.querySelectorAll("[data-theme-label]").forEach((el) => {
