@@ -51,6 +51,13 @@ module:
       target: assets/js/chart.js
     - source: node_modules/chart.js/dist/chunks/helpers.dataset.js
       target: assets/js/chunks/helpers.dataset.js
+    # KaTeX stylesheet, self-hosted to avoid the third-party CDN request it
+    # previously came from. The whole `dist` dir is mounted (not just the CSS
+    # file) because katex.min.css references its fonts via relative URLs
+    # (e.g. fonts/KaTeX_Main-Regular.woff2), which only resolve if the fonts
+    # directory keeps the same layout alongside the CSS.
+    - source: node_modules/katex/dist
+      target: static/katex
     # FontAwesome (slim): core engine plus only the solid and brands packs.
     - source: node_modules/@fortawesome/fontawesome-free/js/fontawesome.min.js
       target: assets/js/fontawesome.min.js
