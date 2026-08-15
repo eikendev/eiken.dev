@@ -23,9 +23,6 @@ sitemap:
 
 minify:
   minifyOutput: true
-  tdewolff:
-    html:
-      keepDocumentTags: true
 
 # Tailwind reads the class list Hugo writes to hugo_stats.json while building.
 # Declaring any mount removes the default assets mount, so it is re-declared,
@@ -46,24 +43,14 @@ module:
     - source: hugo_stats.json
       target: assets/notwatching/hugo_stats.json
       disableWatch: true
-    # Chart.js: bundled on demand for posts with `chartjs: true`.
     - source: node_modules/chart.js/dist/chart.js
       target: assets/js/chart.js
     - source: node_modules/chart.js/dist/chunks/helpers.dataset.js
       target: assets/js/chunks/helpers.dataset.js
-    # KaTeX stylesheet, self-hosted to avoid the third-party CDN request it
-    # previously came from. The whole `dist` dir is mounted (not just the CSS
-    # file) because katex.min.css references its fonts via relative URLs
-    # (e.g. fonts/KaTeX_Main-Regular.woff2), which only resolve if the fonts
-    # directory keeps the same layout alongside the CSS.
     - source: node_modules/katex/dist
       target: static/katex
-    # FontAwesome: raw per-icon SVGs, inlined at build time by icon.html.
     - source: node_modules/@fortawesome/fontawesome-free/svgs
       target: assets/icons/fontawesome
-    # Self-hosted IBM Plex, served from /fonts/ (see @font-face in main.css).
-    # Only the exact weights used are mounted, so the published site does not
-    # carry every fontsource weight/subset/format.
     - source: node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-400-normal.woff2
       target: static/fonts/ibm-plex-sans/ibm-plex-sans-latin-400-normal.woff2
     - source: node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-500-normal.woff2
@@ -98,7 +85,6 @@ params:
     bluesky: "@eikendev.bsky.social"
     blueskyurl: "https://bsky.app/profile/eikendev.bsky.social"
 
-  # Hero and contact copy. The rotating pill reads roles in order.
   headline: "Hello world."
   intro: >-
     My name is Raphael. I have a big passion for information security and security
@@ -114,9 +100,6 @@ params:
   contact:
     title: "Say hello."
     body: "Thoughts, suggestions, or just want to chat about all things tech? Reach out."
-
-# Nav, social, contact and footer links: data/links.yaml
-# Projects: data/project/*.toml, one file each, sorted by Priority
 
 markup:
   highlight:
