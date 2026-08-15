@@ -1,0 +1,436 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=author content="eikendev"><meta name=description content="Thanks to the global chip shortage, for about two years certain electronic items are really hard to buy. This includes graphics cards, those things that make your display useful. They&rsquo;re also …"><meta name=keywords content="aws,cloud,cracking,hashcat"><meta property="og:url" content="https://www.eiken.dev/blog/2022/03/cracking-with-hashcat-in-the-cloud/"><meta property="og:site_name" content="eikendev"><meta property="og:title" content="Cracking With Hashcat in the Cloud"><meta property="og:description" content="Thanks to the global chip shortage, for about two years certain electronic items are really hard to buy. This includes graphics cards, those things that make your display useful. They’re also beasts at cracking password hashes. Admittedly, I waited for the situation to resolve so I can buy a graphics card for a sane price and improve my hashcat experience, but I now think this is unlikely to happen anytime soon. Time to find a modern solution."><meta property="og:locale" content="en_US"><meta property="og:type" content="article"><meta property="article:section" content="blog"><meta property="article:published_time" content="2022-03-16T21:00:00+00:00"><meta property="article:modified_time" content="2022-03-20T11:55:33+01:00"><meta property="article:tag" content="Aws"><meta property="article:tag" content="Cloud"><meta property="article:tag" content="Cracking"><meta property="article:tag" content="Hashcat"><meta property="og:image" content="https://www.eiken.dev/img/blog/cracking-with-hashcat-in-the-cloud/card.png"><meta itemprop=name content="Cracking With Hashcat in the Cloud"><meta itemprop=description content="Thanks to the global chip shortage, for about two years certain electronic items are really hard to buy. This includes graphics cards, those things that make your display useful. They’re also beasts at cracking password hashes. Admittedly, I waited for the situation to resolve so I can buy a graphics card for a sane price and improve my hashcat experience, but I now think this is unlikely to happen anytime soon. Time to find a modern solution."><meta itemprop=datePublished content="2022-03-16T21:00:00+00:00"><meta itemprop=dateModified content="2022-03-20T11:55:33+01:00"><meta itemprop=wordCount content="3338"><meta itemprop=image content="https://www.eiken.dev/img/blog/cracking-with-hashcat-in-the-cloud/card.png"><meta itemprop=keywords content="Aws,Cloud,Cracking,Hashcat"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://www.eiken.dev/img/blog/cracking-with-hashcat-in-the-cloud/card.png"><meta name=twitter:title content="Cracking With Hashcat in the Cloud"><meta name=twitter:description content="Thanks to the global chip shortage, for about two years certain electronic items are really hard to buy. This includes graphics cards, those things that make your display useful. They’re also beasts at cracking password hashes. Admittedly, I waited for the situation to resolve so I can buy a graphics card for a sane price and improve my hashcat experience, but I now think this is unlikely to happen anytime soon. Time to find a modern solution."><meta name=twitter:site content="@eikendev"><meta name=twitter:creator content="@eikendev"><title>Cracking With Hashcat in the Cloud | eikendev</title><link rel=canonical href=https://www.eiken.dev/blog/2022/03/cracking-with-hashcat-in-the-cloud/><link rel=icon href=/img/logo.svg type=image/svg+xml><link rel=icon href=/favicon.ico sizes=32x32><link rel=apple-touch-icon href=/apple-touch-icon.png><meta name=theme-color content="#111111"><link rel=stylesheet href=/css/main.50ed40becd7ebc4a6108cc70e56ce283a6eab2b0b9b1aea67c02c11f2ecb100bb51831dd2e355a83223aa78dcb189dda.css integrity=sha384-UO1Avs1+vEphCMxw5Wzig6bqsrC5sa6mfALBHy7LEAu1GDHdLjVagyI6p43LGJ3a><script>(function(){var e=localStorage.getItem("eikendev-mode")||"system",t=e==="system"?window.matchMedia("(prefers-color-scheme: dark)").matches:e==="dark";t||document.documentElement.classList.add("light"),document.documentElement.dataset.mode=e})()</script></head><body class="min-h-screen overflow-x-hidden bg-bg font-sans text-on antialiased"><div class="pointer-events-none fixed inset-0 z-0 layer-grid"></div><div class="pointer-events-none fixed inset-0 z-40 layer-scan"></div><div class="pointer-events-none fixed -top-[260px] left-1/2 z-0 h-[520px] w-[900px] -translate-x-1/2 blur-[20px] layer-glow"></div><header class="sticky top-0 z-30 border-b border-outlinev bg-bg/80 backdrop-blur-[16px]"><div class="mx-auto flex min-h-16 max-w-[1100px] flex-wrap items-center gap-3 px-[clamp(16px,4vw,24px)] py-2.5"><a href=/ class="flex items-center gap-2.5"><span class="inline-flex [&>svg]:h-[26px] [&>svg]:w-[26px]" aria-hidden=true><svg viewBox="0 0 96 96"><style>.logo-bar{fill:var(--color-on,#17171a)}.logo-dot{fill:var(--color-primary,#3557c8)}@media(prefers-color-scheme:dark){.logo-bar{fill:var(--color-on,#ececed)}.logo-dot{fill:var(--color-primary,#8fb0ff)}}</style><rect class="logo-bar" x="0" y="0" width="16" height="96"/><rect class="logo-bar" x="0" y="0" width="28" height="16"/><rect class="logo-bar" x="0" y="80" width="28" height="16"/><rect class="logo-bar" x="80" y="0" width="16" height="96"/><rect class="logo-bar" x="68" y="0" width="28" height="16"/><rect class="logo-bar" x="68" y="80" width="28" height="16"/><rect class="logo-dot" x="36" y="36" width="24" height="24"/></svg>
+</span><span class="font-mono text-base font-semibold tracking-tight">eikendev</span></a><nav aria-label=Primary class="ml-auto flex flex-wrap items-center gap-2"><div class="flex items-center gap-0.5 rounded-full border border-outlinev bg-s1 p-[3px]"><a href=/ class="text-onv hover:text-on
+inline-flex items-center gap-[7px] rounded-full px-3.5 py-2 font-mono text-[13px] transition-colors"><svg aria-hidden="true" style="height:14px;width:auto" viewBox="0 0 512 512"><path fill="currentColor" d="M277.8 8.6c-12.3-11.4-31.3-11.4-43.5.0l-224 208c-9.6 9-12.8 22.9-8 35.1S18.8 272 32 272h16v176c0 35.3 28.7 64 64 64h288c35.3.0 64-28.7 64-64V272h16c13.2.0 25-8.1 29.8-20.3s1.6-26.2-8-35.1l-224-208zM240 320h32c26.5.0 48 21.5 48 48v96H192v-96c0-26.5 21.5-48 48-48z"/></svg>
+home
+</a><a href=/blog/ class="bg-s3 text-on
+inline-flex items-center gap-[7px] rounded-full px-3.5 py-2 font-mono text-[13px] transition-colors"><svg aria-hidden="true" style="height:14px;width:auto" viewBox="0 0 512 512"><path fill="currentColor" d="M0 416V120c0-13.3 10.7-24 24-24s24 10.7 24 24v288c0 13.3 10.7 24 24 24s24-10.7 24-24V96c0-35.3 28.7-64 64-64h288c35.3.0 64 28.7 64 64v320c0 35.3-28.7 64-64 64H64c-35.3.0-64-28.7-64-64zM160 128v64c0 17.7 14.3 32 32 32h64c17.7.0 32-14.3 32-32v-64c0-17.7-14.3-32-32-32h-64c-17.7.0-32 14.3-32 32zm24 240c-13.3.0-24 10.7-24 24s10.7 24 24 24h240c13.3.0 24-10.7 24-24s-10.7-24-24-24H184zm-24-72c0 13.3 10.7 24 24 24h240c13.3.0 24-10.7 24-24s-10.7-24-24-24H184c-13.3.0-24 10.7-24 24zM360 176c-13.3.0-24 10.7-24 24s10.7 24 24 24h64c13.3.0 24-10.7 24-24s-10.7-24-24-24h-64z"/></svg>
+blog
+</a><a href=/projects/ class="text-onv hover:text-on
+inline-flex items-center gap-[7px] rounded-full px-3.5 py-2 font-mono text-[13px] transition-colors"><svg aria-hidden="true" style="height:14px;width:auto" viewBox="0 0 512 512"><path fill="currentColor" d="M0 80C0 53.5 21.5 32 48 32h96c26.5.0 48 21.5 48 48v16h128V80c0-26.5 21.5-48 48-48h96c26.5.0 48 21.5 48 48v96c0 26.5-21.5 48-48 48h-96c-26.5.0-48-21.5-48-48v-16H192v16c0 7.3-1.7 14.3-4.6 20.5L256 288h80c26.5.0 48 21.5 48 48v96c0 26.5-21.5 48-48 48h-96c-26.5.0-48-21.5-48-48v-96c0-7.3 1.7-14.3 4.6-20.5L128 224H48c-26.5.0-48-21.5-48-48V80z"/></svg>
+projects</a></div><button type=button data-theme-toggle aria-label="Toggle color scheme" class="inline-flex h-[38px] cursor-pointer items-center gap-2 rounded-full border border-outlinev bg-s1 px-3.5 font-mono text-xs text-onv transition-colors hover:bg-s3 hover:text-on">
+<span data-theme-icon class=inline-flex><span data-icon-for=system class=inline-flex><svg aria-hidden="true" style="height:15px;width:auto" viewBox="0 0 512 512"><path fill="currentColor" d="M448 256c0-106-86-192-192-192v384c106 0 192-86 192-192zM0 256a256 256 0 11512 0A256 256 0 110 256z"/></svg>
+</span><span data-icon-for=dark class=hidden><svg aria-hidden="true" style="height:15px;width:auto" viewBox="0 0 512 512"><path fill="currentColor" d="M256 0C114.6.0.0 114.6.0 256S114.6 512 256 512c68.8.0 131.3-27.2 177.3-71.4 7.3-7 9.4-17.9 5.3-27.1s-13.7-14.9-23.8-14.1c-4.9.4-9.8.6-14.8.6-101.6.0-184-82.4-184-184 0-72.1 41.5-134.6 102.1-164.8 9.1-4.5 14.3-14.3 13.1-24.4S322.6 8.5 312.7 6.3C294.4 2.2 275.4.0 256 0z"/></svg>
+</span><span data-icon-for=light class=hidden><svg aria-hidden="true" style="height:15px;width:auto" viewBox="0 0 576 512"><path fill="currentColor" d="M288-32c8.4.0 16.3 4.4 20.6 11.7l55.5 92.6L468.9 46c8.2-2 16.9.4 22.8 6.3S5e2 67 498 75.1l-26.3 104.7 92.7 55.5c7.2 4.3 11.7 12.2 11.7 20.6s-4.4 16.3-11.7 20.6l-92.7 55.6L498 436.8c2 8.2-.4 16.9-6.3 22.8S477 468 468.9 466l-104.7-26.3-55.5 92.7c-4.3 7.2-12.2 11.7-20.6 11.7s-16.3-4.4-20.6-11.7L211.9 439.7 107.2 466c-8.2 2-16.8-.4-22.8-6.3S76 445 78 436.8l26.2-104.7-92.6-55.5C4.4 272.2.0 264.4.0 256s4.4-16.3 11.7-20.6l92.6-55.5L78 75.1c-2-8.2.3-16.8 6.3-22.8S99 44 107.2 46l104.7 26.2 55.5-92.6 1.8-2.6c4.5-5.7 11.4-9.1 18.8-9.1zm0 144a144 144 0 100 288 144 144 0 100-288zm0 240a96 96 0 110-192 96 96 0 110 192z"/></svg>
+</span></span><span data-theme-label>auto</span></button></nav></div></header><main class="relative z-1 mx-auto max-w-[1100px] px-[clamp(16px,4vw,24px)] pb-10"><article class="max-w-[70ch] animate-rise pt-[clamp(36px,5vw,64px)] pb-6"><a href=/blog/ class="mb-7 inline-flex items-center gap-[7px] font-mono text-[13px] text-onv transition-colors hover:text-primary!"><svg aria-hidden="true" style="height:14px;width:auto" viewBox="0 0 512 512"><path fill="currentColor" d="M9.4 233.4c-12.5 12.5-12.5 32.8.0 45.3l160 160c12.5 12.5 32.8 12.5 45.3.0s12.5-32.8.0-45.3L109.3 288H480c17.7.0 32-14.3 32-32s-14.3-32-32-32H109.3l105.4-105.4c12.5-12.5 12.5-32.8.0-45.3s-32.8-12.5-45.3.0l-160 160z"/></svg>
+back to blog</a><div class="mb-[18px] flex flex-wrap items-center gap-3.5 font-mono text-xs text-onv"><span class="inline-flex items-center gap-[7px]"><svg aria-hidden="true" style="height:14px;width:auto" viewBox="0 0 448 512"><path fill="currentColor" d="M128 0c17.7.0 32 14.3 32 32v32h128V32c0-17.7 14.3-32 32-32s32 14.3 32 32v32h32c35.3.0 64 28.7 64 64v288c0 35.3-28.7 64-64 64H64c-35.3.0-64-28.7-64-64V128C0 92.7 28.7 64 64 64h32V32c0-17.7 14.3-32 32-32zm0 256c-17.7.0-32 14.3-32 32v64c0 17.7 14.3 32 32 32h64c17.7.0 32-14.3 32-32v-64c0-17.7-14.3-32-32-32h-64z"/></svg>
+<time datetime=2022-03-16T21:00:00Z>2022.03</time>
+</span><span class="inline-flex items-center gap-[7px]"><svg aria-hidden="true" style="height:14px;width:auto" viewBox="0 0 512 512"><path fill="currentColor" d="M256 0a256 256 0 110 512 256 256 0 110-512zM232 120v136c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2V120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"/></svg>
+16 min read
+</span><span class="inline-flex items-center gap-[7px]">updated 2022.03</span></div><h1 class="m-0 mb-5 text-[clamp(30px,5vw,46px)] leading-[1.08] font-semibold tracking-[-.03em] text-pretty">Cracking With Hashcat in the Cloud</h1><div class="flex flex-wrap gap-1.5 border-b border-outlinev pb-7"><a href=/tags/aws/ class="rounded-full border border-outlinev px-2.5 py-[3px] font-mono text-[11px] text-onv transition-colors hover:border-outline hover:text-on!">aws</a>
+<a href=/tags/cloud/ class="rounded-full border border-outlinev px-2.5 py-[3px] font-mono text-[11px] text-onv transition-colors hover:border-outline hover:text-on!">cloud</a>
+<a href=/tags/cracking/ class="rounded-full border border-outlinev px-2.5 py-[3px] font-mono text-[11px] text-onv transition-colors hover:border-outline hover:text-on!">cracking</a>
+<a href=/tags/hashcat/ class="rounded-full border border-outlinev px-2.5 py-[3px] font-mono text-[11px] text-onv transition-colors hover:border-outline hover:text-on!">hashcat</a></div><div class="pt-8 [&_.footnotes]:mt-10 [&_.footnotes]:border-t [&_.footnotes]:border-outlinev [&_.footnotes]:pt-5 [&_.footnotes]:text-[15px] [&_.footnotes]:text-onv [&_.footnotes_hr]:hidden [&_.hanchor]:ml-2 [&_.hanchor]:text-onv [&_.hanchor]:no-underline [&_.hanchor]:opacity-0 [&_:not(pre)>code]:rounded [&_:not(pre)>code]:bg-s2 [&_:not(pre)>code]:px-1.5 [&_:not(pre)>code]:py-0.5 [&_:not(pre)>code]:font-mono [&_:not(pre)>code]:text-[.9em] [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-2 [&_blockquote]:my-7 [&_blockquote]:rounded-2xl [&_blockquote]:border [&_blockquote]:border-l-[3px] [&_blockquote]:border-outlinev [&_blockquote]:border-l-primary [&_blockquote]:bg-s1 [&_blockquote]:px-5 [&_blockquote]:py-[18px] [&_blockquote_p]:mb-0 [&_blockquote_p]:text-[15px] [&_blockquote_p]:text-onv [&_figcaption]:mt-2 [&_figcaption]:font-mono [&_figcaption]:text-xs [&_figcaption]:text-onv [&_figure]:my-7 [&_h2]:mt-11 [&_h2]:mb-3.5 [&_h2]:text-2xl [&_h2]:font-semibold [&_h2]:tracking-[-.02em] [&_h2:hover_.hanchor]:opacity-100 [&_h3]:mt-8 [&_h3]:mb-3 [&_h3]:text-xl [&_h3]:font-semibold [&_h3:hover_.hanchor]:opacity-100 [&_img]:rounded-2xl [&_img]:border [&_img]:border-outlinev [&_li]:mb-2 [&_li]:text-[17px] [&_li]:leading-[1.75] [&_ol]:mb-5 [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:m-0 [&_p]:mb-5 [&_p]:text-[17px] [&_p]:leading-[1.75] [&_p]:text-pretty [&_p]:text-on [&_pre]:mb-6 [&_pre]:overflow-x-auto [&_pre]:rounded-2xl [&_pre]:border [&_pre]:border-outlinev [&_pre]:bg-s1 [&_pre]:p-5 [&_pre]:font-mono [&_pre]:text-[13.5px] [&_pre]:leading-[1.75] [&_table]:mb-6 [&_table]:w-full [&_table]:border-collapse [&_table]:text-[15px] [&_td]:border-b [&_td]:border-outlinev [&_td]:px-3 [&_td]:py-2 [&_th]:border-b [&_th]:border-outline [&_th]:px-3 [&_th]:py-2 [&_th]:text-left [&_th]:font-mono [&_th]:text-xs [&_th]:tracking-wide [&_th]:text-onv [&_th]:uppercase [&_ul]:mb-5 [&_ul]:list-disc [&_ul]:pl-6"><p>Thanks to the global chip shortage, for about two years certain electronic items are really hard to buy.
+This includes graphics cards, those things that make your display useful.
+They&rsquo;re also beasts at cracking password hashes.
+Admittedly, I waited for the situation to resolve so I can buy a graphics card for a sane price and improve my <a href=https://hashcat.net/hashcat/>hashcat</a> experience, but I now think this is unlikely to happen anytime soon.
+Time to find a modern solution.</p><h2 id=cloud-to-the-rescue>Cloud to the Rescue<a href=#cloud-to-the-rescue class=hanchor aria-label=Anchor>#</a></h2><p>hashcat is an incredibly powerful piece of software when used on the right hardware.
+Sadly, my graphics card is too old to be supported by the latest driver, so I find myself resorting to <a href=https://www.openwall.com/john/>john</a> every time I want to crack a hash.
+This comes with the drawback of forcing a high load on my system, leaving me unable to work in parallel.
+What can I do?
+Buy a new graphics card for my system?
+Build a dedicated cracking system?
+Both options are unfavorable in the current market situation.
+So I came up with this idea to use cloud computing.<sup id=fnref:1><a href=#fn:1 class=footnote-ref role=doc-noteref>1</a></sup></p><p>Okay, let me guess what you&rsquo;re thinking: this guy just throws the word &ldquo;cloud&rdquo; at his problem and we&rsquo;re done?
+Well, maybe, but that&rsquo;s not the whole story.
+The closer I got to a solution, the more advantages I discovered of using the cloud for this:</p><ul><li>I do not need to care about the maintenance of the hardware.</li><li>There are times when I&rsquo;m busy and don&rsquo;t use hashcat for a while or so. During these breaks, the bought card would lose value without serving any purpose.</li><li>The cloud scales better than a local hardware setup. Need better performance <em>this</em> time? Simply spawn a more powerful machine in the cloud.</li></ul><p>Here is the game plan:
+Cloud services like <a href=https://aws.amazon.com/>AWS</a>, <a href=https://azure.microsoft.com/>Azure</a>, and <a href=https://cloud.google.com/>GCP</a> offer systems that come equipped with strong graphics cards.
+They have the correct drivers pre-installed, just as if they were made for GPU-heavy computations.
+I want to use this hardware and make it as easy as possible to access a high-performance hashcat installation.
+In this post, I&rsquo;ll show you my results and how you can benefit from the project.
+If you want to skip this post and start cracking, check the final code in my <a href=https://github.com/eikendev/cloud-cracking>GitHub repository</a>.</p><p>And as always, this may read as if I knew what I was doing, but I&rsquo;m myself new to the topic.
+Makes it more fun for everyone, <em>right</em>?</p><h2 id=preparation-work>Preparation Work<a href=#preparation-work class=hanchor aria-label=Anchor>#</a></h2><p>The first thing to do is to define the scope:</p><ul><li>The system should be accessible from the Internet, so I can use it even when I&rsquo;m traveling with my laptop.</li><li>I want to be able to spin up a system in minimum time, and only spend money when actually cracking.</li><li>Since we have good hardware, let&rsquo;s try to get as much out of it as possible.</li><li>Being careless with resources in the cloud can result in significant bills. Safeguards <em>are</em> necessary.</li></ul><p>Ideally, the end product should tick all of these boxes.</p><p>Before we can do anything on the technical side, we must pick a cloud service provider.
+I&rsquo;ll go with AWS here because a brief look revealed it&rsquo;s the cheapest option.<sup id=fnref:2><a href=#fn:2 class=footnote-ref role=doc-noteref>2</a></sup></p><p>So we&rsquo;ll need an AWS account.
+If you don&rsquo;t already have one, simply go and create a root account on AWS.
+The instances we spawn are not free, so make sure to provide valid payment details.<sup id=fnref:3><a href=#fn:3 class=footnote-ref role=doc-noteref>3</a></sup></p><p>It is good practice to <a href=https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create.html>create a separate IAM role</a> for our purposes.
+This allows us to limit the permissions and access to our resources.
+I&rsquo;ll call the user <code>cracking</code> and assign it the following permissions:<sup id=fnref:4><a href=#fn:4 class=footnote-ref role=doc-noteref>4</a></sup></p><ul><li><code>AmazonEC2FullAccess</code></li><li><code>AmazonVPCFullAccess</code></li><li><code>AWSCloudFormationFullAccess</code></li></ul><p>Next, download the <a href=https://aws.amazon.com/cli/>AWS command-line tool</a>, which is a great helper to automate light tasks.
+I&rsquo;m using v1 here because Fedora ships it by default.
+After installing, run <code>aws configure</code> and use the IAM role to login.
+Also, specify the default region where you want to create your hashcat instance.</p><p>To access the instances we spawn, we use SSH, so we need to <a href=https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html#having-ec2-create-your-key-pair>create a key pair</a> on AWS.
+Remember the name you assign this key.
+You can also import a key pair that&rsquo;s already been created locally.
+Watch out for trailing newlines in the imported key, AWS seemed not to like these when I last tried.</p><p>One step is missing: our quota.
+Basically, when we request a machine on AWS, we can select from a range of <a href=https://aws.amazon.com/ec2/instance-types/>different instance types</a> which are grouped based on their purpose.
+One of the groups is the &ldquo;P Instances&rdquo; group; these are meant for GPU-intensive tasks, so it&rsquo;s the group we use here.
+Unfortunately, at the time of writing, AWS won&rsquo;t allow us to spawn any P instances by default.
+We, therefore, need to <a href=https://docs.aws.amazon.com/servicequotas/latest/userguide/request-quota-increase.html>request a quota increase</a> for P instances.
+I&rsquo;ll request a quota of 4 under &ldquo;All P Spot Instance Requests&rdquo; and &ldquo;Running On-Demand P instances&rdquo;.<sup id=fnref:5><a href=#fn:5 class=footnote-ref role=doc-noteref>5</a></sup></p><p>The value of GPUs naturally drives demand for GPUs in the cloud.
+So it might be if you have not yet increased your quotas, that AWS denies your request.
+Here&rsquo;s a reply I received regarding my limit increase request for &ldquo;All P Spot Instance Requests&rdquo; in Northern Virginia:</p><blockquote><p>Hi there,</p><p>Thank you for your patience while we were awaiting feedback from the Service team.</p><p>The Service team has advised that at this time, we are unable to approve your increase request. Due to the recent unprecedented demand for GPU instances, quota increases for GPU instances are now facilitated by our AWS sales teams. Please reach out to your Account team or contact AWS sales with a detailed description of your use-case and GPU requirements: <a href=https://aws.amazon.com/contact-us/sales-support/>https://aws.amazon.com/contact-us/sales-support/</a></p><p>[&mldr;]</p></blockquote><p>If you receive this, try to select another region.
+While doing so keep in mind that not all regions support P instances.</p><h2 id=hashcat-instance-as-code>Hashcat Instance as Code<a href=#hashcat-instance-as-code class=hanchor aria-label=Anchor>#</a></h2><p>We can now go and launch instances.
+But clicking through the web interface doesn&rsquo;t do for me.
+Much better is to have a clean, repeatable way: <a href=https://aws.amazon.com/cloudformation/>CloudFormation</a>.
+Using CloudFormation we can define our instance in a YAML file, called &ldquo;template&rdquo;.
+This lets us spawn our hashcat machine with a single command.</p><p>There are <a href=https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-anatomy.html>better resources</a> to learn how to create templates.
+But on a very basic level, the format knows several high-level YAML keys like <code>Parameters</code>, <code>Mappings</code>, <code>Resources</code>, and <code>Outputs</code>.
+The core of the file is in <code>Resources</code>: here we define what is actually being created with our template, the other keys give additional information and functionality.
+When AWS reads our template and instantiates the resources, they are grouped in a so-called &ldquo;stack&rdquo;.</p><h3 id=parameters>Parameters<a href=#parameters class=hanchor aria-label=Anchor>#</a></h3><p>Let&rsquo;s start with the parameters.
+These let us supply user-specific information during creation and reference them in other parts of the file.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>Parameters</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>paramKeyPair</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>Description</span><span class=p>:</span><span class=w> </span><span class=l>The key pair for connecting via SSH</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>Type</span><span class=p>:</span><span class=w> </span><span class=l>AWS::EC2::KeyPair::KeyName</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>paramInstanceType</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>Description</span><span class=p>:</span><span class=w> </span><span class=l>The EC2 instance type</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>Type</span><span class=p>:</span><span class=w> </span><span class=l>String</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>Default</span><span class=p>:</span><span class=w> </span><span class=l>p2.xlarge</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>AllowedValues</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>p2.xlarge</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>p2.8xlarge</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>p2.16xlarge</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>We have two parameters: <code>paramKeyPair</code> and <code>paramInstanceType</code>.
+The descriptions in the snippet indicate what each does.
+Upon creation, these parameters are supplied, so they can be referenced in the rest of the template.</p><p>One comment regarding <code>paramInstanceType</code>: it is limited to the variants of P2 instances using the <code>AllowedValues</code> modifier.
+There are also P3 (and P4) instances, which are newer, but more expensive.
+They are also overkill depending on your use case.</p><h3 id=mappings>Mappings<a href=#mappings class=hanchor aria-label=Anchor>#</a></h3><p>To make sure we have the correct driver pre-installed on the box, we tell AWS to use the <code>AWS Deep Learning Base AMI</code> image.
+We do this by providing an ID for the image but turns out the ID is region-specific.
+To support multiple regions, we create a map that contains the correct image ID for many regions.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>Mappings</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>RegionMap</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>us-east-1</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>ami</span><span class=p>:</span><span class=w> </span><span class=l>ami-0365f1c02d110fa96</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>us-west-2</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>ami</span><span class=p>:</span><span class=w> </span><span class=l>ami-01242c3178ffa1b87</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>us-west-1</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>ami</span><span class=p>:</span><span class=w> </span><span class=l>ami-08ce7082680a0d51d</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>eu-west-1</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>ami</span><span class=p>:</span><span class=w> </span><span class=l>ami-0e13b805a2eba9cbb</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>This way, we can later look up the ID for the region we create the instance in.</p><p>One thing to note here is that looking up the IDs can be a bit cumbersome.
+I wrote a little script to automate this for many regions:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>print_id <span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>	<span class=nb>local</span> region
+</span></span><span class=line><span class=cl>	<span class=nv>region</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=nv>id</span><span class=o>=</span><span class=s2>&#34;</span><span class=k>$(</span>aws ec2 describe-images --region <span class=nv>$region</span> --owners amazon --filters <span class=s1>&#39;Name=name,Values=AWS Deep Learning Base AMI (Ubuntu 18.04)*&#39;</span> <span class=p>|</span> jq -r <span class=s1>&#39;.Images[0].ImageId&#39;</span><span class=k>)</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=nb>printf</span> <span class=s2>&#34;%s: %s\n&#34;</span> <span class=s2>&#34;</span><span class=nv>$region</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=nv>$id</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>while</span> <span class=nb>read</span> -r region<span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>	print_id <span class=s2>&#34;</span><span class=nv>$region</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>done</span> &lt;./regions.txt
+</span></span></code></pre></td></tr></table></div></div><p>The <code>regions.txt</code> file contains the regions to look up the IDs for, line by line.
+Feel free to repurpose that for your own template.
+Alternatively, you can get fancy and use a Lambda function, but this here works fine for me.</p><h3 id=outputs>Outputs<a href=#outputs class=hanchor aria-label=Anchor>#</a></h3><p>After creating the instance, we will want to connect to it over SSH.
+This will require knowledge of the IP address associated with the instance.
+To look it up conveniently, we write the IP address as an output of the CloudFormation template:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>Outputs</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>PublicIp</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>Description</span><span class=p>:</span><span class=w> </span><span class=l>The public IPv4 address of the hashcat instance</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>Value</span><span class=p>:</span><span class=w> </span>!<span class=l>GetAtt hashcatInstance.PublicIp</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>Note that we do not directly provide a value.
+Instead, we use the <code>!GetAtt</code> function to instruct AWS to read the value from the <code>hashcatInstance</code> resource.
+Think of this as a reference to a property of a resource we specify in the next section.</p><p>When we later query information about our stack, we will get back the IP as an output in JSON:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=s2>&#34;Outputs&#34;</span><span class=err>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&#34;OutputKey&#34;</span><span class=p>:</span> <span class=s2>&#34;PublicIp&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&#34;OutputValue&#34;</span><span class=p>:</span> <span class=s2>&#34;3.86.125.30&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&#34;Description&#34;</span><span class=p>:</span> <span class=s2>&#34;The public IPv4 address of the hashcat instance&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>]</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=resources>Resources<a href=#resources class=hanchor aria-label=Anchor>#</a></h3><p>Now it&rsquo;s time for the core piece.
+Let&rsquo;s try to make this as generic as possible and compatible with most environments.
+Here is what I propose:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>Resources</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=c># [...]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>hashcatSecurityGroup</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>Type</span><span class=p>:</span><span class=w> </span><span class=l>AWS::EC2::SecurityGroup</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>Properties</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>GroupName</span><span class=p>:</span><span class=w> </span><span class=l>Security Group to allow access to the hashcat instance</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>GroupDescription</span><span class=p>:</span><span class=w> </span><span class=l>Allows inbound SSH traffic from any source</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>SecurityGroupIngress</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=nt>IpProtocol</span><span class=p>:</span><span class=w> </span><span class=l>tcp</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>FromPort</span><span class=p>:</span><span class=w> </span><span class=m>22</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>ToPort</span><span class=p>:</span><span class=w> </span><span class=m>22</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>CidrIp</span><span class=p>:</span><span class=w> </span><span class=m>0.0.0.0</span><span class=l>/0</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=nt>IpProtocol</span><span class=p>:</span><span class=w> </span><span class=l>tcp</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>FromPort</span><span class=p>:</span><span class=w> </span><span class=m>22</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>ToPort</span><span class=p>:</span><span class=w> </span><span class=m>22</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>CidrIpv6</span><span class=p>:</span><span class=w> </span><span class=s1>&#39;::/0&#39;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>VpcId</span><span class=p>:</span><span class=w> </span>!<span class=l>Ref hashcatVPC</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>hashcatLaunchTemplate</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>Type</span><span class=p>:</span><span class=w> </span><span class=l>AWS::EC2::LaunchTemplate</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>Properties</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>LaunchTemplateData</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>InstanceType</span><span class=p>:</span><span class=w> </span>!<span class=l>Ref paramInstanceType</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>KeyName</span><span class=p>:</span><span class=w> </span>!<span class=l>Ref paramKeyPair</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>ImageId</span><span class=p>:</span><span class=w> </span>!<span class=l>FindInMap</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span>- <span class=l>RegionMap</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span>- !<span class=l>Ref &#39;AWS::Region&#39;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span>- <span class=l>ami</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>InstanceMarketOptions</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>MarketType</span><span class=p>:</span><span class=w> </span><span class=l>spot</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>SpotOptions</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>              </span><span class=nt>InstanceInterruptionBehavior</span><span class=p>:</span><span class=w> </span><span class=l>terminate</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>              </span><span class=nt>MaxPrice</span><span class=p>:</span><span class=w> </span><span class=m>0.4</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>              </span><span class=nt>SpotInstanceType</span><span class=p>:</span><span class=w> </span><span class=l>one-time</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>NetworkInterfaces</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span>- <span class=nt>AssociatePublicIpAddress</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>DeleteOnTermination</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>DeviceIndex</span><span class=p>:</span><span class=w> </span><span class=m>0</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>SubnetId</span><span class=p>:</span><span class=w> </span>!<span class=l>Ref hashcatSubnet</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>Groups</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>              </span>- !<span class=l>Ref hashcatSecurityGroup</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>UserData</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>Fn::Base64</span><span class=p>:</span><span class=w> </span>!<span class=l>Sub |</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=c>#cloud-config</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>repo_update</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>packages</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>              </span>- <span class=l>build-essential</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>runcmd</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>              </span>- <span class=l>touch /tmp/.cloudinit_started</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>              </span>- <span class=l>systemctl disable --now unattended-upgrades</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>              </span>- <span class=l>curl -sLo /tmp/rockyou.tgz &#39;https://github.com/danielmiessler/SecLists/raw/master/Passwords/Leaked-Databases/rockyou.txt.tar.gz&#39;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>              </span>- <span class=l>tar -xf /tmp/rockyou.tgz -C /opt &amp;&amp; rm -f /tmp/rockyou.tgz</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>              </span>- <span class=l>curl -sLo /tmp/hashcat.tgz &#34;$(curl -s https://api.github.com/repos/hashcat/hashcat/releases/latest | grep &#39;tarball_url&#39; | awk &#39;{print $2}&#39; | tail -c +2 | head -c -3)&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>              </span>- <span class=l>tar -xf /tmp/hashcat.tgz -C /opt &amp;&amp; rm -f /tmp/hashcat.tgz</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>              </span>- <span class=l>cd /opt/hashcat-* &amp;&amp; make -j4 &amp;&amp; make install</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>              </span>- <span class=l>shutdown -P +1440</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>              </span>- <span class=l>touch /tmp/.cloudinit_completed</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>hashcatInstance</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>Type</span><span class=p>:</span><span class=w> </span><span class=l>AWS::EC2::Instance</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>DependsOn</span><span class=p>:</span><span class=w> </span><span class=l>hashcatRoute</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>Properties</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>LaunchTemplate</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>LaunchTemplateId</span><span class=p>:</span><span class=w> </span>!<span class=l>Ref hashcatLaunchTemplate</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>Version</span><span class=p>:</span><span class=w> </span>!<span class=l>GetAtt hashcatLaunchTemplate.LatestVersionNumber</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>Yeah, I admit, that&rsquo;s a bit to digest.
+Let me break it down for you, bottom to top.</p><p>The <code>hashcatInstance</code> is the actual Instance.
+This is what it&rsquo;s all about in the end.
+There isn&rsquo;t much to its configuration, except that it uses our <code>hashcatLaunchTemplate</code>.</p><p>The <code>hashcatLaunchTemplate</code> is the recipe for AWS to create our Instance.
+Here we specify the type from the parameters, together with the key pair for SSH.
+We also specify the ID of the image that we defined in the <code>RegionMap</code>.
+Look how <code>!FindInMap</code> is used to retrieve the value from the map.</p><p>An important key is <code>InstanceMarketOptions</code>.
+This option says that we want a spot instance, not an on-demand one.
+I haven&rsquo;t said this in the beginning, but the former is cheaper albeit not always available, whereas the latter is more expensive but usually available.
+Also, a spot instance can suddenly terminate if other users are willing to pay more for it than you, so it&rsquo;s more &ldquo;market-driven&rdquo; than the on-demand instances with a fixed price.
+If we left this key away we would request an on-demand instance, which might be suitable in some situations.</p><p>A <code>MaxPrice</code> of 0.4 seemed reasonable when I last checked all the prices in different regions.
+We don&rsquo;t want to set this too low, else our instance might be eaten by other bidders too fast.
+If every dime counts for you, adjust this with your target regions in mind.</p><p>The <code>NetworkInterfaces</code> is related to networking.
+It puts the instance in the correct Subnet and assigns it the right SecurityGroup.
+We&rsquo;ll come to this in a second.</p><p>One of the most important elements in this resource is the <code>UserData</code> key.
+This lets us provide commands that we want the instance to run right after launch.
+We can use this to install additional software and configure the system.</p><p>On AWS, we can do this through <a href=https://cloud-init.io/>cloud-init</a>, which describes itself as a &ldquo;standard for customising cloud instances&rdquo;.
+I would myself describe it like an <a href=https://www.ansible.com/>Ansible</a> for machines in the cloud, with a more lightweight configuration.</p><p>Here are the high-level steps we perform in the configuration above:</p><ul><li>Before running custom commands, we list the <code>build-essential</code> package to be installed. It contains common tools for building software, including <a href=https://www.gnu.org/software/make/>Make</a>.</li><li>We then download the rockyou password list, which is my go-to list for challenges on <a href=https://www.hackthebox.com/>Hack The Box</a>, and extract it to <code>/opt</code>.</li><li>At the heart of the configuration, we download and install hashcat. Doing this gives us better performance than installing via the package manager, details follow below.</li><li>Lastly, we set the machine to power off after a day (24 hours, 1440 minutes). This is a safeguard so we don&rsquo;t let the instance run until we catch it on the next bill.</li><li>The files <code>.cloudinit_started</code> and <code>.cloudinit_completed</code> are created so we can quickly check if the installation has started and been completed.</li></ul><p>And with this, only the <code>hashcatSecurityGroup</code> is left.
+This resource can be considered as a bunch of firewall rules for our instance.
+We allow inbound traffic on port 22, which is commonly used for SSH.
+If you have a fixed IP address of your machine at home, feel free to extend the SecurityGroup so only your machine can connect.
+For me, it was important to also give an IPv6 rule, because it&rsquo;s 2022.</p><p>Finally, note that I left out some parts at the <code>[...]</code> marker.
+This is networking stuff that I won&rsquo;t explain here in detail.
+In summary, it creates a VPC that we use our SecurityGroup for, and this then requires us to create an InternetGateway, Subnet, and RouteTable.</p><h2 id=establish-a-connection>Establish a Connection<a href=#establish-a-connection class=hanchor aria-label=Anchor>#</a></h2><p>The hard part is done.
+Using the template is simple.
+Still, how about we wrap a Makefile around it?
+Provided that we have the template in <code>./hashcat.yaml</code>, I&rsquo;m using a <code>./Makefile</code> with these contents:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-make data-lang=make><span class=line><span class=cl><span class=nv>STACK_NAME</span> <span class=o>:=</span> hashcat
+</span></span><span class=line><span class=cl><span class=nv>KEY_NAME</span> <span class=o>:=</span> aws
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nf>.PHONY</span><span class=o>:</span> <span class=n>create</span>
+</span></span><span class=line><span class=cl><span class=nf>create</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>	aws cloudformation create-stack --stack-name <span class=k>$(</span>STACK_NAME<span class=k>)</span> --parameters <span class=nv>ParameterKey</span><span class=o>=</span>paramKeyPair,ParameterValue<span class=o>=</span><span class=k>$(</span>KEY_NAME<span class=k>)</span> --template-body file://hashcat.yaml
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nf>.PHONY</span><span class=o>:</span> <span class=n>delete</span>
+</span></span><span class=line><span class=cl><span class=nf>delete</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>	aws cloudformation delete-stack --stack-name <span class=k>$(</span>STACK_NAME<span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nf>.PHONY</span><span class=o>:</span> <span class=n>describe</span>
+</span></span><span class=line><span class=cl><span class=nf>describe</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>	aws cloudformation describe-stacks --stack-name <span class=k>$(</span>STACK_NAME<span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nf>.PHONY</span><span class=o>:</span> <span class=n>get_status</span>
+</span></span><span class=line><span class=cl><span class=nf>get_status</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>	aws cloudformation describe-stacks --stack-name <span class=k>$(</span>STACK_NAME<span class=k>)</span> <span class=p>|</span> jq -r <span class=s1>&#39;.Stacks[0].StackStatus&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nf>.PHONY</span><span class=o>:</span> <span class=n>get_ip</span>
+</span></span><span class=line><span class=cl><span class=nf>get_ip</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>	aws cloudformation describe-stacks --stack-name <span class=k>$(</span>STACK_NAME<span class=k>)</span> <span class=p>|</span> jq -r <span class=s1>&#39;.Stacks[0].Outputs | map(select(.OutputKey | contains (&#34;PublicIp&#34;)))[0].OutputValue&#39;</span>
+</span></span></code></pre></td></tr></table></div></div><p>As you can see, this uses the AWS command-line tool.
+Everything is done with the <code>cloudformation</code> subcommand in the region specified during configuration.</p><p>With <code>make create</code>, we request AWS to read our template and create the specified resources.
+Note how we specify the <code>paramKeyPair</code> on the command line.
+You can get an explanation of the syntax with <code>aws cloudformation create-stack help</code>.</p><p>Our request may take a while, up to a minute, to complete.
+During this time, you can observe the status of your request with <code>make get_status</code>.
+While the stack is being created, this returns <code>CREATE_IN_PROGRESS</code>.
+When the operation is complete, the status changes to <code>CREATE_COMPLETE</code>, and we can retrieve the IP address of the new instance with <code>make get_ip</code>:<sup id=fnref:6><a href=#fn:6 class=footnote-ref role=doc-noteref>6</a></sup></p><pre tabindex=0><code>$ make get_ip
+3.86.125.30
+</code></pre><p>Now let&rsquo;s SSH onto the machine:</p><pre tabindex=0><code>$ ssh -i ~/path/to/your/ssh/key ubuntu@3.86.125.30
+</code></pre><p>Here we can see the <code>.cloudinit_started</code> file was already created:</p><pre tabindex=0><code>$ ls /tmp/.cloudinit_*
+/tmp/.cloudinit_started
+</code></pre><p>It only takes a bit until the installation of hashcat is complete:</p><pre tabindex=0><code>$ ls /tmp/.cloudinit_*
+/tmp/.cloudinit_completed  /tmp/.cloudinit_started
+</code></pre><p>You can also confirm this by reading what&rsquo;s in <code>/var/log/cloud-init-output.log</code>.</p><p>This means hashcat must be ready, and it is indeed!</p><pre tabindex=0><code>$ which hashcat
+/usr/local/bin/hashcat
+</code></pre><p>When we&rsquo;re done using hashcat, we close the SSH session and run <code>make delete</code>.
+Everything is clean again, all resources are removed.
+And even if we forgot to delete the stack, the machine would terminate after 24 hours.</p><h2 id=it-s-all-about-performance>It&rsquo;s All About Performance<a href=#it-s-all-about-performance class=hanchor aria-label=Anchor>#</a></h2><p>Ready for it?
+I&rsquo;ll take a password from rockyou which appears a bit later in the list and hash it with MD5:</p><pre tabindex=0><code>$ wc -l rockyou.txt
+14344391 rockyou.txt
+
+$ sed -n 11000000p &lt; rockyou.txt
+KASKAS8
+
+$ printf &#39;KASKAS8&#39; | md5sum
+e8f535bb8c05c354404381b2021a5368  -
+</code></pre><p>Okay, now we put this on the cloud machine and crack it:</p><pre tabindex=0><code>$ echo &#34;e8f535bb8c05c354404381b2021a5368&#34; &gt;&gt; hashes.txt
+$ hashcat -m 0 hashes.txt /opt/rockyou.txt
+[...]
+
+e8f535bb8c05c354404381b2021a5368:KASKAS8
+
+Session..........: hashcat
+Status...........: Cracked
+Hash.Mode........: 0 (MD5)
+Hash.Target......: e8f535bb8c05c354404381b2021a5368
+Time.Started.....: Mon Mar 14 21:18:01 2022 (2 secs)
+Time.Estimated...: Mon Mar 14 21:18:03 2022 (0 secs)
+Kernel.Feature...: Pure Kernel
+Guess.Base.......: File (/opt/rockyou.txt)
+Guess.Queue......: 1/1 (100.00%)
+Speed.#1.........:  4504.3 kH/s (8.55ms) @ Accel:512 Loops:1 Thr:64 Vec:1
+Recovered........: 1/1 (100.00%) Digests
+Progress.........: 11075584/14344384 (77.21%)
+Rejected.........: 0/11075584 (0.00%)
+Restore.Point....: 10649600/14344384 (74.24%)
+Restore.Sub.#1...: Salt:0 Amplifier:0-1 Iteration:0-1
+Candidate.Engine.: Device Generator
+Candidates.#1....: SEXY#1ALLDAY -&gt; IloveSanMahua17
+Hardware.Mon.#1..: Temp: 38c Util: 34% Core: 627MHz Mem:2505MHz Bus:16
+</code></pre><p>Only takes two seconds!
+It&rsquo;s only MD5, yes, but it&rsquo;s a whole lot faster than my setup with john.</p><p>We can run proper benchmarks with <code>hashcat -b</code>:</p><div class="mb-6 overflow-x-auto"><table><thead><tr><th>Algorithm</th><th style=text-align:right>Compiled locally</th><th style=text-align:right>From repository</th></tr></thead><tbody><tr><td>MD5</td><td style=text-align:right>4594.1 MH/s</td><td style=text-align:right>4538.2 MH/s</td></tr><tr><td>SHA1</td><td style=text-align:right>1734.2 MH/s</td><td style=text-align:right>1687.4 MH/s</td></tr><tr><td>SHA2-256</td><td style=text-align:right>819.6 MH/s</td><td style=text-align:right>815.7 MH/s</td></tr><tr><td>SHA2-512</td><td style=text-align:right>256.2 MH/s</td><td style=text-align:right>255.0 MH/s</td></tr><tr><td>WPA-PBKDF2-PMKID+EAPOL</td><td style=text-align:right>88754.0 H/s</td><td style=text-align:right>87002.0 H/s</td></tr><tr><td>NTLM</td><td style=text-align:right>7438.2 MH/s</td><td style=text-align:right>7358.9 MH/s</td></tr><tr><td>LM</td><td style=text-align:right>4312.7 MH/s</td><td style=text-align:right>4338.6 MH/s</td></tr><tr><td>NetNTLMv1 / NetNTLMv1+ESS</td><td style=text-align:right>4413.9 MH/s</td><td style=text-align:right>4197.3 MH/s</td></tr></tbody></table></div><p>Here you also see a comparison between our own build and the build from the repository.
+Why is the build faster for almost all algorithms?
+My guess is that building hashcat on our own hardware allows the compiler to use its full instruction set, while the repository version must be more generic.
+To be confirmed.</p><p>Either way, it&rsquo;s best to run the most recent version of hashcat if we aim for speed.</p><h2 id=conclusion>Conclusion<a href=#conclusion class=hanchor aria-label=Anchor>#</a></h2><p>The word &ldquo;cloud&rdquo; can be annoying at times, but I feel this project made me realize more of its strengths.
+I will definitely continue using this setup and advance it further.
+Of course, this may change just like the market does.
+If you are curious to try it out, please head over to my <a href=https://github.com/eikendev/cloud-cracking>GitHub repository</a>.
+Leaving a star will encourage me to improve the tool.</p><div class=footnotes role=doc-endnotes><hr><ol><li id=fn:1><p>I&rsquo;m not the first one to use hashcat in the cloud. In fact, there are many posts showing how this is done. The difference is that I want a properly automated solution.&#160;<a href=#fnref:1 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p></li><li id=fn:2><p>This may vary depending on the hardware you configure.&#160;<a href=#fnref:2 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p></li><li id=fn:3><p>And if you&rsquo;re unfamiliar with all the pricing just like me, <a href=https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-create.html>create a cost budget</a> and configure notifications for it. I use this to trigger an alert if my spending goes beyond a reasonable threshold.&#160;<a href=#fnref:3 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p></li><li id=fn:4><p>It would be even better to make the permissions as narrow as possible. But I lack the time to figure out the policies manually, and I have not found an automated approach that is not a hack. I&rsquo;ll leave it be, for now, after all, it would potentially block any future adjustments we make.&#160;<a href=#fnref:4 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p></li><li id=fn:5><p>Be aware the quotas are limiting the vCPUs of your instances. If you go for a different instance type, make sure to request a high-enough quota.&#160;<a href=#fnref:5 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p></li><li id=fn:6><p>This reads the IP from the output we specified ourselves!&#160;<a href=#fnref:6 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p></li></ol></div></div><div class="mt-12 flex flex-wrap items-center gap-4 border-t border-outlinev pt-7"><p class="m-0 font-mono text-xs tracking-[.12em] text-onv uppercase">share this</p><div class="ml-auto flex flex-wrap gap-2"><a href="https://news.ycombinator.com/submitlink?u=https%3A%2F%2Fwww.eiken.dev%2Fblog%2F2022%2F03%2Fcracking-with-hashcat-in-the-cloud%2F&amp;t=Cracking+With+Hashcat+in+the+Cloud" target=_blank rel=noopener class="inline-flex h-[34px] items-center gap-2 rounded-full border border-outlinev px-4 font-mono text-xs text-onv transition-colors hover:border-outline hover:text-on!"><svg aria-hidden="true" style="height:13px;width:auto" viewBox="0 0 448 512"><path fill="currentColor" d="M0 32v448h448V32H0zM21.2 229.2H21c.1-.1.2-.3.3-.4.0.1.0.3-.1.4zm218 53.9V384h-31.4V281.3L128 128h37.3c52.5 98.3 49.2 101.2 59.3 125.6 12.3-27 5.8-24.4 60.6-125.6H320l-80.8 155.1z"/></svg>
+Hacker News
+</a><a href="https://www.reddit.com/submit?url=https%3A%2F%2Fwww.eiken.dev%2Fblog%2F2022%2F03%2Fcracking-with-hashcat-in-the-cloud%2F&amp;title=Cracking+With+Hashcat+in+the+Cloud" target=_blank rel=noopener class="inline-flex h-[34px] items-center gap-2 rounded-full border border-outlinev px-4 font-mono text-xs text-onv transition-colors hover:border-outline hover:text-on!"><svg aria-hidden="true" style="height:13px;width:auto" viewBox="0 0 512 512"><path fill="currentColor" d="M373 138.6c-25.2.0-46.3-17.5-51.9-41-30.6 4.3-54.2 30.7-54.2 62.4v.2c47.4 1.8 90.6 15.1 124.9 36.3 12.6-9.7 28.4-15.5 45.5-15.5 41.3.0 74.7 33.4 74.7 74.7.0 29.8-17.4 55.5-42.7 67.5-2.4 86.8-97 156.6-213.2 156.6S45.5 410.1 43 323.4c-25.4-11.9-43-37.7-43-67.7C0 214.4 33.4 181 74.7 181c17.2.0 33 5.8 45.7 15.6 34-21.1 76.8-34.4 123.7-36.4v-.3c0-44.3 33.7-80.9 76.8-85.5C325.8 50.2 347.2 32 373 32c29.4.0 53.3 23.9 53.3 53.3s-23.9 53.3-53.3 53.3zM157.5 255.3c-20.9.0-38.9 20.8-40.2 47.9s17.1 38.1 38 38.1 36.6-9.8 37.8-36.9-14.7-49.1-35.7-49.1h.1zM395 303.1c-1.2-27.1-19.2-47.9-40.2-47.9s-36.9 22-35.7 49.1 16.9 36.9 37.8 36.9 39.3-11 38-38.1h.1zm-60.1 70.8c1.5-3.6-1-7.7-4.9-8.1-23-2.3-47.9-3.6-73.8-3.6s-50.8 1.3-73.8 3.6c-3.9.4-6.4 4.5-4.9 8.1 12.9 30.8 43.3 52.4 78.7 52.4s65.8-21.6 78.7-52.4z"/></svg>
+Reddit
+</a><a href="https://bsky.app/intent/compose?text=Cracking+With+Hashcat+in+the+Cloud%20https%3A%2F%2Fwww.eiken.dev%2Fblog%2F2022%2F03%2Fcracking-with-hashcat-in-the-cloud%2F" target=_blank rel=noopener class="inline-flex h-[34px] items-center gap-2 rounded-full border border-outlinev px-4 font-mono text-xs text-onv transition-colors hover:border-outline hover:text-on!"><svg aria-hidden="true" style="height:13px;width:auto" viewBox="0 0 576 512"><path fill="currentColor" d="M407.8 294.7c-3.3-.4-6.7-.8-10-1.3 3.4.4 6.7.9 10 1.3zM288 227.1C261.9 176.4 190.9 81.9 124.9 35.3 61.6-9.4 37.5-1.7 21.6 5.5 3.3 13.8.0 41.9.0 58.4S9.1 194 15 213.9c19.5 65.7 89.1 87.9 153.2 80.7 3.3-.5 6.6-.9 10-1.4-3.3.5-6.6 1-10 1.4-93.9 14-177.3 48.2-67.9 169.9C220.6 589.1 265.1 437.8 288 361.1c22.9 76.7 49.2 222.5 185.6 103.4 102.4-103.4 28.1-156-65.8-169.9-3.3-.4-6.7-.8-10-1.3 3.4.4 6.7.9 10 1.3 64.1 7.1 133.6-15.1 153.2-80.7C566.9 194 576 75 576 58.4s-3.3-44.7-21.6-52.9c-15.8-7.1-40-14.9-103.2 29.8C385.1 81.9 314.1 176.4 288 227.1z"/></svg>
+Bluesky</a></div></div><nav aria-label="Adjacent articles" class="mt-8 grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-4"><a href=/blog/2021/02/how-to-break-your-jar-in-2021-decompilation-guide-for-jars-and-apks/ class="flex flex-col gap-2 rounded-[20px] border border-outlinev bg-s1 p-5 transition hover:border-outline hover:bg-s2"><span class="font-mono text-[11px] tracking-[.12em] text-onv uppercase">previous</span>
+<span class="text-[15px] leading-[1.4] font-medium text-pretty">How to Break Your JAR in 2021 - Decompilation Guide for JARs and APKs</span></a></nav></article><section id=contact class="mt-[clamp(56px,7vw,80px)] grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] items-center gap-7 rounded-3xl border border-outlinev bg-s1 p-[clamp(24px,4vw,40px)]"><div><h2 class="m-0 mb-2 text-2xl font-semibold tracking-[-.02em]">Say hello.</h2><p class="m-0 max-w-[46ch] text-[15px] leading-[1.6] text-onv">Thoughts, suggestions, or just want to chat about all things tech? Reach out.</p></div><div class="flex flex-wrap gap-3"><a href=https://www.eikenberg.at/ class="bg-fill text-onfill! hover:brightness-110 inline-flex h-11 items-center gap-2.5 rounded-full px-[22px] text-sm font-semibold transition"><svg aria-hidden="true" style="height:16px;width:auto" viewBox="0 0 512 512"><path fill="currentColor" d="M351.9 280H161c2.9 64.5 17.2 123.9 37.5 167.4 11.4 24.5 23.7 41.8 35.1 52.4 11.2 10.5 18.9 12.2 22.9 12.2s11.7-1.7 22.9-12.2c11.4-10.6 23.7-28 35.1-52.4 20.3-43.5 34.6-102.9 37.5-167.4zm-191-48h190.9C349 167.5 334.7 108.1 314.4 64.6 303 40.2 290.7 22.8 279.3 12.2 268.1 1.7 260.4.0 256.4.0s-11.7 1.7-22.9 12.2c-11.4 10.6-23.7 28-35.1 52.4-20.3 43.5-34.6 102.9-37.5 167.4zm-48 0c3.5-85.6 25.6-165.1 57.9-217.3C78.7 47.3 10.9 131.2 1.5 232h111.4zM1.5 280c9.4 100.8 77.2 184.7 169.3 217.3-32.3-52.2-54.4-131.7-57.9-217.3H1.5zm398.4.0c-3.5 85.6-25.6 165.1-57.9 217.3 92.1-32.7 159.9-116.5 169.3-217.3H399.9zm111.4-48C501.9 131.2 434.1 47.3 342 14.7c32.3 52.2 54.4 131.7 57.9 217.3h111.4z"/></svg>
+eikenberg.at
+</a><a href=https://www.linkedin.com/in/raphael-eikenberg/ class="border border-outline hover:bg-s2 inline-flex h-11 items-center gap-2.5 rounded-full px-[22px] text-sm font-semibold transition"><svg aria-hidden="true" style="height:16px;width:auto" viewBox="0 0 448 512"><path fill="currentColor" d="M100.3 448h-92.9V148.9h92.9V448zM53.8 108.1C24.1 108.1.0 83.5.0 53.8c0-14.3 5.7-27.9 15.8-38S39.6.0 53.8.0s27.9 5.7 38 15.8 15.8 23.8 15.8 38c0 29.7-24.1 54.3-53.8 54.3zM447.9 448h-92.7V302.4c0-34.7-.7-79.2-48.3-79.2-48.3.0-55.7 37.7-55.7 76.7V448h-92.8V148.9h89.1v40.8h1.3c12.4-23.5 42.7-48.3 87.9-48.3 94 0 111.3 61.9 111.3 142.3V448h-.1z"/></svg>
+LinkedIn</a></div></section></main><footer class="relative z-1 mt-10 border-t border-outlinev"><div class="mx-auto flex max-w-[1100px] flex-wrap items-center gap-x-6 gap-y-4 px-[clamp(16px,4vw,24px)] py-7 font-mono text-xs text-onv"><span>Copyright © eikendev</span>
+<span class="ml-auto flex flex-wrap gap-5"><a href=https://www.eikenberg.at/ class="transition-colors hover:text-primary!">eikenberg.at</a>
+<a href=/index.xml class="transition-colors hover:text-primary!">Feed</a>
+<a href=/tags/ class="transition-colors hover:text-primary!">Tags</a>
+<a href=https://creativecommons.org/licenses/by/4.0/ class="transition-colors hover:text-primary!">License</a></span></div></footer><script src=/js/site.4a8debd352bb33f60b0d0b161ec4ec914198d79dcfb806316ac34cf7d78c5eb11c8e1a432764d8bc3cda0fcbf446dec593647adc50f00121b61a9d7df44628bf.js integrity="sha512-So3r01K7M/YLDQsWHsTskUGY153PuAYxasNM99eMXrEcjhpDJ2TYvDzaD8v0Rt7Fk2R63FDwASG2Gp199EYovw==" defer></script></body></html>
