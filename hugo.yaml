@@ -24,6 +24,17 @@ sitemap:
 minify:
   minifyOutput: true
 
+# tailwindcss is not in Hugo's default security.exec.allow list.
+security:
+  exec:
+    allow:
+      - "^(dart-)?sass$"
+      - "^go$"
+      - "^git$"
+      - "^node$"
+      - "^postcss$"
+      - "^tailwindcss$"
+
 # Tailwind reads the class list Hugo writes to hugo_stats.json while building.
 # Declaring any mount removes the default assets mount, so it is re-declared,
 # along with the JS dependencies (Chart.js, FontAwesome) and the self-hosted
