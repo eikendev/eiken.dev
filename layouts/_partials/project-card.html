@@ -1,6 +1,11 @@
 {{/* expects one entry from hugo.Data.project */}}
+{{ $label := .Name }}
+{{ with .Languages }}
+	{{ $label = printf "%s, %s" $label (delimit . " and ") }}
+{{ end }}
 <a
 	href="{{ .RepositoryLink }}"
+	aria-label="{{ $label }} project"
 	class="flex flex-col gap-3 rounded-[20px] border border-outlinev bg-s1 p-[22px] transition hover:-translate-y-0.5 hover:border-outline hover:bg-s2"
 >
 	<div class="flex items-center gap-2.5">
