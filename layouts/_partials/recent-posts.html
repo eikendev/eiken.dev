@@ -19,8 +19,10 @@
 	</div>
 	<div class="flex flex-col">
 		{{ range $posts }}
+			{{ $label := printf "%s, %s" .Title (.Date.Format "January 2006") }}
 			<a
 				href="{{ .RelPermalink }}"
+				aria-label="{{ $label }}"
 				class="-mx-4 flex flex-wrap items-center gap-x-5 gap-y-2 rounded-xl border-b border-outlinev px-4 py-[18px] transition-colors hover:bg-s1"
 			>
 				<span class="w-[66px] flex-none font-mono text-xs text-onv"

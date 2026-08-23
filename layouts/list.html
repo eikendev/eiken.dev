@@ -13,8 +13,10 @@
 	</section>
 	<section class="border-t border-outlinev">
 		{{ range .Pages.ByDate.Reverse }}
+			{{ $label := printf "%s, %s" .Title (.Date.Format "January 2006") }}
 			<a
 				href="{{ .RelPermalink }}"
+				aria-label="{{ $label }}"
 				class="-mx-4 flex flex-wrap gap-x-[26px] gap-y-2.5 rounded-[14px] border-b border-outlinev px-4 py-[26px] transition-colors hover:bg-s1"
 			>
 				<span
