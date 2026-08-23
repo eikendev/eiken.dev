@@ -80,7 +80,6 @@ module:
 params:
   title: "eikendev"
   description: "Coding projects and blog posts by eikendev. Always happy to learn something new. Also interested in infosec? Join my journey!"
-  keywords: "coding, programming, projects, infosec, information security, system security, portfolio"
   copyright: "Copyright © eikendev"
   themeColor: "#111111"
   showLastmod: true

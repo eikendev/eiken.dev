@@ -5,10 +5,6 @@
 {{ else }}
 	{{ $desc = or .Description .Summary site.Params.description }}
 {{ end }}
-{{ $keywords := site.Params.keywords }}
-{{ if and (not .IsHome) .Params.tags }}
-	{{ $keywords = delimit .Params.tags ", " }}
-{{ end }}
 
 
 <meta name="author" content="{{ site.Params.author.name }}" />
@@ -16,7 +12,6 @@
 	name="description"
 	content="{{ $desc | plainify | chomp | truncate 200 }}"
 />
-<meta name="keywords" content="{{ $keywords }}" />
 
 {{/* Hugo's embedded OpenGraph, schema and Twitter card templates */}}
 {{- partial "opengraph.html" . -}}
