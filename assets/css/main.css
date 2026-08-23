@@ -220,6 +220,10 @@
 .highlight .chroma {
 	background: transparent;
 }
+.highlight .chroma .lnt,
+.highlight .chroma .ln {
+	color: var(--color-onv);
+}
 .highlight pre.chroma {
 	margin: 0;
 	border: 0;
