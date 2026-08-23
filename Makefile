@@ -16,12 +16,13 @@ all: build
 dependencies:
 	$(NPM) install
 
-# Regenerate the syntax highlighting themes. chroma-light is wrapped in
-# `.light { … }` so native CSS nesting scopes it to light mode. Both files are
-# gitignored build artifacts.
+# Regenerate the syntax highlighting themes. Each is scoped to its own mode so
+# the two never stack. Both files are gitignored build artifacts.
 .PHONY: syntax
 syntax:
-	$(HUGO) gen chromastyles --style=$(CHROMA_DARK) > assets/css/chroma-dark.css
+	printf 'html:where(:not(.light)) {\n' > assets/css/chroma-dark.css
+	$(HUGO) gen chromastyles --style=$(CHROMA_DARK) >> assets/css/chroma-dark.css
+	printf '}\n' >> assets/css/chroma-dark.css
 	printf '.light {\n' > assets/css/chroma-light.css
 	$(HUGO) gen chromastyles --style=$(CHROMA_LIGHT) >> assets/css/chroma-light.css
 	printf '}\n' >> assets/css/chroma-light.css
