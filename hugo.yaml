@@ -91,7 +91,6 @@ params:
   social:
     github: "eikendev"
     gitlab: "eikendev"
-    twitter: "eikendev"
     bluesky: "@eikendev.bsky.social"
     blueskyurl: "https://bsky.app/profile/eikendev.bsky.social"
 

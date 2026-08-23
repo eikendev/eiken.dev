@@ -13,15 +13,12 @@
 	content="{{ $desc | plainify | chomp | truncate 200 }}"
 />
 
-{{/* Hugo's embedded OpenGraph, schema and Twitter card templates */}}
+{{/* Hugo's embedded OpenGraph and schema templates */}}
 {{- partial "opengraph.html" . -}}
 {{- partial "schema.html" . -}}
-{{- partial "twitter_cards.html" . -}}
 
-{{ with site.Params.social.twitter }}
-	<meta name="twitter:creator" content="@{{ . }}" />
-{{ end }}
-
+{{/* X falls back to Open Graph; only the card type needs declaring. */}}
+<meta name="twitter:card" content="summary_large_image" />
 
 <title>{{ $title }}</title>
 <link rel="canonical" href="{{ .Permalink }}" />
