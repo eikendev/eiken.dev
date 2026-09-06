@@ -67,31 +67,48 @@ if (typeEl && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
 	setTimeout(step, 380);
 }
 
-// projects page: language filter chips
+// projects page: language and topic filter chips, ANDed across the two groups
 const filterBar = document.querySelector("[data-filters]");
 if (filterBar) {
 	const cards = [
 		...document.querySelectorAll("[data-projects] > [data-langs]"),
 	];
+	const empty = document.querySelector("[data-empty]");
 	const ACTIVE = ["bg-pc", "text-onpc", "border-transparent"];
-	const IDLE = ["bg-transparent", "text-onv", "border-outlinev"];
+	const IDLE = [
+		"bg-transparent",
+		"text-onv",
+		"border-outlinev",
+		"hover:bg-s1",
+	];
+	const active = { langs: "all", tags: "all" };
+
+	const apply = () => {
+		let shown = 0;
+		cards.forEach((c) => {
+			const show = Object.entries(active).every(
+				([key, want]) =>
+					want === "all" || c.dataset[key].split(" ").includes(want),
+			);
+			c.classList.toggle("contents", show);
+			c.classList.toggle("hidden", !show);
+			if (show) shown++;
+		});
+		if (empty) empty.classList.toggle("hidden", shown > 0);
+	};
+
 	filterBar.addEventListener("click", (e) => {
 		const btn = e.target.closest("[data-filter]");
 		if (!btn) return;
-		filterBar.querySelectorAll("[data-filter]").forEach((b) => {
+		const group = btn.closest("[data-filter-group]");
+		active[group.dataset.filterGroup] = btn.dataset.filter;
+		group.querySelectorAll("[data-filter]").forEach((b) => {
 			const on = b === btn;
 			b.toggleAttribute("data-active", on);
-			b.classList.toggle("hidden", false);
 			ACTIVE.forEach((c) => b.classList.toggle(c, on));
 			IDLE.forEach((c) => b.classList.toggle(c, !on));
 		});
-		const want = btn.dataset.filter;
-		cards.forEach((c) => {
-			const show =
-				want === "all" || c.dataset.langs.split(" ").includes(want);
-			c.classList.toggle("contents", show);
-			c.classList.toggle("hidden", !show);
-		});
+		apply();
 	});
 }
 
