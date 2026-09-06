@@ -8,6 +8,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+
 jobs:
   test:
     name: Test
@@ -17,6 +20,7 @@ jobs:
         uses: actions/checkout@v7
         with:
           fetch-depth: 0 # `make test` builds the site; Hugo uses Git info for .Lastmod (enableGitInfo).
+          persist-credentials: false
 
       - name: Test
         run: make test
@@ -26,11 +30,14 @@ jobs:
     needs: test
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # `peaceiris/actions-gh-pages` pushes the built site to the `html` branch.
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
         with:
           fetch-depth: 0 # Hugo uses Git information to fetch .Lastmod information (enableGitInfo).
+          persist-credentials: false
 
       - name: Build
         run: make build
