@@ -1,7 +1,13 @@
 Name = "taskseed"
 Priority = 140
+Since = 2026
 License = "MIT"
 Languages = ["Go"]
+Tags = ["automation", "self-hosted"]
 RepositoryLink = "https://github.com/eikendev/taskseed"
 Icon = "calendar"
 Description = "Expands CalDAV recurring task rules into individual upcoming tasks so all clients (even without RRULE support) stay consistent."
+
+[[Distribution]]
+Name = "pkg.go.dev"
+URL = "https://pkg.go.dev/github.com/eikendev/taskseed"

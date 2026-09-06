@@ -1,18 +1,25 @@
-{{/* expects one entry from hugo.Data.project */}}
+{{/* expects one entry from hugo.Data.project
+
+	An <article>, not an <a>: the badges are links and anchors cannot nest. The
+	title link's ::after stretches over the card to keep all of it clickable.
+*/}}
 {{ $label := .Name }}
 {{ with .Languages }}
 	{{ $label = printf "%s, %s" $label (delimit . " and ") }}
 {{ end }}
-<a
-	href="{{ .RepositoryLink }}"
-	aria-label="{{ $label }} project"
-	class="flex flex-col gap-3 rounded-[20px] border border-outlinev bg-s1 p-[22px] transition hover:-translate-y-0.5 hover:border-outline hover:bg-s2"
+<article
+	class="relative flex flex-col gap-3 rounded-[20px] border border-outlinev bg-s1 p-[22px] transition hover:-translate-y-0.5 hover:border-outline hover:bg-s2"
 >
 	<div class="flex items-center gap-2.5">
 		<span class="inline-flex text-primary"
 			>{{ partial "icon.html" (dict "name" (.Icon | default "terminal") "size" 16) }}</span
 		>
-		<span class="font-mono text-base font-semibold">{{ .Name }}</span>
+		<a
+			href="{{ .RepositoryLink }}"
+			aria-label="{{ $label }} project"
+			class="font-mono text-base font-semibold after:absolute after:inset-0 after:rounded-[20px]"
+			>{{ .Name }}</a
+		>
 		<span class="ml-auto flex flex-wrap justify-end gap-1.5">
 			{{ range .Languages }}
 				<span
@@ -25,10 +32,41 @@
 	<p class="m-0 text-sm leading-[1.55] text-pretty text-onv">
 		{{ .Description | markdownify }}
 	</p>
-	<span
-		class="mt-auto flex items-center gap-[7px] pt-1.5 font-mono text-[11px] text-onv"
+	{{ with .Tags }}
+		<div class="flex flex-wrap gap-1.5">
+			{{ range . }}
+				<span
+					class="rounded-full border border-outlinev px-2.5 py-[3px] font-mono text-[11px] text-onv"
+					>{{ . }}</span
+				>
+			{{ end }}
+		</div>
+	{{ end }}
+	<div
+		class="mt-auto flex flex-wrap items-center gap-x-3.5 gap-y-2 pt-1.5 font-mono text-[11px] text-onv"
 	>
-		{{ partial "icon.html" (dict "name" "license" "size" 13) }}
-		{{ .License | default "no license" }}
-	</span>
-</a>
+		<span class="flex items-center gap-[7px]">
+			{{ partial "icon.html" (dict "name" "license" "size" 13) }}
+			{{ .License | default "no license" }}
+		</span>
+		{{ with .Since }}
+			<span class="flex items-center gap-[7px]">
+				{{ partial "icon.html" (dict "name" "clock" "size" 13) }}
+				since
+				{{ . }}
+			</span>
+		{{ end }}
+		{{ with .Distribution }}
+			<span class="ml-auto flex flex-wrap justify-end gap-1.5">
+				{{ range . }}
+					<a
+						href="{{ .URL }}"
+						class="relative z-10 inline-flex items-center gap-1.5 rounded-full border border-outlinev px-2.5 py-[3px] transition-colors hover:border-primary hover:text-primary"
+						>{{ partial "icon.html" (dict "name" "box" "size" 11) }}
+						{{ .Name }}</a
+					>
+				{{ end }}
+			</span>
+		{{ end }}
+	</div>
+</article>

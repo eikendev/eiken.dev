@@ -1,7 +1,13 @@
 Name = "cheergo"
 Priority = 118
-Languages = ["Go"]
+Since = 2021
 License = "MIT"
+Languages = ["Go"]
+Tags = ["cli", "automation"]
 RepositoryLink = "https://github.com/eikendev/cheergo"
 Icon = "bell"
 Description = "Notifies maintainers about new stars, watches, and forks via a lightweight local CLI that keeps engagement signals out of GitHub's UI."
+
+[[Distribution]]
+Name = "pkg.go.dev"
+URL = "https://pkg.go.dev/github.com/eikendev/cheergo"

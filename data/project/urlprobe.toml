@@ -1,7 +1,13 @@
 Name = "urlprobe"
 Priority = 80
+Since = 2020
 License = "MIT"
 Languages = ["Rust"]
+Tags = ["cli", "devtools"]
 RepositoryLink = "https://github.com/eikendev/urlprobe"
 Icon = "link"
 Description = "Checks URL availability in bulk with a small CLI suited for CI, link health checks, or monitoring."
+
+[[Distribution]]
+Name = "crates.io"
+URL = "https://crates.io/crates/urlprobe"

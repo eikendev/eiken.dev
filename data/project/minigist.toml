@@ -1,7 +1,13 @@
 Name = "minigist"
 Priority = 150
+Since = 2025
 License = "MIT"
 Languages = ["Python"]
+Tags = ["cli", "automation"]
 RepositoryLink = "https://github.com/eikendev/minigist"
 Icon = "bot"
 Description = "Summarizes Miniflux unread articles with an LLM and writes structured summaries back to entries with per-feed prompts."
+
+[[Distribution]]
+Name = "PyPI"
+URL = "https://pypi.org/project/minigist/"

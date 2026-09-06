@@ -1,7 +1,13 @@
 Name = "PushBits"
 Priority = 110
+Since = 2020
 License = "MIT"
 Languages = ["Go"]
+Tags = ["self-hosted", "automation"]
 RepositoryLink = "https://github.com/pushbits/server"
 Icon = "mail"
 Description = "Delivers self-hosted push notifications over Matrix with a web API, user/app management, and multi-user support."
+
+[[Distribution]]
+Name = "ghcr.io"
+URL = "https://github.com/pushbits/server/pkgs/container/server"

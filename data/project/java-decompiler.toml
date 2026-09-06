@@ -1,7 +1,13 @@
 Name = "java-decompiler"
 Priority = 90
+Since = 2021
 License = "MIT"
 Languages = ["Dockerfile"]
+Tags = ["security", "reverse-engineering"]
 RepositoryLink = "https://github.com/eikendev/java-decompiler"
 Icon = "box"
 Description = "Bundles popular Java decompilers (CFR, Fernflower, Krakatau, Procyon) in a single Docker image to reduce setup friction."
+
+[[Distribution]]
+Name = "ghcr.io"
+URL = "https://github.com/eikendev/java-decompiler/pkgs/container/java-decompiler"

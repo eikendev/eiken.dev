@@ -1,7 +1,13 @@
 Name = "hackenv"
 Priority = 130
+Since = 2020
 License = "MIT"
 Languages = ["Go"]
+Tags = ["security", "cli", "linux"]
 RepositoryLink = "https://github.com/eikendev/hackenv"
 Icon = "shield"
 Description = "Provisions short-lived security testing VMs (Kali/Parrot) with libvirt, streamlined SSH, shared folders, and UI access for CTFs and labs."
+
+[[Distribution]]
+Name = "pkg.go.dev"
+URL = "https://pkg.go.dev/github.com/eikendev/hackenv"

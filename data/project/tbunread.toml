@@ -1,7 +1,13 @@
 Name = "tbunread"
 Priority = 92
+Since = 2021
 License = "MIT"
 Languages = ["Rust"]
+Tags = ["cli", "linux"]
 RepositoryLink = "https://github.com/eikendev/tbunread"
 Icon = "mail"
 Description = "Reports unread Thunderbird IMAP counts per account for dashboards or status scripts by reading configured maildirs."
+
+[[Distribution]]
+Name = "crates.io"
+URL = "https://crates.io/crates/tbunread"

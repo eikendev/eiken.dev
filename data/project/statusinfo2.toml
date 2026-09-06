@@ -1,7 +1,13 @@
 Name = "statusinfo2"
 Priority = 160
-Languages = ["Rust"]
+Since = 2021
 License = "MIT"
+Languages = ["Rust"]
+Tags = ["cli", "linux"]
 RepositoryLink = "https://github.com/eikendev/statusinfo2"
 Icon = "cpu"
 Description = "Summarizes CPU temperature and memory usage for Linux desktops via a lightweight CLI suited for terminals and status bars."
+
+[[Distribution]]
+Name = "crates.io"
+URL = "https://crates.io/crates/statusinfo2"

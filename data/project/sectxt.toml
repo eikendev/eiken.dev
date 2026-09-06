@@ -1,7 +1,13 @@
 Name = "sectxt"
 Priority = 120
+Since = 2020
 License = "MIT"
 Languages = ["Rust"]
+Tags = ["security", "cli"]
 RepositoryLink = "https://github.com/eikendev/sectxt"
 Icon = "file"
 Description = "Validates security.txt (RFC 9116) files by probing for reachable disclosure contacts in a consistent, machine-readable format."
+
+[[Distribution]]
+Name = "crates.io"
+URL = "https://crates.io/crates/sectxt"

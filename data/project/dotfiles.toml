@@ -1,6 +1,8 @@
 Name = "dotfiles"
 Priority = 15
+Since = 2020
 Languages = ["Shell", "Vim script"]
+Tags = ["linux", "devtools"]
 RepositoryLink = "https://github.com/eikendev/dotfiles"
 Icon = "terminal"
 Description = "My day-to-day shell and Neovim setup, with curated configs (fish, fzf, etc.) that reflect how I can be most productive."

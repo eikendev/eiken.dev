@@ -1,7 +1,9 @@
 Name = "vim-textobj-names"
 Priority = 35
+Since = 2019
 License = "MIT"
 Languages = ["Vim script"]
+Tags = ["devtools"]
 RepositoryLink = "https://github.com/eikendev/vim-textobj-names"
 Icon = "code"
 Description = "Adds Vim/Neovim text objects for identifiers with delimiters like -, _, or / to speed refactors."
