@@ -15,11 +15,11 @@
     "@fontsource/ibm-plex-sans": "^5.0.0",
     "@fortawesome/fontawesome-free": "^7.2.0",
     "chart.js": "^4.5.1",
-    "katex": "^0.18.5"
+    "katex": "^0.18.7"
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.0.0",
-    "html-validate": "^11.10.0",
+    "html-validate": "^11.13.0",
     "prettier": "^3.9.6",
     "prettier-plugin-go-template": "^0.0.15",
     "prettier-plugin-tailwindcss": "^0.8.1",
