@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+  <style>
+    .logo-bar { fill: var(--color-on, #17171a); }
+    .logo-dot { fill: var(--color-primary, #3557c8); }
+    @media (prefers-color-scheme: dark) {
+      .logo-bar { fill: var(--color-on, #ececed); }
+      .logo-dot { fill: var(--color-primary, #8fb0ff); }
+    }
+  </style>
+  <rect class="logo-bar" x="0" y="0" width="16" height="96"/>
+  <rect class="logo-bar" x="0" y="0" width="28" height="16"/>
+  <rect class="logo-bar" x="0" y="80" width="28" height="16"/>
+  <rect class="logo-bar" x="80" y="0" width="16" height="96"/>
+  <rect class="logo-bar" x="68" y="0" width="28" height="16"/>
+  <rect class="logo-bar" x="68" y="80" width="28" height="16"/>
+  <rect class="logo-dot" x="36" y="36" width="24" height="24"/>
+</svg>
