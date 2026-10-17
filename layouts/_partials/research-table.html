@@ -1,0 +1,80 @@
+{{/* expects a slice of hugo.Data.research entries, newest first
+
+	A table from md up; below that, each row reflows into a small grid (date and
+	project, then the finding, then the badges) and the header is dropped. Rows
+	carry data-* attributes for the filter chips on the research page.
+*/}}
+{{ $th := "px-3 pb-3 text-left font-mono text-[11px] font-normal tracking-[.12em] text-onv uppercase" }}
+<table class="w-full border-collapse">
+	<thead class="max-md:hidden">
+		<tr class="border-b border-outlinev">
+			<th scope="col" class="{{ $th }} w-[84px]">date</th>
+			<th scope="col" class="{{ $th }} w-[120px]">project</th>
+			<th scope="col" class="{{ $th }}">finding</th>
+			<th scope="col" class="{{ $th }} w-[170px]">identifiers</th>
+		</tr>
+	</thead>
+	<tbody>
+		{{ range . }}
+			<tr
+				data-filter-item
+				data-class="{{ .Class | urlize }}"
+				data-tags="{{ delimit (apply (.Tags | default slice) "urlize" ".") " " }}"
+				class="border-b border-outlinev align-top max-md:grid max-md:grid-cols-[auto_1fr] max-md:gap-x-4 max-md:gap-y-3 max-md:py-5"
+			>
+				<td
+					class="px-3 py-5 font-mono text-xs text-onv max-md:p-0 max-md:pt-[3px]"
+				>
+					<time datetime="{{ .Date }}"
+						>{{ (time.AsTime .Date).Format "2006.01" }}</time
+					>
+				</td>
+				<td class="px-3 py-5 max-md:p-0">
+					<a
+						href="{{ .ProjectLink }}"
+						class="font-mono text-sm font-semibold text-primary hover:underline"
+						>{{ .Project }}</a
+					>
+				</td>
+				<td class="px-3 py-5 max-md:col-span-2 max-md:p-0">
+					<div class="flex flex-col gap-2">
+						<span
+							class="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-[17px] leading-[1.35] font-medium tracking-[-.01em] text-pretty"
+						>
+							{{ .Title }}
+							<span
+								class="rounded-full bg-pc px-2.5 py-[3px] font-mono text-[11px] font-normal tracking-normal text-onpc"
+								>{{ .Class }}</span
+							>
+						</span>
+						<p
+							class="m-0 max-w-[68ch] text-sm leading-[1.6] text-pretty text-onv [&_code]:font-mono [&_code]:text-[.92em] [&_code]:text-on"
+						>
+							{{ .Description | markdownify }}
+						</p>
+						<div
+							class="flex flex-wrap items-center gap-x-3.5 gap-y-1.5 font-mono text-[11px] text-onv"
+						>
+							{{ range .References }}
+								<a
+									href="{{ .URL }}"
+									class="inline-flex items-center gap-1.5 text-primary hover:underline"
+									>{{ partial "icon.html" (dict "name" "external" "size" 10) }}
+									{{ .Name }}</a
+								>
+							{{ end }}
+							{{ with .Credit }}
+								<span class="font-sans text-xs">{{ . }}</span>
+							{{ end }}
+						</div>
+					</div>
+				</td>
+				<td class="px-3 py-5 max-md:col-span-2 max-md:p-0">
+					<div class="flex flex-wrap items-start gap-1.5 md:flex-col">
+						{{ partial "research-badges.html" (dict "entry" . "end" true) }}
+					</div>
+				</td>
+			</tr>
+		{{ end }}
+	</tbody>
+</table>

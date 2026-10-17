@@ -1,0 +1,15 @@
+Title = "Remote crash via regex framing"
+Project = "rsyslog"
+ProjectLink = "https://www.rsyslog.com/"
+Date = "2026-07-22"
+Class = "denial of service"
+Tags = ["linux", "network"]
+CVE = "CVE-2026-19654"
+CVSS = "7.5"
+Severity = "high"
+Summary = "Unauthenticated remote crash of `rsyslogd` through crafted TCP input to regex-framed `imptcp` listeners."
+Description ="An unauthenticated TCP client could terminate `rsyslogd` by sending crafted input to an `imptcp` listener configured with `framing.delimiter.regex`."
+
+[[References]]
+Name = "advisory"
+URL = "https://github.com/rsyslog/rsyslog/security/advisories/GHSA-cj5r-wh2m-7w29"

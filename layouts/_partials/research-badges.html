@@ -1,0 +1,55 @@
+{{/* CVE and CVSS chips for one finding. Expects a dict with entry (one
+	hugo.Data.research entry) and optionally end (true aligns the no-CVE tooltip
+	to the chip's right edge from md up, for the table's last column).
+
+	The chips sit above the card's stretched link (relative z-10) so the tooltip
+	button stays hoverable and focusable.
+*/}}
+{{ $r := .entry }}
+{{ $chip := "relative z-10 inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border px-2.5 py-[3px] font-mono text-[11px]" }}
+{{ $sev := dict
+	"critical" "border-sev-critical/50 text-sev-critical"
+	"high"     "border-sev-high/50 text-sev-high"
+	"medium"   "border-sev-medium/50 text-sev-medium"
+	"low"      "border-sev-low/50 text-sev-low"
+}}
+{{ if eq $r.CVE "pending" }}
+	<span class="{{ $chip }} border-dashed border-outline text-onv"
+		>CVE pending</span
+	>
+{{ else if $r.CVE }}
+	<span class="{{ $chip }} border-outline text-on">{{ $r.CVE }}</span>
+{{ else if $r.Note }}
+	{{ $id := printf "note-%s" ($r.Title | urlize) }}
+	<span class="group relative z-10 inline-flex">
+		<button
+			type="button"
+			aria-describedby="{{ $id }}"
+			class="{{ $chip }} cursor-help border-outlinev bg-transparent text-onv"
+		>
+			{{ $r.NoCVE | default "no CVE" }}
+			{{ partial "icon.html" (dict "name" "info" "size" 11) }}
+		</button>
+		<span
+			role="tooltip"
+			id="{{ $id }}"
+			class="{{ if .end }}
+				md:right-0 md:left-auto
+			{{ end }} pointer-events-none invisible absolute top-full left-0 z-20 mt-2 w-60 rounded-xl border border-outline bg-s2 p-3 font-sans text-xs leading-[1.5] text-on opacity-0 shadow-[0_8px_26px_rgba(0,0,0,.3)] transition-opacity group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100"
+			>{{ $r.Note }}</span
+		>
+	</span>
+{{ else }}
+	<span class="{{ $chip }} border-outlinev text-onv"
+		>{{ $r.NoCVE | default "no CVE" }}</span
+	>
+{{ end }}
+{{ if $r.CVSS }}
+	{{ $level := lower ($r.Severity | default "") }}
+	<span
+		class="{{ $chip }} {{ index $sev $level | default "border-outline text-onv" }}"
+		>CVSS
+		{{ $r.CVSS }}
+		{{ with $level }}· {{ . }}{{ end }}</span
+	>
+{{ end }}

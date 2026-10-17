@@ -1,0 +1,15 @@
+Title = "sudoedit symlink race to root"
+Project = "sudo-rs"
+ProjectLink = "https://github.com/trifectatechfoundation/sudo-rs"
+Date = "2026-08-31"
+Class = "privilege escalation"
+Tags = ["linux", "access control", "race condition"]
+CVE = "pending"
+CVSS = "6.4"
+Severity = "medium"
+Summary = "A symlink race in `sudoedit` let a user allowed to edit one file write into any directory, escalating to root."
+Description ="Path sanitization in `sudoedit` ran twice: once for the policy check, once to pick the file to open. A user allowed to edit a single file could flip a symlink between the two to write into any directory, and reach root via `/etc/sudoers.d`."
+
+[[References]]
+Name = "advisory"
+URL = "https://github.com/trifectatechfoundation/sudo-rs/security/advisories/GHSA-f42v-x7gq-phc8"

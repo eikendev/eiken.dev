@@ -1,0 +1,40 @@
+{{/* expects one entry from hugo.Data.research
+
+	Mirrors project-card.html: an <article> whose title link stretches over the
+	card via ::after, pointing at the first reference (advisory, paper, commit),
+	else the project. The chips sit above it with relative z-10.
+*/}}
+{{ $href := .ProjectLink }}
+{{ with .References }}{{ $href = (index . 0).URL }}{{ end }}
+<article
+	class="relative flex flex-col gap-3 rounded-[20px] border border-outlinev bg-s1 p-[22px] transition hover:-translate-y-0.5 hover:border-outline hover:bg-s2"
+>
+	<div class="flex items-center gap-2.5">
+		<span class="inline-flex text-primary"
+			>{{ partial "icon.html" (dict "name" "bug" "size" 16) }}</span
+		>
+		<span class="font-mono text-base font-semibold">{{ .Project }}</span>
+		<time
+			datetime="{{ .Date }}"
+			class="ml-auto font-mono text-[11px] text-onv"
+			>{{ (time.AsTime .Date).Format "2006.01" }}</time
+		>
+	</div>
+	<a
+		href="{{ $href }}"
+		class="text-[15px] leading-[1.35] font-medium text-pretty after:absolute after:inset-0 after:rounded-[20px]"
+		>{{ .Title }}</a
+	>
+	<p
+		class="m-0 text-sm leading-[1.55] text-pretty text-onv [&_code]:font-mono [&_code]:text-[.92em] [&_code]:text-on"
+	>
+		{{ .Summary | default .Description | markdownify }}
+	</p>
+	<div class="mt-auto flex flex-wrap items-center gap-1.5 pt-1.5">
+		<span
+			class="mr-auto rounded-full bg-pc px-2.5 py-[3px] font-mono text-[11px] text-onpc"
+			>{{ .Class }}</span
+		>
+		{{ partial "research-badges.html" (dict "entry" .) }}
+	</div>
+</article>

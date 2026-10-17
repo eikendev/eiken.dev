@@ -1,0 +1,35 @@
+{{ define "main" }}
+	{{ $all := sort hugo.Data.research "Date" "desc" }}
+	{{ $classes := slice }}
+	{{ $tags := slice }}
+	{{ range $all }}
+		{{ $classes = $classes | append .Class }}
+		{{ range .Tags }}{{ $tags = $tags | append . }}{{ end }}
+	{{ end }}
+	{{/* Group key matches the row's data-* attribute the chips filter on. */}}
+	{{ $groups := slice
+		(dict "key" "class" "label" "class" "values" ($classes | uniq | sort))
+		(dict "key" "tags" "label" "topic" "values" ($tags | uniq | sort))
+	}}
+	<section class="pt-[clamp(44px,6vw,72px)] pb-8">
+		<h1
+			class="m-0 mb-3.5 text-[clamp(34px,6vw,60px)] leading-[1.02] font-semibold tracking-[-.035em]"
+		>
+			{{ .Title }}
+		</h1>
+		{{ with .Params.lede }}
+			<p
+				class="m-0 mb-7 max-w-[56ch] text-[17px] leading-[1.65] text-onv"
+			>
+				{{ . }}
+			</p>
+		{{ end }}
+		{{ partial "filter-bar.html" $groups }}
+	</section>
+	<section class="pb-6">
+		{{ partial "research-table.html" $all }}
+	</section>
+	<p class="hidden pb-10 font-mono text-sm text-onv" data-empty>
+		No findings match this combination.
+	</p>
+{{ end }}

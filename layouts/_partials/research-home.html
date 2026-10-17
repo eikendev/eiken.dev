@@ -1,0 +1,24 @@
+{{ $all := sort hugo.Data.research "Date" "desc" }}
+<section class="pt-[clamp(48px,6vw,72px)]">
+	<div
+		class="flex flex-wrap items-center gap-4 border-b border-outlinev pb-5"
+	>
+		<h2
+			class="m-0 flex items-center gap-2.5 font-mono text-[13px] tracking-[.12em] text-onv uppercase"
+		>
+			{{ partial "icon.html" (dict "name" "bug") }}
+			security research
+		</h2>
+		<a
+			href="{{ "/research/" | relURL }}"
+			class="ml-auto inline-flex items-center gap-1.5 font-mono text-[13px] text-primary"
+		>
+			all
+			{{ len $all }}
+			{{ partial "icon.html" (dict "name" "arrow" "size" 14) }}
+		</a>
+	</div>
+	<div class="grid gap-4 pt-6 md:grid-cols-2">
+		{{ range first 4 $all }}{{ partial "research-card.html" . }}{{ end }}
+	</div>
+</section>

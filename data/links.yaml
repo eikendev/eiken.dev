@@ -3,6 +3,7 @@
 nav:
   - { name: home,     url: /,          icon: home }
   - { name: blog,     url: /blog/,     icon: blog }
+  - { name: research, url: /research/, icon: bug }
   - { name: projects, url: /projects/, icon: projects }
 
 social:

@@ -85,6 +85,11 @@
 	--color-onfill: #ffffff;
 	--color-pc: #22304f;
 	--color-onpc: #dbe4ff;
+	/* CVSS severity chips */
+	--color-sev-critical: #ff7a9c;
+	--color-sev-high: #ff9a7a;
+	--color-sev-medium: #f2c66d;
+	--color-sev-low: #8fd3a4;
 
 	--animate-caret: caret 1.05s steps(1) infinite;
 	--animate-cell: pulseCell 2.4s ease-in-out infinite;
@@ -149,6 +154,10 @@
 	--color-onfill: #ffffff;
 	--color-pc: #dfe6ff;
 	--color-onpc: #1a3080;
+	--color-sev-critical: #a3123a;
+	--color-sev-high: #b3361c;
+	--color-sev-medium: #8a5a00;
+	--color-sev-low: #1f7a3a;
 }
 
 /* decorative layer variables (grid, scanlines, glow) */

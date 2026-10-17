@@ -1,0 +1,14 @@
+Title = "Breaking Bridgefy, again"
+Project = "Bridgefy"
+ProjectLink = "https://bridgefy.me/"
+Date = "2021-08-17"
+Class = "cryptographic break"
+Tags = ["cryptography", "mobile", "race condition"]
+NoCVE = "no CVE requested"
+Credit = "With Martin R. Albrecht and Kenneth G. Paterson. Published at USENIX Security 2022."
+Summary = "Read Signal-encrypted private chats in a Bluetooth mesh messenger through a race in its libsignal integration."
+Description ="The mesh messenger had adopted libsignal after earlier attacks. A race between queuing a message and fetching its key let an attacker read Signal-encrypted private chats anyway. Broadcasts were recoverable without the network key, and impersonation, interception, and user tracking still worked."
+
+[[References]]
+Name = "paper"
+URL = "https://www.usenix.org/conference/usenixsecurity22/presentation/albrecht"
