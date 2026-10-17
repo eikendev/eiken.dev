@@ -67,12 +67,11 @@ if (typeEl && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
 	setTimeout(step, 380);
 }
 
-// projects page: language and topic filter chips, ANDed across the two groups
+// list pages (projects, research): filter chips, ANDed across groups. Each
+// group's key names the data-* attribute it matches on [data-filter-item].
 const filterBar = document.querySelector("[data-filters]");
 if (filterBar) {
-	const cards = [
-		...document.querySelectorAll("[data-projects] > [data-langs]"),
-	];
+	const items = [...document.querySelectorAll("[data-filter-item]")];
 	const empty = document.querySelector("[data-empty]");
 	const ACTIVE = ["bg-pc", "text-onpc", "border-transparent"];
 	const IDLE = [
@@ -81,17 +80,23 @@ if (filterBar) {
 		"border-outlinev",
 		"hover:bg-s1",
 	];
-	const active = { langs: "all", tags: "all" };
+	const active = Object.fromEntries(
+		[...filterBar.querySelectorAll("[data-filter-group]")].map((g) => [
+			g.dataset.filterGroup,
+			"all",
+		]),
+	);
 
+	// The hidden attribute, not a class: items keep their own display utility
+	// (contents, responsive grid), which would otherwise compete with .hidden.
 	const apply = () => {
 		let shown = 0;
-		cards.forEach((c) => {
+		items.forEach((c) => {
 			const show = Object.entries(active).every(
 				([key, want]) =>
 					want === "all" || c.dataset[key].split(" ").includes(want),
 			);
-			c.classList.toggle("contents", show);
-			c.classList.toggle("hidden", !show);
+			c.hidden = !show;
 			if (show) shown++;
 		});
 		if (empty) empty.classList.toggle("hidden", shown > 0);

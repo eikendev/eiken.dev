@@ -1,0 +1,37 @@
+{{/* Filter chips for a list page. Expects a slice of groups, each a dict with
+	key (the data-* attribute on every [data-filter-item] it filters), label and
+	values. Chips are ANDed across groups by site.js.
+*/}}
+{{ $chip := "h-[34px] cursor-pointer rounded-full border px-4 font-mono text-xs transition-colors" }}
+{{ $on := "border-transparent bg-pc text-onpc" }}
+{{ $off := "border-outlinev bg-transparent text-onv hover:bg-s1" }}
+<div class="flex flex-col gap-2.5" data-filters>
+	{{ range . }}
+		<div
+			class="flex flex-wrap items-center gap-2"
+			data-filter-group="{{ .key }}"
+		>
+			<span
+				class="w-[70px] shrink-0 font-mono text-[11px] tracking-[.12em] text-onv uppercase"
+				>{{ .label }}</span
+			>
+			<button
+				type="button"
+				data-filter="all"
+				data-active
+				class="{{ $chip }} {{ $on }}"
+			>
+				all
+			</button>
+			{{ range .values }}
+				<button
+					type="button"
+					data-filter="{{ . | urlize }}"
+					class="{{ $chip }} {{ $off }}"
+				>
+					{{ lower . }}
+				</button>
+			{{ end }}
+		</div>
+	{{ end }}
+</div>
