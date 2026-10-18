@@ -90,7 +90,6 @@ params:
     email: "hello@eiken.dev"
   social:
     github: "eikendev"
-    gitlab: "eikendev"
     bluesky: "@eikendev.bsky.social"
     blueskyurl: "https://bsky.app/profile/eikendev.bsky.social"
 

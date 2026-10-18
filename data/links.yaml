@@ -11,10 +11,6 @@ social:
     url: https://github.com/eikendev
     icon: github
     class: bg-fill text-onfill! shadow-[0_1px_2px_rgba(0,0,0,.4),0_8px_26px_rgba(0,0,0,.24)] hover:-translate-y-px hover:brightness-110
-  - name: GitLab
-    url: https://gitlab.com/eikendev
-    icon: gitlab
-    class: bg-s3 text-on hover:bg-pc hover:text-onpc
   - name: Bluesky
     url: https://bsky.app/profile/eikendev.bsky.social
     icon: bluesky
