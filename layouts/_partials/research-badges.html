@@ -1,6 +1,10 @@
 {{/* CVE and CVSS chips for one finding. Expects a dict with entry (one
 	hugo.Data.research entry) and optionally end (true aligns the no-CVE tooltip
-	to the chip's right edge from md up, for the table's last column).
+	to the chip's right edge from md up, for the table's last column) or right
+	(true aligns it to the right edge always, for right-aligned card chips).
+
+	The tooltip is display:none until shown: even invisible, a box hanging past
+	the viewport widens the page and lets iOS zoom out.
 
 	The chips sit above the card's stretched link (relative z-10) so the tooltip
 	button stays hoverable and focusable.
@@ -33,9 +37,13 @@
 		<span
 			role="tooltip"
 			id="{{ $id }}"
-			class="{{ if .end }}
-				md:right-0 md:left-auto
-			{{ end }} pointer-events-none invisible absolute top-full left-0 z-20 mt-2 w-60 rounded-xl border border-outline bg-s2 p-3 font-sans text-xs leading-[1.5] text-on opacity-0 shadow-[0_8px_26px_rgba(0,0,0,.3)] transition-opacity group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100"
+			class="{{ if .right }}
+				right-0
+			{{ else if .end }}
+				left-0 md:right-0 md:left-auto
+			{{ else }}
+				left-0
+			{{ end }} pointer-events-none absolute top-full z-20 mt-2 hidden w-60 rounded-xl border border-outline bg-s2 p-3 font-sans text-xs leading-[1.5] text-on shadow-[0_8px_26px_rgba(0,0,0,.3)] group-focus-within:block group-hover:block"
 			>{{ $r.Note }}</span
 		>
 	</span>
