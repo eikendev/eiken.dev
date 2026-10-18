@@ -21,7 +21,7 @@
 		</a>
 	</div>
 	<div
-		class="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-4 pt-6"
+		class="grid grid-cols-[repeat(auto-fill,minmax(min(260px,100%),1fr))] gap-4 pt-6"
 	>
 		{{ range $featured }}{{ partial "project-card.html" . }}{{ end }}
 		<a

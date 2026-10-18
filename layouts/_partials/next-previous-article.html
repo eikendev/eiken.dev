@@ -1,7 +1,7 @@
 {{ if or .PrevInSection .NextInSection }}
 	<nav
 		aria-label="Adjacent articles"
-		class="mt-8 grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-4"
+		class="mt-8 grid grid-cols-[repeat(auto-fit,minmax(min(220px,100%),1fr))] gap-4"
 	>
 		{{ with .PrevInSection }}
 			<a

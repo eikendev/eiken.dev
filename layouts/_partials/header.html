@@ -3,7 +3,7 @@
 	class="sticky top-0 z-30 border-b border-outlinev bg-bg/80 backdrop-blur-[16px]"
 >
 	<div
-		class="mx-auto flex min-h-16 max-w-[1100px] flex-wrap items-center gap-3 px-[clamp(16px,4vw,24px)] py-2.5"
+		class="mx-auto flex min-h-16 max-w-[1100px] items-center gap-3 px-[clamp(16px,4vw,24px)] py-2.5"
 	>
 		<a href="{{ "/" | relURL }}" class="flex items-center gap-2.5">
 			<span
@@ -16,12 +16,9 @@
 				>{{ site.Title }}</span
 			>
 		</a>
-		<nav
-			aria-label="Primary"
-			class="ml-auto flex flex-wrap items-center gap-2"
-		>
+		<nav aria-label="Primary" class="ml-auto flex items-center gap-2">
 			<div
-				class="flex items-center gap-0.5 rounded-full border border-outlinev bg-s1 p-[3px]"
+				class="flex items-center gap-0.5 rounded-full border border-outlinev bg-s1 p-[3px] max-sm:hidden"
 			>
 				{{ range hugo.Data.links.nav }}
 					{{ $url := .url | relURL }}
@@ -43,7 +40,7 @@
 			<button
 				type="button"
 				data-theme-toggle
-				class="inline-flex h-[38px] cursor-pointer items-center gap-2 rounded-full border border-outlinev bg-s1 px-3.5 font-mono text-xs text-onv transition-colors hover:bg-s3 hover:text-on"
+				class="inline-flex h-[38px] cursor-pointer items-center justify-center gap-2 rounded-full border border-outlinev bg-s1 px-3.5 font-mono text-xs text-onv transition-colors hover:bg-s3 hover:text-on max-sm:w-[38px] max-sm:px-0"
 			>
 				<span class="sr-only">Color scheme:</span>
 				<span data-theme-icon class="inline-flex">
@@ -57,8 +54,48 @@
 						>{{ partial "icon.html" (dict "name" "light" "size" 15) }}</span
 					>
 				</span>
-				<span data-theme-label>auto</span>
+				<span data-theme-label class="max-sm:sr-only">auto</span>
 			</button>
+			{{/* Small screens: the nav pill does not fit, so it collapses into
+				a dropdown toggled by site.js.
+			*/}}
+			<button
+				type="button"
+				data-menu-toggle
+				aria-expanded="false"
+				aria-controls="nav-menu"
+				class="inline-flex size-[38px] cursor-pointer items-center justify-center rounded-full border border-outlinev bg-s1 text-onv transition-colors hover:bg-s3 hover:text-on sm:hidden"
+			>
+				<span class="sr-only">Menu</span>
+				<span data-menu-icon="open" class="inline-flex"
+					>{{ partial "icon.html" (dict "name" "menu" "size" 15) }}</span
+				>
+				<span data-menu-icon="close" class="hidden"
+					>{{ partial "icon.html" (dict "name" "close" "size" 15) }}</span
+				>
+			</button>
+			<div
+				id="nav-menu"
+				hidden
+				class="absolute inset-x-0 top-full flex flex-col gap-1 border-b border-outlinev bg-bg/95 px-[clamp(16px,4vw,24px)] py-3 shadow-[0_8px_26px_rgba(0,0,0,.34)] sm:hidden"
+			>
+				{{ range hugo.Data.links.nav }}
+					{{ $url := .url | relURL }}
+					{{ $active := cond (eq .url "/") (eq $page.RelPermalink $url) (hasPrefix $page.RelPermalink $url) }}
+					<a
+						href="{{ $url }}"
+						class="{{ if $active }}
+							bg-s3 text-on
+						{{ else }}
+							text-onv hover:bg-s1 hover:text-on
+						{{ end }} flex items-center gap-3 rounded-xl px-4 py-3 font-mono text-sm transition-colors"
+						{{ if $active }}aria-current="page"{{ end }}
+					>
+						{{ partial "icon.html" (dict "name" .icon "size" 15) }}
+						{{ .name }}
+					</a>
+				{{ end }}
+			</div>
 		</nav>
 	</div>
 </header>

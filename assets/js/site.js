@@ -39,6 +39,36 @@ document.querySelectorAll("[data-theme-toggle]").forEach((btn) => {
 	});
 });
 
+// header: dropdown nav on small screens, closed by Escape or an outside click
+const menuBtn = document.querySelector("[data-menu-toggle]");
+if (menuBtn) {
+	const menu = document.getElementById(menuBtn.getAttribute("aria-controls"));
+	const setOpen = (open) => {
+		menu.hidden = !open;
+		menuBtn.setAttribute("aria-expanded", String(open));
+		menuBtn.querySelectorAll("[data-menu-icon]").forEach((i) => {
+			const active = (i.dataset.menuIcon === "close") === open;
+			i.classList.toggle("hidden", !active);
+			i.classList.toggle("inline-flex", active);
+		});
+	};
+	menuBtn.addEventListener("click", () => setOpen(menu.hidden));
+	document.addEventListener("click", (e) => {
+		if (
+			!menu.hidden &&
+			!menu.contains(e.target) &&
+			!menuBtn.contains(e.target)
+		)
+			setOpen(false);
+	});
+	document.addEventListener("keydown", (e) => {
+		if (e.key === "Escape" && !menu.hidden) {
+			setOpen(false);
+			menuBtn.focus();
+		}
+	});
+}
+
 // hero: rotating role label
 const roleEl = document.querySelector("[data-roles]");
 if (roleEl) {
