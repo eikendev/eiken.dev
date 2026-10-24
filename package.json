@@ -19,7 +19,7 @@
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.0.0",
-    "html-validate": "^11.16.2",
+    "html-validate": "^11.16.4",
     "prettier": "^3.9.10",
     "prettier-plugin-go-template": "^0.0.15",
     "prettier-plugin-tailwindcss": "^0.8.1",
