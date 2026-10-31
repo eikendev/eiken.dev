@@ -1,0 +1,51 @@
+{{/* Structured data as JSON-LD: a WebSite on the home page, a BlogPosting on
+	posts and a plain WebPage elsewhere, all attributed to the same Person.
+	URLs here must stay absolute. safeJS keeps Go from escaping the JSON.
+*/}}
+{{ $person := dict
+	"@type" "Person"
+	"name" site.Params.author.name
+	"url" site.BaseURL
+	"sameAs" (apply (hugo.Data.links.social | append hugo.Data.links.contact) "index" "." "url")
+}}
+{{ $images := apply (or .Params.images site.Params.images slice) "absURL" "." }}
+{{ $data := dict }}
+{{ if .IsHome }}
+	{{ $data = dict
+		"@type" "WebSite"
+		"name" site.Title
+		"url" site.BaseURL
+		"description" site.Params.description
+		"author" $person
+	}}
+{{ else if and .IsPage (eq .Section "blog") }}
+	{{ $data = dict
+		"@type" "BlogPosting"
+		"headline" .Title
+		"description" (.Description | default .Summary | plainify | chomp)
+		"url" .Permalink
+		"mainEntityOfPage" .Permalink
+		"datePublished" (.PublishDate.Format "2006-01-02T15:04:05Z07:00")
+		"dateModified" (.Lastmod.Format "2006-01-02T15:04:05Z07:00")
+		"wordCount" .WordCount
+		"inLanguage" site.Language.Lang
+		"author" $person
+		"publisher" $person
+	}}
+	{{ with $images }}{{ $data = merge $data (dict "image" .) }}{{ end }}
+	{{ with .Params.tags }}
+		{{ $data = merge $data (dict "keywords" .) }}
+	{{ end }}
+{{ else }}
+	{{ $data = dict
+		"@type" "WebPage"
+		"name" .Title
+		"url" .Permalink
+		"description" (.Description | default site.Params.description)
+		"isPartOf" (dict "@type" "WebSite" "name" site.Title "url" site.BaseURL)
+	}}
+{{ end }}
+{{ $data = merge (dict "@context" "https://schema.org") $data }}
+<script type="application/ld+json">
+	{{ $data | jsonify | safeJS }}
+</script>

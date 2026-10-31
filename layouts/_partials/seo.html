@@ -13,9 +13,9 @@
 	content="{{ $desc | plainify | chomp | truncate 200 }}"
 />
 
-{{/* Hugo's embedded OpenGraph and schema templates */}}
+{{/* Hugo's embedded OpenGraph template, plus our own JSON-LD */}}
 {{- partial "opengraph.html" . -}}
-{{- partial "schema.html" . -}}
+{{- partial "jsonld.html" . -}}
 
 {{/* X falls back to Open Graph; only the card type needs declaring. */}}
 <meta name="twitter:card" content="summary_large_image" />
