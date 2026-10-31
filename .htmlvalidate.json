@@ -3,11 +3,10 @@
 	"rules": {
 		"attr-quotes": "off",
 		"no-inline-style": "off",
-		"void-style": "off",
 		"doctype-style": "off",
 		"prefer-tbody": "off",
-		"no-raw-characters": "off",
-		"valid-id": "off",
-		"long-title": "off"
+		"long-title": ["error", { "maxlength": 90 }],
+		"no-raw-characters": ["error", { "relaxed": true }],
+		"valid-id": ["error", { "relaxed": true }]
 	}
 }
