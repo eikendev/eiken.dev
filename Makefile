@@ -1,7 +1,8 @@
-ENGINE_COMMAND := ${shell . ./run; echo $$ENGINE_COMMAND}
-
 HUGO := ./run hugo
 NPM := ./run npm
+
+# CI installs exactly what the lockfile says; locally the lockfile may move.
+NPM_INSTALL := $(if $(CI),ci,install)
 
 # Chroma highlighting styles. `make syntax` regenerates the two theme files
 # imported by assets/css/main.css. Override on the command line to try others,
@@ -14,7 +15,7 @@ all: build
 
 .PHONY: dependencies
 dependencies:
-	$(NPM) install
+	$(NPM) $(NPM_INSTALL)
 
 # Regenerate the syntax highlighting themes. Each is scoped to its own mode so
 # the two never stack. Both files are gitignored build artifacts.
@@ -30,16 +31,14 @@ syntax:
 .PHONY: build
 build: dependencies syntax
 	$(HUGO) --minify
-	# If we run using Docker, we should reset file ownership afterwards.
-ifneq (,$(findstring docker,${ENGINE_COMMAND}))
-	sudo chown -R ${shell id -u ${USER}}:${shell id -g ${USER}} ./public/
-endif
 
 .PHONY: server
 server: dependencies syntax
 	$(HUGO) server --minify --buildDrafts
 
-# Format templates (Go-template-aware), CSS and JS with Prettier.
+# Format templates (Go-template-aware), CSS, JS, YAML and JSON with Prettier.
+# Content Markdown is left out: Prettier rewraps front matter and inserts blank
+# lines around passthrough math.
 .PHONY: format
 format: dependencies syntax
 	$(NPM) run format

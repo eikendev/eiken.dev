@@ -1,43 +1,58 @@
 #!/usr/bin/env bash
 
-HUGO_IMAGE='docker.io/hugomods/hugo:latest'
+set -euo pipefail
 
-ENGINE_COMMAND="$(command -v podman 2>/dev/null || command -v docker 2>/dev/null)"
+HUGO_IMAGE='docker.io/hugomods/hugo:latest'
 
 log() {
     printf "%s\n" "$*" >&2
 }
 
-if [ -z "$ENGINE_COMMAND" ]; then
+ENGINE="$(command -v podman 2>/dev/null || command -v docker 2>/dev/null || true)"
+
+if [ -z "$ENGINE" ]; then
     log 'Neither Docker nor Podman are available.'
     exit 1
 fi
 
-if ! $ENGINE_COMMAND info &>/dev/null; then
-    log "Failed to execute $ENGINE_COMMAND. Check if you have the correct permissions."
+if ! "$ENGINE" info &>/dev/null; then
+    log "Failed to execute $ENGINE. Check if you have the correct permissions."
     exit 1
 fi
 
-BASE_COMMAND="\
-    $ENGINE_COMMAND run \
-    --tty \
-    --interactive \
-    --rm=true \
-    --net=host \
-    -v '$PWD':/src:Z \
-"
-
-case "$1" in
-    hugo)
-        COMMAND="$BASE_COMMAND --entrypoint='hugo' $HUGO_IMAGE ${@:2}"
-        ;;
-    npm)
-        COMMAND="$BASE_COMMAND --entrypoint='npm' $HUGO_IMAGE ${@:2}"
+case "${1:-}" in
+    hugo | npm)
+        ENTRYPOINT="$1"
+        shift
         ;;
     *)
-        echo "Usage: $0 <hugo|npm> [parameters]"
+        log "Usage: $0 <hugo|npm> [parameters]"
         exit 1
         ;;
 esac
 
-eval "$COMMAND"
+ARGS=(run --rm --volume "$PWD:/src:Z" --entrypoint "$ENTRYPOINT")
+
+# Only attach a terminal when there is one, so the wrapper also works from CI
+# and pipes.
+if [ -t 0 ] && [ -t 1 ]; then
+    ARGS+=(--tty --interactive)
+fi
+
+# Only the dev server needs to be reachable from the host.
+if [ "$ENTRYPOINT" = hugo ] && [ "${1:-}" = server ]; then
+    ARGS+=(--net=host)
+fi
+
+# Rootless Podman maps the container's root to the invoking user, so files it
+# writes to /src already come out owned by us. Docker runs as the real root and
+# would leave root-owned files behind, so there we run as the host user. That
+# user has no passwd entry in the image, hence the explicit writable HOME for
+# the npm and Hugo caches.
+case "$ENGINE" in
+    *docker*)
+        ARGS+=(--user "$(id -u):$(id -g)" --env HOME=/tmp)
+        ;;
+esac
+
+exec "$ENGINE" "${ARGS[@]}" "$HUGO_IMAGE" "$@"
