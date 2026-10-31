@@ -1,41 +1,26 @@
-// three-state theme control: auto -> dark -> light, persisted in localStorage
-const ORDER = ["system", "dark", "light"];
+import { MODES, apply, current, onSystemChange, read, store } from "./mode.js";
 
-const mq = window.matchMedia("(prefers-color-scheme: dark)");
-
-function apply(mode) {
-	const dark = mode === "system" ? mq.matches : mode === "dark";
-	document.documentElement.classList.toggle("light", !dark);
-	document.documentElement.dataset.mode = mode;
-	document.querySelectorAll("[data-theme-icon]").forEach((el) => {
-		el.querySelectorAll("[data-icon-for]").forEach((i) => {
-			const active = i.dataset.iconFor === mode;
-			i.classList.toggle("hidden", !active);
-			i.classList.toggle("inline-flex", active);
-		});
+// Applies the mode and syncs the toggle's icon and label with it.
+function render(mode) {
+	apply(mode);
+	document.querySelectorAll("[data-icon-for]").forEach((el) => {
+		const active = el.dataset.iconFor === mode;
+		el.classList.toggle("hidden", !active);
+		el.classList.toggle("inline-flex", active);
 	});
 	document.querySelectorAll("[data-theme-label]").forEach((el) => {
 		el.textContent = mode === "system" ? "auto" : mode;
 	});
 }
 
-apply(localStorage.getItem("eikendev-mode") || "system");
-mq.addEventListener("change", () =>
-	apply(document.documentElement.dataset.mode || "system"),
-);
+render(read());
+onSystemChange(() => render(current()));
 
 document.querySelectorAll("[data-theme-toggle]").forEach((btn) => {
 	btn.addEventListener("click", () => {
-		const next =
-			ORDER[
-				(ORDER.indexOf(
-					document.documentElement.dataset.mode || "system",
-				) +
-					1) %
-					3
-			];
-		localStorage.setItem("eikendev-mode", next);
-		apply(next);
+		const next = MODES[(MODES.indexOf(current()) + 1) % MODES.length];
+		store(next);
+		render(next);
 	});
 });
 

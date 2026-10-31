@@ -43,16 +43,12 @@
   </script>
 {{ end }}
 
-
-<script>
-	// apply the stored theme before first paint so there is no flash
-	(function () {
-		var m = localStorage.getItem("eikendev-mode") || "system";
-		var dark =
-			m === "system"
-				? window.matchMedia("(prefers-color-scheme: dark)").matches
-				: m === "dark";
-		if (!dark) document.documentElement.classList.add("light");
-		document.documentElement.dataset.mode = m;
-	})();
-</script>
+{{/* Apply the stored color mode before first paint so there is no flash. The
+	logic is shared with site.js through js/mode.js; js.Build bundles the import
+	so only this tiny init script is inlined.
+*/}}
+{{ with resources.Get "js/mode-init.js" | js.Build (dict "minify" true "target" "es2019") }}
+	<script>
+		{{ .Content | safeJS }}
+	</script>
+{{ end }}
