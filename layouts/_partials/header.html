@@ -54,7 +54,9 @@
 						>{{ partial "icon.html" (dict "name" "light" "size" 15) }}</span
 					>
 				</span>
-				<span data-theme-label class="max-sm:sr-only">auto</span>
+				<span data-theme-label aria-live="polite" class="max-sm:sr-only"
+					>auto</span
+				>
 			</button>
 			{{/* Small screens: the nav pill does not fit, so it collapses into
 				a dropdown toggled by site.js.
