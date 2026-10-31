@@ -1,8 +1,8 @@
 # data/links.yaml
 # Nav, hero buttons, contact and footer links. Icons are keys in partials/icon.html.
 nav:
-  - { name: home,     url: /,          icon: home }
-  - { name: blog,     url: /blog/,     icon: blog }
+  - { name: home, url: /, icon: home }
+  - { name: blog, url: /blog/, icon: blog }
   - { name: research, url: /research/, icon: bug }
   - { name: projects, url: /projects/, icon: projects }
 
@@ -28,6 +28,6 @@ contact:
 
 footer:
   - { name: eikenberg.at, url: "https://www.eikenberg.at/" }
-  - { name: Feed,         url: /index.xml }
-  - { name: Tags,         url: /tags/ }
-  - { name: License,      url: "https://creativecommons.org/licenses/by/4.0/" }
+  - { name: Feed, url: /index.xml }
+  - { name: Tags, url: /tags/ }
+  - { name: License, url: "https://creativecommons.org/licenses/by/4.0/" }

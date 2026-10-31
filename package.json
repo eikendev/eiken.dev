@@ -1,31 +1,31 @@
 {
-  "name": "eiken.dev",
-  "version": "0.0.1",
-  "description": "My personal portfolio",
-  "repository": "https://github.com/eikendev/eiken.dev",
-  "author": "eikendev <raphael@eiken.dev>",
-  "private": true,
-  "scripts": {
-    "format": "prettier --write 'layouts/**/*.html' 'assets/**/*.css' 'assets/**/*.js'",
-    "format:check": "prettier --check 'layouts/**/*.html' 'assets/**/*.css' 'assets/**/*.js'",
-    "test:html": "html-validate 'public/**/*.html'"
-  },
-  "dependencies": {
-    "@fontsource/ibm-plex-mono": "^5.0.0",
-    "@fontsource/ibm-plex-sans": "^5.0.0",
-    "@fortawesome/fontawesome-free": "^7.2.0",
-    "chart.js": "^4.6.1",
-    "katex": "^0.19.1"
-  },
-  "devDependencies": {
-    "@tailwindcss/cli": "^4.0.0",
-    "html-validate": "^11.17.0",
-    "prettier": "^3.9.10",
-    "prettier-plugin-go-template": "^0.0.15",
-    "prettier-plugin-tailwindcss": "^0.8.1",
-    "tailwindcss": "^4.0.0"
-  },
-  "overrides": {
-    "@parcel/watcher": "^2.6.0"
-  }
+	"name": "eiken.dev",
+	"version": "0.0.1",
+	"description": "My personal portfolio",
+	"repository": "https://github.com/eikendev/eiken.dev",
+	"author": "eikendev <raphael@eiken.dev>",
+	"private": true,
+	"scripts": {
+		"format": "prettier --write 'layouts/**/*.html' 'assets/**/*.{css,js}' '*.{json,yaml}' '.*.json' '.github/**/*.yaml' 'data/**/*.yaml'",
+		"format:check": "prettier --check 'layouts/**/*.html' 'assets/**/*.{css,js}' '*.{json,yaml}' '.*.json' '.github/**/*.yaml' 'data/**/*.yaml'",
+		"test:html": "html-validate 'public/**/*.html'"
+	},
+	"dependencies": {
+		"@fontsource/ibm-plex-mono": "^5.0.0",
+		"@fontsource/ibm-plex-sans": "^5.0.0",
+		"@fortawesome/fontawesome-free": "^7.2.0",
+		"chart.js": "^4.6.1",
+		"katex": "^0.19.1"
+	},
+	"devDependencies": {
+		"@tailwindcss/cli": "^4.0.0",
+		"html-validate": "^11.17.0",
+		"prettier": "^3.9.10",
+		"prettier-plugin-go-template": "^0.0.15",
+		"prettier-plugin-tailwindcss": "^0.8.1",
+		"tailwindcss": "^4.0.0"
+	},
+	"overrides": {
+		"@parcel/watcher": "^2.6.0"
+	}
 }

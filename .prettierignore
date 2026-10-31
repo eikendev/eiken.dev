@@ -1,6 +1,8 @@
 node_modules
 public
 resources
+package-lock.json
+hugo_stats.json
 
 # Generated syntax highlighting themes (see `make syntax`).
 assets/css/chroma-dark.css
