@@ -1,0 +1,43 @@
+{{/* Self-hosted IBM Plex, mounted from @fontsource into assets/fonts by
+	hugo.yaml. One loop collects the fingerprinted files and feeds both the
+	preloads and the @font-face rules, so the two cannot drift apart. Only the
+	weights used above the fold are preloaded.
+*/}}
+{{ $fonts := slice }}
+{{ range slice
+	(dict "family" "IBM Plex Sans" "weight" "400" "file" "ibm-plex-sans/ibm-plex-sans-latin-400-normal" "preload" true)
+	(dict "family" "IBM Plex Sans" "weight" "500" "file" "ibm-plex-sans/ibm-plex-sans-latin-500-normal" "preload" false)
+	(dict "family" "IBM Plex Sans" "weight" "600" "file" "ibm-plex-sans/ibm-plex-sans-latin-600-normal" "preload" true)
+	(dict "family" "IBM Plex Sans" "weight" "700" "file" "ibm-plex-sans/ibm-plex-sans-latin-700-normal" "preload" false)
+	(dict "family" "IBM Plex Mono" "weight" "400" "file" "ibm-plex-mono/ibm-plex-mono-latin-400-normal" "preload" true)
+	(dict "family" "IBM Plex Mono" "weight" "500" "file" "ibm-plex-mono/ibm-plex-mono-latin-500-normal" "preload" false)
+	(dict "family" "IBM Plex Mono" "weight" "600" "file" "ibm-plex-mono/ibm-plex-mono-latin-600-normal" "preload" false)
+}}
+	{{ $font := resources.Get (printf "fonts/%s.woff2" .file) }}
+	{{ if not $font }}
+		{{ errorf "font %q not found; run `make dependencies`" .file }}
+	{{ end }}
+	{{ $fonts = $fonts | append (merge . (dict "url" ($font | fingerprint).RelPermalink)) }}
+{{ end }}
+{{ range $fonts }}
+	{{ if .preload }}
+		<link
+			rel="preload"
+			as="font"
+			type="font/woff2"
+			href="{{ .url }}"
+			crossorigin
+		/>
+	{{ end }}
+{{ end }}
+<style>
+	{{ range $fonts }}
+		@font-face {
+			font-family: "{{ .family }}";
+			font-style: normal;
+			font-weight: {{ .weight }};
+			font-display: swap;
+			src: url("{{ .url }}") format("woff2");
+		}
+	{{ end }}
+</style>

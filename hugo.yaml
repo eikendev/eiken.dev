@@ -38,7 +38,8 @@ security:
 # Tailwind reads the class list Hugo writes to hugo_stats.json while building.
 # Declaring any mount removes the default assets mount, so it is re-declared,
 # along with the JS dependencies (Chart.js, FontAwesome) and the self-hosted
-# fonts, all mounted straight out of node_modules.
+# fonts, all mounted straight out of node_modules. Fonts go through assets so
+# head.html can fingerprint them.
 build:
   buildStats:
     enable: true
@@ -63,19 +64,19 @@ module:
     - source: node_modules/@fortawesome/fontawesome-free/svgs
       target: assets/icons/fontawesome
     - source: node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-400-normal.woff2
-      target: static/fonts/ibm-plex-sans/ibm-plex-sans-latin-400-normal.woff2
+      target: assets/fonts/ibm-plex-sans/ibm-plex-sans-latin-400-normal.woff2
     - source: node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-500-normal.woff2
-      target: static/fonts/ibm-plex-sans/ibm-plex-sans-latin-500-normal.woff2
+      target: assets/fonts/ibm-plex-sans/ibm-plex-sans-latin-500-normal.woff2
     - source: node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-600-normal.woff2
-      target: static/fonts/ibm-plex-sans/ibm-plex-sans-latin-600-normal.woff2
+      target: assets/fonts/ibm-plex-sans/ibm-plex-sans-latin-600-normal.woff2
     - source: node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-700-normal.woff2
-      target: static/fonts/ibm-plex-sans/ibm-plex-sans-latin-700-normal.woff2
+      target: assets/fonts/ibm-plex-sans/ibm-plex-sans-latin-700-normal.woff2
     - source: node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2
-      target: static/fonts/ibm-plex-mono/ibm-plex-mono-latin-400-normal.woff2
+      target: assets/fonts/ibm-plex-mono/ibm-plex-mono-latin-400-normal.woff2
     - source: node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-500-normal.woff2
-      target: static/fonts/ibm-plex-mono/ibm-plex-mono-latin-500-normal.woff2
+      target: assets/fonts/ibm-plex-mono/ibm-plex-mono-latin-500-normal.woff2
     - source: node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-600-normal.woff2
-      target: static/fonts/ibm-plex-mono/ibm-plex-mono-latin-600-normal.woff2
+      target: assets/fonts/ibm-plex-mono/ibm-plex-mono-latin-600-normal.woff2
 
 params:
   title: "eikendev"

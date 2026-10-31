@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 {{ partial "seo.html" . }}
 {{ partial "favicons.html" . }}
+{{ partial "fonts.html" . }}
 
 
 <link
@@ -36,11 +37,12 @@
 */}}
 {{ if .Params.chartjs }}
 	{{ $chart := resources.Get "js/chart.js" | js.Build (dict "minify" hugo.IsProduction "format" "esm") }}
-  <script type="module">
-    import { Chart, registerables } from "{{ $chart.RelPermalink }}";
-    Chart.register(...registerables);
-    window.Chart = Chart;
-  </script>
+	{{ if hugo.IsProduction }}{{ $chart = $chart | fingerprint }}{{ end }}
+	<script type="module">
+		import { Chart, registerables } from "{{ $chart.RelPermalink }}";
+		Chart.register(...registerables);
+		window.Chart = Chart;
+	</script>
 {{ end }}
 
 {{/* Apply the stored color mode before first paint so there is no flash. The
