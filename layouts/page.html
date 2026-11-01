@@ -2,7 +2,7 @@
 	<article class="max-w-[70ch] animate-rise pt-[clamp(36px,5vw,64px)] pb-6">
 		<a
 			href="{{ "/blog/" | relURL }}"
-			class="mb-7 inline-flex items-center gap-2 font-mono text-[13px] text-onv transition-colors hover:text-primary!"
+			class="mb-7 inline-flex items-center gap-2 font-mono text-[13px] text-onv transition-colors"
 		>
 			{{ partial "icon.html" (dict "name" "arrowleft" "size" 14) }}
 			back to blog
@@ -41,7 +41,7 @@
 			{{ range .Params.tags }}
 				<a
 					href="{{ (printf "/tags/%s/" (. | urlize)) | relURL }}"
-					class="rounded-lg border border-outlinev px-2.5 py-1 font-mono text-[11px] text-onv transition-colors hover:border-outline hover:text-on!"
+					class="rounded-lg border border-outlinev px-2.5 py-1 font-mono text-[11px] text-onv transition-colors hover:border-outline hover:text-on"
 					>{{ . }}</a
 				>
 			{{ end }}

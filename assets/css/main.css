@@ -134,6 +134,10 @@
 		color: inherit;
 		text-decoration: none;
 	}
+	/* Text links take the primary on hover; controls and cards override it. */
+	a:hover {
+		color: var(--color-primary);
+	}
 	::selection {
 		background: color-mix(in srgb, var(--color-primary) 30%, transparent);
 	}

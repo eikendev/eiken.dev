@@ -5,9 +5,7 @@
 		<span>{{ site.Params.copyright }}</span>
 		<span class="ml-auto flex flex-wrap gap-5">
 			{{ range hugo.Data.links.footer }}
-				<a
-					href="{{ .url | relURL }}"
-					class="transition-colors hover:text-primary!"
+				<a href="{{ .url | relURL }}" class="transition-colors"
 					>{{ .name }}</a
 				>
 			{{ end }}

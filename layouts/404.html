@@ -23,14 +23,14 @@
 			<div class="flex flex-wrap gap-3">
 				<a
 					href="{{ "/" | relURL }}"
-					class="inline-flex h-10 items-center gap-2.5 rounded-full bg-primary px-6 text-sm font-semibold text-onprimary! transition hover:brightness-110"
+					class="inline-flex h-10 items-center gap-2.5 rounded-full bg-primary px-6 text-sm font-semibold text-onprimary transition hover:text-onprimary hover:brightness-110"
 				>
 					{{ partial "icon.html" (dict "name" "home" "size" 16) }}
 					Home
 				</a>
 				<a
 					href="{{ "/blog/" | relURL }}"
-					class="inline-flex h-10 items-center gap-2.5 rounded-full border border-outline px-6 text-sm font-semibold transition-colors hover:bg-s2"
+					class="inline-flex h-10 items-center gap-2.5 rounded-full border border-outline px-6 text-sm font-semibold text-on transition-colors hover:bg-s2 hover:text-on"
 				>
 					{{ partial "icon.html" (dict "name" "blog" "size" 16) }}
 					Blog
