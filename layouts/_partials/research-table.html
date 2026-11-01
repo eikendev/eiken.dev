@@ -11,7 +11,7 @@
 			<th scope="col" class="{{ $th }} w-[84px]">date</th>
 			<th scope="col" class="{{ $th }} w-[120px]">project</th>
 			<th scope="col" class="{{ $th }}">finding</th>
-			<th scope="col" class="{{ $th }} w-[170px]">identifiers</th>
+			<th scope="col" class="{{ $th }} w-42">identifiers</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -23,7 +23,7 @@
 				class="border-b border-outlinev align-top max-md:grid max-md:grid-cols-[auto_1fr] max-md:gap-x-4 max-md:gap-y-3 max-md:py-5"
 			>
 				<td
-					class="px-3 py-5 font-mono text-xs text-onv max-md:p-0 max-md:pt-[3px]"
+					class="px-3 py-5 font-mono text-xs text-onv max-md:p-0 max-md:pt-1"
 				>
 					<time datetime="{{ .Date }}"
 						>{{ (time.AsTime .Date).Format "2006.01" }}</time
@@ -43,7 +43,7 @@
 						>
 							{{ .Title }}
 							<span
-								class="rounded-full bg-pc px-2.5 py-[3px] font-mono text-[11px] font-normal tracking-normal text-onpc"
+								class="rounded-lg bg-pc px-2.5 py-1 font-mono text-[11px] font-normal tracking-normal text-onpc"
 								>{{ .Class }}</span
 							>
 						</span>
@@ -53,7 +53,7 @@
 							{{ .Description | markdownify }}
 						</p>
 						<div
-							class="flex flex-wrap items-center gap-x-3.5 gap-y-1.5 font-mono text-[11px] text-onv"
+							class="flex flex-wrap items-center gap-x-4 gap-y-1.5 font-mono text-[11px] text-onv"
 						>
 							{{ range .References }}
 								<a

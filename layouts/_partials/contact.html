@@ -1,6 +1,6 @@
 <section
 	id="contact"
-	class="mt-[clamp(56px,7vw,80px)] grid grid-cols-[repeat(auto-fit,minmax(min(260px,100%),1fr))] items-center gap-7 rounded-3xl border border-outlinev bg-s1 p-[clamp(24px,4vw,40px)]"
+	class="mt-[clamp(56px,7vw,80px)] grid grid-cols-[repeat(auto-fit,minmax(min(260px,100%),1fr))] items-center gap-7 rounded-[28px] border border-outlinev bg-s1 p-[clamp(24px,4vw,40px)]"
 >
 	<div>
 		<h2 class="m-0 mb-2 text-2xl font-semibold tracking-[-.02em]">
@@ -14,7 +14,7 @@
 		{{ range hugo.Data.links.contact }}
 			<a
 				href="{{ .url }}"
-				class="{{ .class }} inline-flex h-11 items-center gap-2.5 rounded-full px-[22px] text-sm font-semibold transition"
+				class="{{ .class }} inline-flex h-10 items-center gap-2.5 rounded-full px-6 text-sm font-semibold transition"
 			>
 				{{ partial "icon.html" (dict "name" .icon "size" 16) }}
 				{{ .name }}

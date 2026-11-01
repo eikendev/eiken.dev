@@ -8,7 +8,7 @@
 	{{ $label = printf "%s, %s" $label (delimit . " and ") }}
 {{ end }}
 <article
-	class="relative flex flex-col gap-3 rounded-[20px] border border-outlinev bg-s1 p-[22px] transition hover:-translate-y-0.5 hover:border-outline hover:bg-s2"
+	class="relative flex flex-col gap-3 rounded-xl border border-outlinev bg-s1 p-6 transition hover:-translate-y-0.5 hover:border-outline hover:bg-s2"
 >
 	<div class="flex items-center gap-2.5">
 		<span class="inline-flex text-primary"
@@ -17,13 +17,13 @@
 		<a
 			href="{{ .RepositoryLink }}"
 			aria-label="{{ $label }} project"
-			class="font-mono text-base font-semibold after:absolute after:inset-0 after:rounded-[20px]"
+			class="font-mono text-base font-semibold after:absolute after:inset-0 after:rounded-xl"
 			>{{ .Name }}</a
 		>
 		<span class="ml-auto flex flex-wrap justify-end gap-1.5">
 			{{ range .Languages }}
 				<span
-					class="rounded-full bg-pc px-2.5 py-[3px] font-mono text-[11px] text-onpc"
+					class="rounded-lg bg-pc px-2.5 py-1 font-mono text-[11px] text-onpc"
 					>{{ . }}</span
 				>
 			{{ end }}
@@ -36,21 +36,21 @@
 		<div class="flex flex-wrap gap-1.5">
 			{{ range . }}
 				<span
-					class="rounded-full border border-outlinev px-2.5 py-[3px] font-mono text-[11px] text-onv"
+					class="rounded-lg border border-outlinev px-2.5 py-1 font-mono text-[11px] text-onv"
 					>{{ . }}</span
 				>
 			{{ end }}
 		</div>
 	{{ end }}
 	<div
-		class="mt-auto flex flex-wrap items-center gap-x-3.5 gap-y-2 pt-1.5 font-mono text-[11px] text-onv"
+		class="mt-auto flex flex-wrap items-center gap-x-4 gap-y-2 pt-1.5 font-mono text-[11px] text-onv"
 	>
-		<span class="flex items-center gap-[7px]">
+		<span class="flex items-center gap-2">
 			{{ partial "icon.html" (dict "name" "license" "size" 13) }}
 			{{ .License | default "no license" }}
 		</span>
 		{{ with .Since }}
-			<span class="flex items-center gap-[7px]">
+			<span class="flex items-center gap-2">
 				{{ partial "icon.html" (dict "name" "clock" "size" 13) }}
 				since
 				{{ . }}
@@ -61,7 +61,7 @@
 				{{ range . }}
 					<a
 						href="{{ .URL }}"
-						class="relative z-10 inline-flex items-center gap-1.5 rounded-full border border-outlinev px-2.5 py-[3px] transition-colors hover:border-primary hover:text-primary"
+						class="relative z-10 inline-flex items-center gap-1.5 rounded-lg border border-outlinev px-2.5 py-1 transition-colors hover:border-primary hover:text-primary"
 						>{{ partial "icon.html" (dict "name" "box" "size" 11) }}
 						{{ .Name }}</a
 					>

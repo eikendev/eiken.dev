@@ -7,7 +7,7 @@
 {{ $href := .ProjectLink }}
 {{ with .References }}{{ $href = (index . 0).URL }}{{ end }}
 <article
-	class="relative flex flex-col gap-3 rounded-[20px] border border-outlinev bg-s1 p-[22px] transition hover:-translate-y-0.5 hover:border-outline hover:bg-s2"
+	class="relative flex flex-col gap-3 rounded-xl border border-outlinev bg-s1 p-6 transition hover:-translate-y-0.5 hover:border-outline hover:bg-s2"
 >
 	<div class="flex items-center gap-2.5">
 		<span class="inline-flex text-primary"
@@ -22,7 +22,7 @@
 	</div>
 	<a
 		href="{{ $href }}"
-		class="text-[15px] leading-[1.35] font-medium text-pretty after:absolute after:inset-0 after:rounded-[20px]"
+		class="text-[15px] leading-[1.35] font-medium text-pretty after:absolute after:inset-0 after:rounded-xl"
 		>{{ .Title }}</a
 	>
 	<p
@@ -32,7 +32,7 @@
 	</p>
 	<div class="mt-auto flex flex-wrap items-center gap-1.5 pt-1.5">
 		<span
-			class="mr-auto rounded-full bg-pc px-2.5 py-[3px] font-mono text-[11px] text-onpc"
+			class="mr-auto rounded-lg bg-pc px-2.5 py-1 font-mono text-[11px] text-onpc"
 			>{{ .Class }}</span
 		>
 		{{ partial "research-badges.html" (dict "entry" . "right" true) }}

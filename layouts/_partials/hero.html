@@ -3,7 +3,7 @@
 >
 	<div>
 		<div
-			class="mb-6 inline-flex min-h-4 items-center gap-2.5 rounded-full bg-pc px-3.5 py-[7px] font-mono text-xs tracking-[.09em] text-onpc uppercase"
+			class="mb-6 inline-flex h-8 items-center gap-2.5 rounded-lg bg-pc px-3 font-mono text-xs tracking-[.09em] text-onpc uppercase"
 		>
 			<span
 				class="size-1.5 flex-none animate-cell rounded-full bg-primary"
@@ -15,7 +15,7 @@
 			>
 		</div>
 		<h1
-			class="m-0 mb-[22px] text-[clamp(40px,7vw,76px)] leading-none font-semibold tracking-[-.04em]"
+			class="m-0 mb-6 text-[clamp(40px,7vw,76px)] leading-none font-semibold tracking-[-.04em]"
 		>
 			<span data-type="{{ site.Params.headline }}"
 				>{{ site.Params.headline }}</span
@@ -26,7 +26,7 @@
 			>
 		</h1>
 		<p
-			class="m-0 mb-[34px] max-w-[54ch] text-[17px] leading-[1.66] text-pretty text-onv"
+			class="m-0 mb-8 max-w-[54ch] text-[17px] leading-[1.66] text-pretty text-onv"
 		>
 			{{ site.Params.intro }}
 		</p>
@@ -35,7 +35,7 @@
 				<a
 					href="{{ .url }}"
 					rel="me noopener"
-					class="{{ .class }} inline-flex h-11 items-center gap-2.5 rounded-full px-[22px] text-sm font-semibold transition"
+					class="{{ .class }} inline-flex h-10 items-center gap-2.5 rounded-full px-6 text-sm font-semibold transition"
 				>
 					{{ partial "icon.html" (dict "name" .icon "size" 17) }}
 					{{ .name }}

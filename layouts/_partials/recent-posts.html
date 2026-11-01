@@ -23,9 +23,9 @@
 			<a
 				href="{{ .RelPermalink }}"
 				aria-label="{{ $label }}"
-				class="-mx-4 flex flex-wrap items-center gap-x-5 gap-y-2 rounded-xl border-b border-outlinev px-4 py-[18px] transition-colors hover:bg-s1"
+				class="-mx-4 flex flex-wrap items-center gap-x-5 gap-y-2 rounded-xl border-b border-outlinev px-4 py-4 transition-colors hover:bg-s1"
 			>
-				<span class="w-[66px] flex-none font-mono text-xs text-onv"
+				<span class="w-16 flex-none font-mono text-xs text-onv"
 					>{{ .Date.Format "2006.01" }}</span
 				>
 				<span
@@ -35,7 +35,7 @@
 				<span class="flex flex-wrap items-center gap-1.5">
 					{{ range .Params.tags }}
 						<span
-							class="rounded-full border border-outlinev px-2.5 py-[3px] font-mono text-[11px] text-onv"
+							class="rounded-lg border border-outlinev px-2.5 py-1 font-mono text-[11px] text-onv"
 							>{{ . }}</span
 						>
 					{{ end }}

@@ -26,7 +26,7 @@
 		{{ range $featured }}{{ partial "project-card.html" . }}{{ end }}
 		<a
 			href="{{ "/projects/" | relURL }}"
-			class="flex flex-col gap-3 rounded-[20px] border border-dashed border-outline p-[22px] transition hover:-translate-y-0.5 hover:border-primary hover:bg-s1"
+			class="flex flex-col gap-3 rounded-xl border border-dashed border-outline p-6 transition hover:-translate-y-0.5 hover:border-primary hover:bg-s1"
 		>
 			<div class="flex items-center gap-2.5">
 				<span class="font-mono text-base font-semibold text-primary"
@@ -39,7 +39,7 @@
 			<div class="flex flex-wrap gap-1.5">
 				{{ range $rest }}
 					<span
-						class="rounded-full border border-outlinev px-2.5 py-[3px] font-mono text-[11px] text-onv"
+						class="rounded-lg border border-outlinev px-2.5 py-1 font-mono text-[11px] text-onv"
 						>{{ .Name }}</span
 					>
 				{{ end }}
