@@ -15,7 +15,10 @@
 	--font-sans: "IBM Plex Sans", system-ui, sans-serif;
 	--font-mono: "IBM Plex Mono", ui-monospace, monospace;
 
-	/* dark is the base theme */
+	/* dark is the base theme. Material roles: bg = surface, s1..s3 = surface
+	   containers low..high, outline = outline, outlinev = outline variant,
+	   on = on-surface, onv = on-surface variant, primary = primary,
+	   onprimary = on-primary, pc = primary container, onpc = on-primary-container. */
 	--color-bg: #111112;
 	--color-s1: #161618;
 	--color-s2: #1c1c1f;
@@ -24,9 +27,8 @@
 	--color-outlinev: #28282c;
 	--color-on: #ececed;
 	--color-onv: #a1a1a8;
-	--color-primary: #8fb0ff; /* accent for text, icons, rules */
-	--color-fill: #3f63d8; /* filled buttons, always white label */
-	--color-onfill: #ffffff;
+	--color-primary: #8fb0ff;
+	--color-onprimary: #111112;
 	--color-pc: #22304f;
 	--color-onpc: #dbe4ff;
 	/* CVSS severity chips */
@@ -94,8 +96,7 @@
 	--color-on: #17171a;
 	--color-onv: #5c5c64;
 	--color-primary: #3557c8;
-	--color-fill: #3557c8;
-	--color-onfill: #ffffff;
+	--color-onprimary: #ffffff;
 	--color-pc: #dfe6ff;
 	--color-onpc: #1a3080;
 	--color-sev-critical: #a3123a;

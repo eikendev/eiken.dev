@@ -10,7 +10,7 @@ social:
   - name: GitHub
     url: https://github.com/eikendev
     icon: github
-    class: bg-fill text-onfill! shadow-[0_1px_2px_rgba(0,0,0,.4),0_8px_26px_rgba(0,0,0,.24)] hover:-translate-y-px hover:brightness-110
+    class: bg-primary text-onprimary! shadow-[0_1px_2px_rgba(0,0,0,.4),0_8px_26px_rgba(0,0,0,.24)] hover:-translate-y-px hover:brightness-110
   - name: Bluesky
     url: https://bsky.app/profile/eikendev.bsky.social
     icon: bluesky
@@ -20,7 +20,7 @@ contact:
   - name: eikenberg.at
     url: https://www.eikenberg.at/
     icon: globe
-    class: bg-fill text-onfill! hover:brightness-110
+    class: bg-primary text-onprimary! hover:brightness-110
   - name: LinkedIn
     url: https://www.linkedin.com/in/raphael-eikenberg/
     icon: linkedin
