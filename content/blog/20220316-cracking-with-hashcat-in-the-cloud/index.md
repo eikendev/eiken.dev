@@ -441,7 +441,6 @@ It's only MD5, yes, but it's a whole lot faster than my setup with john.
 
 We can run proper benchmarks with `hashcat -b`:
 
-{{< bootstrap-table table_class="table table-striped table-bordered" >}}
 | Algorithm | Compiled locally | From repository |
 |---|---:|---:|
 | MD5 | 4594.1 MH/s | 4538.2 MH/s |
@@ -452,7 +451,6 @@ We can run proper benchmarks with `hashcat -b`:
 | NTLM | 7438.2 MH/s | 7358.9 MH/s |
 | LM | 4312.7 MH/s | 4338.6 MH/s |
 | NetNTLMv1 / NetNTLMv1+ESS | 4413.9 MH/s | 4197.3 MH/s |
-{{< /bootstrap-table >}}
 
 Here you also see a comparison between our own build and the build from the repository.
 Why is the build faster for almost all algorithms?

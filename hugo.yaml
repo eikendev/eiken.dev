@@ -136,5 +136,8 @@ markup:
         enable: true
     parser:
       autoHeadingIDType: "blackfriday"
+      # Lets a `{caption="…"}` line after a table reach render-table.html.
+      attribute:
+        block: true
     renderer:
       unsafe: true
