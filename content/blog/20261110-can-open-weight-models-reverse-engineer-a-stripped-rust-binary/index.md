@@ -1,6 +1,6 @@
 ---
 title: "Can open-weight models reverse-engineer a stripped Rust binary?"
-date: 2026-11-10T16:00:00Z
+date: 2026-11-10T17:25:00Z
 tags: ["ai", "llm", "reverse-engineering", "rust", "open-weight"]
 chartjs: true
 ---
