@@ -38,6 +38,7 @@ buttons, meta rows, project cards, social and sharing links. */}}
 	"hackernews" "brands/hacker-news"
 	"linkedin"   "brands/linkedin-in"
 	"twitter"    "brands/twitter"
+	"x"          "brands/x-twitter"
 }}
 {{ $rel := index $map .name | default "solid/circle" }}
 {{ with resources.Get (printf "icons/fontawesome/%s.svg" $rel) }}
