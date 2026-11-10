@@ -2,7 +2,6 @@
 title: "How to Break Your JAR in 2021 - Decompilation Guide for JARs and APKs"
 date: 2021-02-25T11:00:00Z
 tags: ["reverse-engineering", "android", "java"]
-images: ["/img/blog/how-to-break-your-jar-in-2021-decompilation-guide-for-jars-and-apks/card.png"]
 ---
 
 In the past few days, I had some fun trying to understand the inner workings of an APK file.

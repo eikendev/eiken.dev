@@ -2,7 +2,6 @@
 title: "Cracking With Hashcat in the Cloud"
 date: 2022-03-16T21:00:00Z
 tags: ["aws", "cloud", "cracking", "hashcat"]
-images: ["/img/blog/cracking-with-hashcat-in-the-cloud/card.png"]
 ---
 
 Thanks to the global chip shortage, for about two years certain electronic items are really hard to buy.

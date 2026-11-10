@@ -8,7 +8,13 @@
 	"url" site.BaseURL
 	"sameAs" (apply (hugo.Data.links.social | append hugo.Data.links.contact) "index" "." "url")
 }}
-{{ $images := apply (or .Params.images site.Params.images slice) "absURL" "." }}
+{{/* Same lookup as Hugo's OpenGraph template: the images param, else a
+	feature/cover/thumbnail image in the page bundle, else the site image.
+*/}}
+{{ $images := slice }}
+{{ range partial "_funcs/get-page-images" . }}
+	{{ $images = $images | append .Permalink }}
+{{ end }}
 {{ $data := dict }}
 {{ if .IsHome }}
 	{{ $data = dict
