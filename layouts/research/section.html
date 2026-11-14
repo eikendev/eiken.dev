@@ -2,14 +2,38 @@
 	{{ $all := sort hugo.Data.research "Date" "desc" }}
 	{{ $classes := slice }}
 	{{ $tags := slice }}
+	{{ $severities := slice }}
+	{{ $cves := slice }}
 	{{ range $all }}
 		{{ $classes = $classes | append .Class }}
 		{{ range .Tags }}{{ $tags = $tags | append . }}{{ end }}
+		{{ $severities = $severities | append (.Severity | default "unrated") }}
+		{{ $cves = $cves | append (cond (isset . "CVE") "yes" "no") }}
 	{{ end }}
+	{{/* Severity and CVE chips keep a fixed order, limited to values in use. */}}
+	{{ $severities = intersect (slice "critical" "high" "medium" "low" "unrated") $severities }}
+	{{ $cves = intersect (slice "yes" "no") $cves }}
+	{{/* Severity chips take the colors of the CVSS badges in the table. */}}
+	{{ $idle := "bg-transparent enabled:hover:bg-s1" }}
+	{{ $tones := dict
+		"critical" (printf "border-sev-critical/50 text-sev-critical %s" $idle)
+		"high"     (printf "border-sev-high/50 text-sev-high %s" $idle)
+		"medium"   (printf "border-sev-medium/50 text-sev-medium %s" $idle)
+		"low"      (printf "border-sev-low/50 text-sev-low %s" $idle)
+	}}
+	{{/* Class chips use the usual short forms; the table keeps the full name. */}}
+	{{ $short := dict
+		"denial of service"     "DoS"
+		"privilege escalation"  "LPE"
+		"remote code execution" "RCE"
+		"security bypass"       "bypass"
+	}}
 	{{/* Group key matches the row's data-* attribute the chips filter on. */}}
 	{{ $groups := slice
-		(dict "key" "class" "label" "class" "values" ($classes | uniq | sort))
+		(dict "key" "class" "label" "class" "values" ($classes | uniq | sort) "short" $short)
 		(dict "key" "tags" "label" "topic" "values" ($tags | uniq | sort))
+		(dict "key" "severity" "label" "severity" "values" $severities "tones" $tones)
+		(dict "key" "cve" "label" "cve" "values" $cves)
 	}}
 	<section class="pt-[clamp(44px,6vw,72px)] pb-8">
 		<h1

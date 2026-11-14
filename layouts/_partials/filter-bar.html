@@ -1,37 +1,61 @@
 {{/* Filter chips for a list page. Expects a slice of groups, each a dict with
-	key (the data-* attribute on every [data-filter-item] it filters), label and
-	values. Chips are ANDed across groups by site.js.
+	key (the data-* attribute on every [data-filter-item] it filters), label
+	(also its URL query parameter), values and optionally tones (value to idle
+	chip classes) and short (value to a shorter chip label, with the full value
+	as its title). Chips are ANDed across groups by site.js, which also fills in
+	the counts.
 */}}
-{{ $chip := "h-8 cursor-pointer rounded-lg border px-4 font-mono text-xs transition-colors" }}
+{{ $chip := "h-8 cursor-pointer rounded-lg border px-4 font-mono text-xs transition-colors disabled:cursor-not-allowed disabled:opacity-40" }}
 {{ $on := "border-transparent bg-pc text-onpc" }}
-{{ $off := "border-outlinev bg-transparent text-onv hover:bg-s1" }}
+{{ $off := "border-outlinev bg-transparent text-onv enabled:hover:bg-s1" }}
+{{ $count := "ml-1.5 opacity-60 empty:hidden" }}
 <div class="flex flex-col gap-2.5" data-filters>
-	{{ range . }}
+	{{ range $g := . }}
 		<div
-			class="flex flex-wrap items-center gap-2"
+			role="group"
+			aria-label="{{ .label }}"
+			class="flex items-start gap-2"
 			data-filter-group="{{ .key }}"
+			data-filter-param="{{ .label | urlize }}"
 		>
+			{{/* Chips wrap in their own box so a second line stays clear of
+				the label.
+			*/}}
 			<span
-				class="w-18 shrink-0 font-mono text-[11px] tracking-[.12em] text-onv uppercase"
+				class="w-18 shrink-0 font-mono text-[11px] leading-8 tracking-[.12em] text-onv uppercase"
 				>{{ .label }}</span
 			>
-			<button
-				type="button"
-				data-filter="all"
-				data-active
-				class="{{ $chip }} {{ $on }}"
-			>
-				all
-			</button>
-			{{ range .values }}
+			<div class="flex flex-wrap items-center gap-2">
 				<button
 					type="button"
-					data-filter="{{ . | urlize }}"
-					class="{{ $chip }} {{ $off }}"
+					data-filter="all"
+					data-active
+					aria-pressed="true"
+					data-idle="{{ $off }}"
+					class="{{ $chip }} {{ $on }}"
 				>
-					{{ lower . }}
+					all<span data-count class="{{ $count }}"></span>
 				</button>
-			{{ end }}
+				{{ range $value := .values }}
+					{{ $idle := index ($g.tones | default dict) . | default $off }}
+					<button
+						type="button"
+						data-filter="{{ . | urlize }}"
+						aria-pressed="false"
+						data-idle="{{ $idle }}"
+						class="{{ $chip }} {{ $idle }}"
+					>
+						{{ with index ($g.short | default dict) . }}
+							<abbr title="{{ $value }}" class="no-underline"
+								>{{ . }}</abbr
+							>
+						{{- else -}}
+							{{ lower . }}
+						{{- end -}}
+						<span data-count class="{{ $count }}"></span>
+					</button>
+				{{ end }}
+			</div>
 		</div>
 	{{ end }}
 </div>

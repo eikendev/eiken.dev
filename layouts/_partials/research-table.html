@@ -24,6 +24,8 @@
 				data-filter-item
 				data-class="{{ .Class | urlize }}"
 				data-tags="{{ delimit (apply (.Tags | default slice) "urlize" ".") " " }}"
+				data-severity="{{ .Severity | default "unrated" | urlize }}"
+				data-cve="{{ cond (isset . "CVE") "yes" "no" }}"
 				class="border-b border-outlinev align-top max-md:grid max-md:grid-cols-[auto_1fr] max-md:gap-x-4 max-md:gap-y-3 max-md:py-5"
 			>
 				<td

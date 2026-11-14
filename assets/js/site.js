@@ -84,37 +84,77 @@ if (typeEl && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
 
 // list pages (projects, research): filter chips, ANDed across groups. Each
 // group's key names the data-* attribute it matches on [data-filter-item].
+// Each chip counts the items it would leave given the other groups' picks and
+// is disabled at zero. Picks live in the query string so a view can be linked.
 const filterBar = document.querySelector("[data-filters]");
 if (filterBar) {
 	const items = [...document.querySelectorAll("[data-filter-item]")];
 	const empty = document.querySelector("[data-empty]");
+	const groups = [...filterBar.querySelectorAll("[data-filter-group]")];
 	const ACTIVE = ["bg-pc", "text-onpc", "border-transparent"];
-	const IDLE = [
-		"bg-transparent",
-		"text-onv",
-		"border-outlinev",
-		"hover:bg-s1",
-	];
 	const active = Object.fromEntries(
-		[...filterBar.querySelectorAll("[data-filter-group]")].map((g) => [
-			g.dataset.filterGroup,
-			"all",
-		]),
+		groups.map((g) => [g.dataset.filterGroup, "all"]),
 	);
+
+	const params = new URLSearchParams(location.search);
+	groups.forEach((g) => {
+		const want = params.get(g.dataset.filterParam);
+		if (want && g.querySelector(`[data-filter="${CSS.escape(want)}"]`))
+			active[g.dataset.filterGroup] = want;
+	});
+
+	const matches = (item, key, want) =>
+		want === "all" || item.dataset[key].split(" ").includes(want);
+	// Whether an item passes every group's pick, ignoring the group skip.
+	const passes = (item, skip) =>
+		Object.entries(active).every(
+			([key, want]) => key === skip || matches(item, key, want),
+		);
 
 	// The hidden attribute, not a class: items keep their own display utility
 	// (contents, responsive grid), which would otherwise compete with .hidden.
-	const apply = () => {
+	const render = () => {
 		let shown = 0;
 		items.forEach((c) => {
-			const show = Object.entries(active).every(
-				([key, want]) =>
-					want === "all" || c.dataset[key].split(" ").includes(want),
-			);
+			const show = passes(c);
 			c.hidden = !show;
 			if (show) shown++;
 		});
 		if (empty) empty.classList.toggle("hidden", shown > 0);
+
+		groups.forEach((g) => {
+			const key = g.dataset.filterGroup;
+			const pool = items.filter((c) => passes(c, key));
+			g.querySelectorAll("[data-filter]").forEach((b) => {
+				const on = b.dataset.filter === active[key];
+				const n = pool.filter((c) =>
+					matches(c, key, b.dataset.filter),
+				).length;
+				b.querySelector("[data-count]").textContent = n;
+				b.disabled = !on && n === 0;
+				b.toggleAttribute("data-active", on);
+				b.setAttribute("aria-pressed", on);
+				ACTIVE.forEach((c) => b.classList.toggle(c, on));
+				b.dataset.idle
+					.split(" ")
+					.forEach((c) => b.classList.toggle(c, !on));
+			});
+		});
+	};
+
+	const sync = () => {
+		const p = new URLSearchParams(location.search);
+		groups.forEach((g) => {
+			const want = active[g.dataset.filterGroup];
+			if (want === "all") p.delete(g.dataset.filterParam);
+			else p.set(g.dataset.filterParam, want);
+		});
+		const q = p.toString();
+		history.replaceState(
+			null,
+			"",
+			location.pathname + (q ? `?${q}` : "") + location.hash,
+		);
 	};
 
 	filterBar.addEventListener("click", (e) => {
@@ -122,14 +162,11 @@ if (filterBar) {
 		if (!btn) return;
 		const group = btn.closest("[data-filter-group]");
 		active[group.dataset.filterGroup] = btn.dataset.filter;
-		group.querySelectorAll("[data-filter]").forEach((b) => {
-			const on = b === btn;
-			b.toggleAttribute("data-active", on);
-			ACTIVE.forEach((c) => b.classList.toggle(c, on));
-			IDLE.forEach((c) => b.classList.toggle(c, !on));
-		});
-		apply();
+		render();
+		sync();
 	});
+
+	render();
 }
 
 // article figures: click to enlarge
