@@ -6,7 +6,7 @@ Class = "security bypass"
 Tags = ["linux", "access control"]
 NoCVE = "no CVE"
 Note = "The sudo project usually fixes lower-impact security bugs in its release notes, without an advisory or CVE."
-Credit = "Reported independently; first report by Pedro Henrique de Almeida Silva."
+Credit = "Also reported independently by another researcher."
 Summary = "x86_64 binaries using the legacy `int 0x80` syscall path slipped past sudo's command interception and logging."
 Description ="In `intercept` and `log_subcmds` mode on Linux, an x86_64 binary using the legacy `int 0x80` syscall path made sudo read its registers with the wrong layout. The `execve` then ran neither intercepted nor logged."
 
