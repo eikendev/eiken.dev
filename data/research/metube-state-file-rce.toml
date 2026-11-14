@@ -1,0 +1,17 @@
+Title = "Forged state file to command execution"
+Project = "MeTube"
+ProjectLink = "https://github.com/alexta69/metube"
+Date = "2026-11-14"
+Class = "remote code execution"
+Tags = ["web", "network"]
+NoCVE = "no CVE"
+Note = "MeTube publishes fixes as GitHub advisories and does not request CVE IDs."
+Credit = "Also reported independently by another researcher."
+CVSS = "8.1"
+Severity = "high"
+Summary = "A client with access to the MeTube API could plant a queue file in MeTube's state directory that runs a shell command after restart."
+Description ="The official image keeps MeTube's state files inside the download directory, and a download may pick any folder inside it. An attacker could download a crafted `pending.json` into `.metube`. After the next restart MeTube loaded it as a queued item, and starting that item made yt-dlp run the command stored in its options as the MeTube user."
+
+[[References]]
+Name = "advisory"
+URL = "https://github.com/alexta69/metube/security/advisories/GHSA-x5g3-pc4p-f56q"
