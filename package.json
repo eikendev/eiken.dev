@@ -18,8 +18,8 @@
 		"katex": "^0.19.1"
 	},
 	"devDependencies": {
-		"@tailwindcss/cli": "^4.3.4",
-		"html-validate": "^11.17.0",
+		"@tailwindcss/cli": "^4.3.5",
+		"html-validate": "^11.19.0",
 		"prettier": "^3.9.10",
 		"prettier-plugin-go-template": "^0.0.15",
 		"prettier-plugin-tailwindcss": "^0.8.1",
