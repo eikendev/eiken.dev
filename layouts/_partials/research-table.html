@@ -3,6 +3,10 @@
 	A table from md up; below that, each row reflows into a small grid (date and
 	project, then the finding, then the badges) and the header is dropped. Rows
 	carry data-* attributes for the filter chips on the research page.
+
+	From md up, the first line of each cell (date, project, title, first badge)
+	sits in a 28px line box, the height of a badge chip, so they line up. The
+	class pill matches the chip's line height and border so their edges align.
 */}}
 {{ $th := "px-3 pb-3 text-left font-mono text-[11px] font-normal tracking-[.12em] text-onv uppercase" }}
 <table class="w-full border-collapse">
@@ -23,13 +27,13 @@
 				class="border-b border-outlinev align-top max-md:grid max-md:grid-cols-[auto_1fr] max-md:gap-x-4 max-md:gap-y-3 max-md:py-5"
 			>
 				<td
-					class="px-3 py-5 font-mono text-xs text-onv max-md:p-0 max-md:pt-1"
+					class="px-3 py-5 font-mono text-xs text-onv max-md:p-0 max-md:pt-1 md:leading-7"
 				>
 					<time datetime="{{ .Date }}"
 						>{{ (time.AsTime .Date).Format "2006.01" }}</time
 					>
 				</td>
-				<td class="px-3 py-5 max-md:p-0">
+				<td class="px-3 py-5 text-sm max-md:p-0 md:leading-7">
 					<a
 						href="{{ .ProjectLink }}"
 						class="font-mono text-sm font-semibold text-primary hover:underline"
@@ -39,11 +43,11 @@
 				<td class="px-3 py-5 max-md:col-span-2 max-md:p-0">
 					<div class="flex flex-col gap-2">
 						<span
-							class="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-[17px] leading-[1.35] font-medium tracking-[-.01em] text-pretty"
+							class="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-[17px] leading-[1.35] font-medium tracking-[-.01em] text-pretty md:min-h-7"
 						>
 							{{ .Title }}
 							<span
-								class="rounded-lg bg-pc px-2.5 py-1 font-mono text-[11px] font-normal tracking-normal text-onpc"
+								class="rounded-lg border border-transparent bg-pc px-2.5 py-1 font-mono text-[11px] leading-[1.6] font-normal tracking-normal text-onpc"
 								>{{ .Class }}</span
 							>
 						</span>
