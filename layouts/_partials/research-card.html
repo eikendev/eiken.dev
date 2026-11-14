@@ -3,11 +3,14 @@
 	Mirrors project-card.html: an <article> whose title link stretches over the
 	card via ::after, pointing at the first reference (advisory, paper, commit),
 	else the project. The chips sit above it with relative z-10.
+
+	The hover transform makes the card a stacking context, so the hovered or
+	focused card is raised (z-10) to keep its tooltip above the next card.
 */}}
 {{ $href := .ProjectLink }}
 {{ with .References }}{{ $href = (index . 0).URL }}{{ end }}
 <article
-	class="relative flex flex-col gap-3 rounded-xl border border-outlinev bg-s1 p-6 transition hover:-translate-y-0.5 hover:border-outline hover:bg-s2"
+	class="relative flex flex-col gap-3 rounded-xl border border-outlinev bg-s1 p-6 transition focus-within:z-10 hover:z-10 hover:-translate-y-0.5 hover:border-outline hover:bg-s2"
 >
 	<div class="flex items-center gap-2.5">
 		<span class="inline-flex text-primary"
