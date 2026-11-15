@@ -1,5 +1,5 @@
 Name = "minigist"
-Priority = 150
+Priority = 90
 Since = 2025
 License = "MIT"
 Languages = ["Python"]

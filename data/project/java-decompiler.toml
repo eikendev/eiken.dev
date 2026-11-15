@@ -1,5 +1,5 @@
 Name = "java-decompiler"
-Priority = 90
+Priority = 120
 Since = 2021
 License = "MIT"
 Languages = ["Dockerfile"]

@@ -1,5 +1,5 @@
 Name = "hackenv"
-Priority = 130
+Priority = 110
 Since = 2020
 License = "MIT"
 Languages = ["Go"]

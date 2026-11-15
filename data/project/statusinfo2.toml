@@ -1,5 +1,5 @@
 Name = "statusinfo2"
-Priority = 160
+Priority = 20
 Since = 2021
 License = "MIT"
 Languages = ["Rust"]

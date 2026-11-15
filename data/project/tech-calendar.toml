@@ -1,5 +1,5 @@
 Name = "tech-calendar"
-Priority = 115
+Priority = 50
 Since = 2025
 License = "MIT"
 Languages = ["Python"]

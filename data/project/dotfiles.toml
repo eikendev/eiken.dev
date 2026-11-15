@@ -1,5 +1,5 @@
 Name = "dotfiles"
-Priority = 15
+Priority = 60
 Since = 2020
 Languages = ["Shell", "Vim script"]
 Tags = ["linux", "devtools"]

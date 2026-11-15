@@ -1,5 +1,5 @@
 Name = "vim-textobj-names"
-Priority = 35
+Priority = 30
 Since = 2019
 License = "MIT"
 Languages = ["Vim script"]

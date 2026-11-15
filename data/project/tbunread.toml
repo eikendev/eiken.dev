@@ -1,5 +1,5 @@
 Name = "tbunread"
-Priority = 92
+Priority = 70
 Since = 2021
 License = "MIT"
 Languages = ["Rust"]

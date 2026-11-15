@@ -1,5 +1,5 @@
 Name = "cheergo"
-Priority = 118
+Priority = 40
 Since = 2021
 License = "MIT"
 Languages = ["Go"]

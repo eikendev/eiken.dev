@@ -1,5 +1,5 @@
 Name = "taskseed"
-Priority = 140
+Priority = 10
 Since = 2026
 License = "MIT"
 Languages = ["Go"]

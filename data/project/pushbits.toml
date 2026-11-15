@@ -1,5 +1,5 @@
 Name = "PushBits"
-Priority = 110
+Priority = 130
 Since = 2020
 License = "MIT"
 Languages = ["Go"]
