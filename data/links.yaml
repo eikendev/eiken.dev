@@ -21,13 +21,18 @@ contact:
     url: https://www.eikenberg.at/
     icon: globe
     class: bg-primary text-onprimary hover:text-onprimary hover:brightness-110
-  - name: LinkedIn
-    url: https://www.linkedin.com/in/raphael-eikenberg/
-    icon: linkedin
+  - name: Bluesky
+    url: https://bsky.app/profile/eikendev.bsky.social
+    icon: bluesky
+    class: border border-outline text-on hover:bg-s2 hover:text-on
+  - name: X
+    url: https://x.com/eikendev
+    icon: x
     class: border border-outline text-on hover:bg-s2 hover:text-on
 
 footer:
   - { name: eikenberg.at, url: "https://www.eikenberg.at/" }
+  - { name: GitHub, url: "https://github.com/eikendev" }
   - { name: Feed, url: /index.xml }
   - { name: Tags, url: /tags/ }
   - { name: License, url: "https://creativecommons.org/licenses/by/4.0/" }

@@ -9,8 +9,14 @@
 			class="m-0 flex items-center gap-2.5 font-mono text-[13px] tracking-[.12em] text-onv uppercase"
 		>
 			{{ partial "icon.html" (dict "name" "projects") }}
-			selected projects
+			personal projects
 		</h2>
+		<a
+			href="https://github.com/{{ site.Params.social.github }}"
+			rel="me noopener"
+			class="-ml-2 font-mono text-[13px] text-primary"
+			>(more on GitHub)</a
+		>
 		<a
 			href="{{ "/projects/" | relURL }}"
 			class="ml-auto inline-flex items-center gap-1.5 font-mono text-[13px] text-primary"

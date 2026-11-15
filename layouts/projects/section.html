@@ -24,6 +24,16 @@
 				{{ . }}
 			</p>
 		{{ end }}
+		{{ with index (where hugo.Data.links.social "icon" "github") 0 }}
+			<a
+				href="{{ .url }}"
+				rel="me noopener"
+				class="{{ .class }} mb-7 inline-flex h-10 items-center gap-2.5 rounded-full px-6 text-sm font-semibold transition"
+			>
+				{{ partial "icon.html" (dict "name" .icon "size" 17) }}
+				{{ .name }}
+			</a>
+		{{ end }}
 		{{ partial "filter-bar.html" $groups }}
 	</section>
 	<section
